@@ -1,6 +1,6 @@
 {
   "name": "bookpill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "纸上良方(BookPill) - 基于经典书籍的个人问题诊断与建议技能",
   "i18n": {
     "display_name": {
@@ -16,7 +16,7 @@
   "interface": {
     "displayName": "BookPill",
     "shortDescription": "纸上良方 - 从书中找到你当下最需要的那一剂良方",
-    "longDescription": "基于《鬼谷子》《悉达多》《认知觉醒》《逆转思维》《亲密关系》《蛤蟆先生去看心理医生》六本书的知识库，当你遇到拖延、焦虑、内耗、表达困难、情商困境时，帮你找到对症的书中智慧，分析原因、拆解问题、给出具体建议。",
+    "longDescription": "基于21本经典书籍的知识库，覆盖拖延、焦虑、内耗、表达、情商五大问题域。当你遇到困惑时，帮你找到对症的书中智慧，分析原因、拆解问题、给出可执行建议。",
     "developerName": "BookPill",
     "category": "Productivity",
     "capabilities": ["Interactive"],
