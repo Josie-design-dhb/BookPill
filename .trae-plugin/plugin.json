@@ -1,30 +1,31 @@
 {
   "name": "bookpill",
-  "version": "1.1.0",
-  "description": "纸上良方(BookPill) - 基于经典书籍的个人问题诊断与建议技能",
+  "version": "2.0.0",
+  "description": "纸上良方(BookPill) v2.0 - 社区共建Agent，基于经典书籍的个人问题诊断与建议引擎，支持记忆系统、多轮深聊与跟进闭环",
   "i18n": {
     "display_name": {
       "en": "BookPill",
       "zh-cn": "纸上良方"
     },
     "description": {
-      "en": "A personal wisdom coach that maps your problems to book knowledge for analysis and actionable advice.",
-      "zh-cn": "当你迷茫、焦虑、拖延、内耗时，从读过的书中找到对症的良方。"
+      "en": "A personal wisdom coach with memory, multi-round deep chat, and follow-up closure. Maps your problems to book knowledge for analysis and actionable advice.",
+      "zh-cn": "当你迷茫、焦虑、拖延、内耗时，从读过的书中找到对症的良方。v2新增记忆系统、多轮深聊、跟进闭环与个性化适配。"
     }
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "BookPill",
-    "shortDescription": "纸上良方 - 从书中找到你当下最需要的那一剂良方",
-    "longDescription": "基于21本经典书籍的知识库，覆盖拖延、焦虑、内耗、表达、情商五大问题域。当你遇到困惑时，帮你找到对症的书中智慧，分析原因、拆解问题、给出可执行建议。",
-    "developerName": "BookPill",
+    "shortDescription": "纸上良方 v2.0 - 社区共建Agent，从书中找到你当下最需要的那一剂良方",
+    "longDescription": "基于21本经典书籍的知识库+社区共建扩展，覆盖拖延、焦虑、内耗、表达、情商五大问题域。v2新增：记忆系统（记住你的历史问题）、多轮深聊（追问→调整→深挖）、第七步跟进闭环（下次对话主动回顾执行情况）、个性化适配（记住偏好调整风格）。",
+    "developerName": "BookPill Community",
     "category": "Productivity",
     "capabilities": ["Interactive"],
     "defaultPrompt": [
       "我总是拖延，明明知道该做却迟迟不动",
       "最近很焦虑，感觉什么都想做又什么都做不好",
       "和人沟通时总是词不达意，或者不知道怎么开口",
-      "内心很内耗，反复纠结同一件事"
+      "内心很内耗，反复纠结同一件事",
+      "上次你说的方法我试了，但没坚持下来"
     ]
   }
 }
