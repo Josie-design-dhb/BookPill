@@ -3,1280 +3,703 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>纸上良方 BookPill — 读过的书，终于能用了</title>
-<meta name="description" content="基于21本经典书籍的个人问题诊断与建议引擎。拖延、焦虑、内耗、表达、情商，五大问题域，七步良方工作流。">
+<title>纸上良方 · 本草堂 — 读过的书，终于能用了</title>
+<meta name="description" content="纸上良方 BookPill v2.0 — 社区共建Agent。基于21本经典书籍的个人问题诊断与建议引擎。">
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 
 <style>
-/* ========== CSS Variables ========== */
-:root {
-  --sage: #7a9b76;
-  --sage-light: #a8c4a3;
-  --sage-pale: #e4ede1;
-  --sage-dark: #5a7a56;
-  --sand: #ddcba8;
-  --sand-light: #f0e7d6;
-  --sand-pale: #f7f2e8;
-  --cream: #fbf9f4;
-  --paper: #ffffff;
-  --ink: #3a3a38;
-  --ink-soft: #6b6b66;
-  --ink-faint: #a0a09a;
-  --accent: #c97b5a;
-  --accent-soft: #e8c9b8;
-  --radius: 24px;
-  --radius-sm: 14px;
-  --radius-xs: 8px;
-  --shadow: 0 2px 20px rgba(122, 155, 118, 0.08);
-  --shadow-hover: 0 8px 32px rgba(122, 155, 118, 0.16);
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+:root{
+  --ink:#2C2825;
+  --ink-soft:#5C544E;
+  --ink-faint:#9C948C;
+  --vermillion:#B84040;
+  --vermillion-dark:#9A3434;
+  --gold:#B89F6B;
+  --gold-dark:#968055;
+  --rice:#F5EDE0;
+  --rice-light:#FAF4EA;
+  --aged:#E8DCC8;
+  --aged-dark:#D4C4A8;
+  --bamboo:#6B8E6F;
+  --indigo:#3A5F7A;
+  --paper:#FFFDF7;
+  --shadow:0 1px 12px rgba(44,40,37,.06);
+  --shadow-lift:0 6px 28px rgba(44,40,37,.12);
+  --t:.35s cubic-bezier(.4,0,.2,1);
+  --serif:'Noto Serif SC',serif;
+  --cal:'Ma Shan Zheng',cursive;
+  --display:'ZCOOL XiaoWei',serif;
 }
 
-/* ========== Reset ========== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  font-family: 'Noto Sans SC', 'Inter', sans-serif;
-  background: var(--cream);
-  color: var(--ink);
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; display: block; }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--serif);background:var(--rice);color:var(--ink);line-height:1.8;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
 
-/* ========== Typography ========== */
-.serif { font-family: 'Noto Serif SC', serif; }
-h1, h2, h3 { font-family: 'Noto Serif SC', serif; font-weight: 700; line-height: 1.3; }
-
-/* ========== Container ========== */
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 24px;
+/* ===== Texture ===== */
+.paper-tex{
+  position:relative;
 }
-@media (max-width: 768px) {
-  .container { padding: 0 18px; }
+.paper-tex::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.6;z-index:0;
 }
 
-/* ========== Nav ========== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  background: rgba(251, 249, 244, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(122, 155, 118, 0.08);
-  transition: var(--transition);
+/* ===== Nav ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(245,237,224,.88);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(184,159,107,.15);
 }
-nav .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 64px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--sage-dark);
-}
-.logo-icon {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--sage);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.nav-links {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-}
-.nav-links a {
-  font-size: 14px;
-  color: var(--ink-soft);
-  transition: color var(--transition);
-}
-.nav-links a:hover { color: var(--sage); }
-.nav-cta {
-  background: var(--sage);
-  color: white !important;
-  padding: 8px 20px;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: var(--transition);
-}
-.nav-cta:hover { background: var(--sage-dark); }
-@media (max-width: 640px) {
-  .nav-links { display: none; }
-  .nav-cta { display: flex; }
-}
+nav .inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--cal);font-size:22px;color:var(--vermillion)}
+.logo-seal{width:30px;height:30px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--cal);font-size:14px;line-height:1;box-shadow:0 2px 8px rgba(184,64,64,.3)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:14px;color:var(--ink-soft);font-family:var(--display);transition:color var(--t)}
+.nav-links a:hover{color:var(--vermillion)}
+.nav-cta{background:var(--vermillion);color:#fff!important;padding:7px 18px;border-radius:4px;font-size:13px;font-family:var(--display);transition:var(--t)}
+.nav-cta:hover{background:var(--vermillion-dark)}
+@media(max-width:640px){.nav-links{display:none}}
 
-/* ========== Hero ========== */
-.hero {
-  padding: 120px 0 80px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 20%, var(--sage-pale) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 30%, var(--sand-pale) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, var(--sage-pale) 0%, transparent 60%);
-  z-index: -1;
-}
-.hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 0 auto;
-}
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--sage-pale);
-  color: var(--sage-dark);
-  padding: 6px 16px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 24px;
-  animation: fadeUp 0.6s ease-out both;
-}
-.hero-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--sage);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.hero h1 {
-  font-size: clamp(32px, 6vw, 52px);
-  font-weight: 900;
-  color: var(--ink);
-  margin-bottom: 16px;
-  animation: fadeUp 0.6s 0.1s ease-out both;
-}
-.hero h1 .accent {
-  color: var(--sage);
-  position: relative;
-}
-.hero h1 .accent::after {
-  content: '';
-  position: absolute;
-  bottom: 4px; left: 0; right: 0;
-  height: 8px;
-  background: var(--sand);
-  border-radius: 4px;
-  z-index: -1;
-  opacity: 0.6;
-}
-.hero-tagline {
-  font-size: clamp(16px, 3vw, 20px);
-  color: var(--ink-soft);
-  margin-bottom: 12px;
-  animation: fadeUp 0.6s 0.2s ease-out both;
-}
-.hero-desc {
-  font-size: 15px;
-  color: var(--ink-faint);
-  margin-bottom: 36px;
-  animation: fadeUp 0.6s 0.3s ease-out both;
-}
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp 0.6s 0.4s ease-out both;
-}
-.btn-primary {
-  background: var(--sage);
-  color: white;
-  padding: 14px 32px;
-  border-radius: 100px;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 4px 16px rgba(122, 155, 118, 0.3);
-}
-.btn-primary:hover {
-  background: var(--sage-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(122, 155, 118, 0.4);
-}
-.btn-secondary {
-  background: transparent;
-  color: var(--sage-dark);
-  padding: 14px 32px;
-  border-radius: 100px;
-  font-size: 16px;
-  font-weight: 500;
-  border: 1.5px solid var(--sage-light);
-  cursor: pointer;
-  transition: var(--transition);
-}
-.btn-secondary:hover {
-  background: var(--sage-pale);
-  border-color: var(--sage);
-}
+/* ===== Hero ===== */
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:80px 24px 60px}
+.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 30% 20%,rgba(184,159,107,.12) 0%,transparent 55%),radial-gradient(ellipse at 70% 60%,rgba(184,64,64,.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 90%,rgba(107,142,111,.08) 0%,transparent 55%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
 
-/* ========== Stats ========== */
-.hero-stats {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-  margin-top: 48px;
-  animation: fadeUp 0.6s 0.5s ease-out both;
-  flex-wrap: wrap;
-}
-.stat {
-  text-align: center;
-}
-.stat-num {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--sage);
-}
-.stat-label {
-  font-size: 13px;
-  color: var(--ink-faint);
-}
+.hero-content{position:relative;z-index:1;max-width:600px}
+.hero-seal{display:inline-flex;align-items:center;gap:8px;background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.2);color:var(--vermillion);padding:5px 14px;border-radius:4px;font-size:12px;font-family:var(--display);margin-bottom:28px;animation:fu .6s ease both}
+.hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--cal);font-size:clamp(48px,10vw,88px);color:var(--ink);line-height:1.1;margin-bottom:8px;animation:fu .6s .1s ease both}
+.hero h1 .red{color:var(--vermillion)}
+.hero-sub{font-family:var(--display);font-size:clamp(15px,3vw,18px);color:var(--gold-dark);margin-bottom:6px;letter-spacing:2px;animation:fu .6s .2s ease both}
+.hero-desc{font-size:14px;color:var(--ink-faint);margin-bottom:40px;animation:fu .6s .3s ease both}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .6s .4s ease both}
+.btn-consult{background:var(--vermillion);color:#fff;padding:13px 36px;border-radius:4px;font-size:16px;font-family:var(--display);letter-spacing:1px;box-shadow:0 3px 14px rgba(184,64,64,.3);transition:var(--t)}
+.btn-consult:hover{background:var(--vermillion-dark);transform:translateY(-2px);box-shadow:0 5px 20px rgba(184,64,64,.4)}
+.btn-ghost{border:1.5px solid var(--aged-dark);color:var(--gold-dark);padding:13px 36px;border-radius:4px;font-size:16px;font-family:var(--display);letter-spacing:1px;transition:var(--t)}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(184,159,107,.06)}
+.hero-stats{display:flex;gap:36px;justify-content:center;margin-top:52px;animation:fu .6s .5s ease both;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-family:var(--cal);font-size:36px;color:var(--vermillion);line-height:1}
+.stat-l{font-size:12px;color:var(--ink-faint);margin-top:4px}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ===== Section ===== */
+section{padding:72px 0;position:relative}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+@media(max-width:768px){.wrap{padding:0 18px}section{padding:56px 0}}
+.sec-head{text-align:center;margin-bottom:44px}
+.sec-head .deco{font-family:var(--cal);color:var(--gold);font-size:14px;letter-spacing:4px;margin-bottom:8px}
+.sec-head h2{font-family:var(--cal);font-size:clamp(28px,5vw,40px);color:var(--ink)}
+.sec-head p{color:var(--ink-faint);font-size:14px;margin-top:8px}
 
-/* ========== Section ========== */
-section { padding: 80px 0; }
-.section-title {
-  text-align: center;
-  margin-bottom: 16px;
-}
-.section-title h2 {
-  font-size: clamp(24px, 4vw, 34px);
-  color: var(--ink);
-}
-.section-subtitle {
-  text-align: center;
-  color: var(--ink-faint);
-  font-size: 15px;
-  margin-bottom: 48px;
-}
+/* ===== Domain Grid ===== */
+.domain-section{background:var(--rice-light)}
+.domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.d-card{background:var(--paper);border-radius:8px;padding:28px 24px;box-shadow:var(--shadow);border:1px solid rgba(184,159,107,.12);transition:var(--t);cursor:pointer;position:relative;overflow:hidden}
+.d-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dc,var(--vermillion));transform:scaleY(.3);transform-origin:top;transition:transform var(--t)}
+.d-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--dc,var(--vermillion))}
+.d-card:hover::before{transform:scaleY(1)}
+.d-icon{width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:var(--t)}
+.d-card:hover .d-icon{transform:scale(1.08)}
+.d-icon svg{width:24px;height:24px}
+.d-card h3{font-family:var(--cal);font-size:24px;margin-bottom:6px;color:var(--ink)}
+.d-card .d-desc{font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6}
+.d-tags{display:flex;flex-wrap:wrap;gap:6px}
+.d-tag{background:var(--aged);color:var(--ink-soft);padding:3px 10px;border-radius:100px;font-size:11px;font-family:var(--display)}
+.d-arrow{position:absolute;bottom:20px;right:20px;color:var(--ink-faint);font-size:14px;transition:var(--t);opacity:0}
+.d-card:hover .d-arrow{opacity:1;transform:translateX(-4px)}
 
-/* ========== Domain Cards ========== */
-.domain-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-.domain-card {
-  background: var(--paper);
-  border-radius: var(--radius);
-  padding: 32px 28px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(122, 155, 118, 0.06);
-  transition: var(--transition);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.domain-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: var(--domain-color, var(--sage));
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-.domain-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--domain-color, var(--sage));
-}
-.domain-card:hover::before { opacity: 1; }
-.domain-card:hover .domain-icon {
-  background: var(--domain-color, var(--sage));
-  color: white;
-}
-.domain-icon {
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  background: var(--sage-pale);
-  color: var(--sage-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  transition: var(--transition);
-}
-.domain-icon svg { width: 28px; height: 28px; }
-.domain-card h3 {
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-.domain-card .desc {
-  font-size: 14px;
-  color: var(--ink-soft);
-  margin-bottom: 16px;
-}
-.domain-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.domain-tag {
-  background: var(--sand-pale);
-  color: var(--ink-soft);
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 12px;
-}
+/* ===== Chat Panel ===== */
+.chat-panel{position:fixed;top:0;right:-100%;width:100%;max-width:440px;height:100svh;background:var(--rice-light);z-index:300;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(44,40,37,.15)}
+.chat-panel.open{right:0}
+.chat-head{padding:16px 20px;background:var(--paper);border-bottom:1px solid rgba(184,159,107,.15);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.chat-head .h-seal{width:36px;height:36px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--cal);font-size:16px}
+.chat-head .h-info h4{font-family:var(--cal);font-size:18px;color:var(--ink)}
+.chat-head .h-info span{font-size:12px;color:var(--ink-faint)}
+.chat-close{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--aged);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-soft);transition:var(--t)}
+.chat-close:hover{background:var(--aged-dark)}
+.chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.chat-body::-webkit-scrollbar{width:4px}
+.chat-body::-webkit-scrollbar-thumb{background:var(--aged-dark);border-radius:2px}
+.msg{max-width:88%;padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.8;animation:msgIn .3s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start;background:var(--paper);border:1px solid rgba(184,159,107,.12);border-bottom-left-radius:4px;box-shadow:var(--shadow)}
+.msg.user{align-self:flex-end;background:var(--vermillion);color:#fff;border-bottom-right-radius:4px}
+.msg.bot .b-name{font-family:var(--cal);color:var(--vermillion);font-size:13px;margin-bottom:4px;display:block}
+.chat-typing{align-self:flex-start;padding:12px 18px;background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:12px;border-bottom-left-radius:4px}
+.typing-dots{display:flex;gap:4px}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:td 1.4s infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
-/* ========== Modal ========== */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(58, 58, 56, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 200;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  animation: fadeIn 0.2s ease;
-}
-.modal-overlay.active { display: flex; }
-.modal {
-  background: var(--paper);
-  border-radius: var(--radius);
-  padding: 40px;
-  max-width: 480px;
-  width: 100%;
-  position: relative;
-  animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-.modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 32px; height: 32px;
-  border: none;
-  background: var(--sand-pale);
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
-  color: var(--ink-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal h3 { font-size: 22px; margin-bottom: 8px; }
-.modal .modal-desc { color: var(--ink-soft); font-size: 14px; margin-bottom: 24px; }
-.prompt-box {
-  background: var(--cream);
-  border: 1px solid var(--sage-pale);
-  border-radius: var(--radius-sm);
-  padding: 20px;
-  font-size: 14px;
-  line-height: 1.8;
-  color: var(--ink);
-  margin-bottom: 16px;
-  white-space: pre-wrap;
-}
-.modal-actions {
-  display: flex;
-  gap: 12px;
-}
-.btn-copy {
-  flex: 1;
-  background: var(--sage);
-  color: white;
-  padding: 12px 24px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-copy:hover { background: var(--sage-dark); }
-.btn-copy.copied {
-  background: var(--sage-dark);
-}
-.btn-github {
-  background: var(--ink);
-  color: white;
-  padding: 12px 24px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.btn-github:hover { opacity: 0.85; }
+.prescription{background:var(--paper);border:1.5px solid var(--gold);border-radius:12px;padding:20px;margin:4px 0;box-shadow:var(--shadow)}
+.prescription .p-title{font-family:var(--cal);font-size:16px;color:var(--vermillion);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.prescription .p-book{font-size:13px;color:var(--gold-dark);margin-bottom:8px;font-family:var(--display)}
+.prescription .p-insight{font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-style:italic;padding:8px 10px;background:rgba(184,159,107,.06);border-radius:6px}
+.prescription .p-steps{list-style:none;margin-bottom:12px}
+.prescription .p-steps li{font-size:13px;color:var(--ink);padding:4px 0;padding-left:18px;position:relative;line-height:1.7}
+.prescription .p-steps li::before{content:'';position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.prescription .p-quote{font-family:var(--cal);font-size:15px;color:var(--vermillion-dark);text-align:center;padding:10px 0;border-top:1px dashed var(--aged-dark);margin-top:8px;line-height:1.6}
 
-/* ========== Workflow ========== */
-.workflow-section { background: var(--paper); }
-.workflow-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: 680px;
-  margin: 0 auto;
-}
-.workflow-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  position: relative;
-  padding-bottom: 32px;
-}
-.workflow-step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 23px;
-  top: 52px;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--sage-light), transparent);
-}
-.workflow-num {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--sage);
-  color: var(--sage);
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-  transition: var(--transition);
-}
-.workflow-step:hover .workflow-num {
-  background: var(--sage);
-  color: white;
-}
-.workflow-step.v2 .workflow-num {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-.workflow-step.v2 .workflow-num::after {
-  content: 'NEW';
-  position: absolute;
-  top: -8px; right: -12px;
-  font-size: 9px;
-  background: var(--accent);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 100px;
-  font-family: 'Noto Sans SC', sans-serif;
-  font-weight: 600;
-}
-.workflow-body h4 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 17px;
-  margin-bottom: 4px;
-}
-.workflow-body p {
-  font-size: 14px;
-  color: var(--ink-soft);
-}
+.chat-foot{padding:14px 16px;background:var(--paper);border-top:1px solid rgba(184,159,107,.12);flex-shrink:0}
+.chat-input-wrap{display:flex;gap:8px;align-items:flex-end}
+.chat-input{flex:1;background:var(--rice);border:1px solid var(--aged-dark);border-radius:8px;padding:10px 14px;font-size:14px;font-family:var(--serif);color:var(--ink);resize:none;max-height:80px;line-height:1.6;transition:var(--t)}
+.chat-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,159,107,.12)}
+.chat-send{width:40px;height:40px;border-radius:8px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;transition:var(--t);flex-shrink:0}
+.chat-send:hover{background:var(--vermillion-dark)}
+.chat-send svg{width:18px;height:18px}
+.chat-send:disabled{opacity:.4}
+.chat-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.quick-btn{background:var(--aged);color:var(--ink-soft);padding:5px 12px;border-radius:100px;font-size:12px;transition:var(--t);font-family:var(--display)}
+.quick-btn:hover{background:var(--gold);color:#fff}
+.chat-end-tip{text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px}
+.chat-end-tip button{color:var(--vermillion);font-family:var(--display);font-size:14px;border-bottom:1px dashed var(--vermillion);transition:var(--t)}
+.chat-end-tip button:hover{color:var(--vermillion-dark)}
 
-/* ========== Books ========== */
-.books-section { background: var(--sand-pale); }
-.book-domains {
-  display: grid;
-  gap: 24px;
-}
-.book-domain-group h4 {
-  font-size: 16px;
-  color: var(--sage-dark);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.book-domain-group h4::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--sand);
-}
-.book-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.book-chip {
-  background: var(--paper);
-  border: 1px solid var(--sand);
-  border-radius: 100px;
-  padding: 6px 14px;
-  font-size: 13px;
-  color: var(--ink);
-  transition: var(--transition);
-}
-.book-chip:hover {
-  border-color: var(--sage);
-  color: var(--sage-dark);
-  transform: translateY(-1px);
-}
-.book-chip.community {
-  background: var(--sage-pale);
-  border-color: var(--sage-light);
-  color: var(--sage-dark);
-}
+.chat-overlay{position:fixed;inset:0;background:rgba(44,40,37,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:250;opacity:0;pointer-events:none;transition:opacity .3s}
+.chat-overlay.show{opacity:1;pointer-events:auto}
 
-/* ========== Community ========== */
-.community-section { text-align: center; }
-.community-card {
-  background: var(--paper);
-  border-radius: var(--radius);
-  padding: 48px 40px;
-  box-shadow: var(--shadow);
-  max-width: 640px;
-  margin: 0 auto;
-}
-.community-card h3 {
-  font-size: 24px;
-  margin-bottom: 12px;
-}
-.community-card p {
-  color: var(--ink-soft);
-  font-size: 15px;
-  margin-bottom: 28px;
-}
-.community-methods {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.method-chip {
-  background: var(--sand-pale);
-  border: 1px solid var(--sand);
-  border-radius: var(--radius-sm);
-  padding: 10px 20px;
-  font-size: 14px;
-  color: var(--ink);
-  transition: var(--transition);
-  cursor: pointer;
-}
-.method-chip:hover {
-  background: var(--sage);
-  color: white;
-  border-color: var(--sage);
-}
+@media(max-width:520px){.chat-panel{max-width:100%;border-radius:0}}
 
-/* ========== Usage ========== */
-.usage-section { background: var(--paper); }
-.usage-tabs {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-}
-.usage-tab {
-  padding: 10px 24px;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 500;
-  background: var(--sand-pale);
-  color: var(--ink-soft);
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: var(--transition);
-}
-.usage-tab.active {
-  background: var(--sage);
-  color: white;
-}
-.usage-content {
-  display: none;
-  background: var(--cream);
-  border-radius: var(--radius);
-  padding: 32px;
-}
-.usage-content.active { display: block; }
-.usage-step {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-  align-items: flex-start;
-}
-.usage-step:last-child { margin-bottom: 0; }
-.usage-step-num {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--sage-pale);
-  color: var(--sage-dark);
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.usage-step-text {
-  font-size: 14px;
-  color: var(--ink);
-  line-height: 1.8;
-}
-.usage-step-text code {
-  background: var(--sage-pale);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 13px;
-  color: var(--sage-dark);
-  font-family: 'Inter', monospace;
-}
+/* ===== Workflow ===== */
+.wf-section{background:var(--paper)}
+.wf-steps{max-width:620px;margin:0 auto}
+.wf-step{display:flex;gap:18px;position:relative;padding-bottom:28px}
+.wf-step:not(:last-child)::after{content:'';position:absolute;left:23px;top:50px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold) 0%,transparent 100%)}
+.wf-num{width:48px;height:48px;border-radius:50%;background:var(--paper);border:2px solid var(--gold);color:var(--gold-dark);font-family:var(--cal);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;transition:var(--t)}
+.wf-step:hover .wf-num{background:var(--gold);color:#fff;border-color:var(--gold)}
+.wf-step.v2 .wf-num{background:var(--vermillion);color:#fff;border-color:var(--vermillion)}
+.wf-step.v2 .wf-num::after{content:'新';position:absolute;top:-6px;right:-8px;font-size:9px;background:var(--vermillion);color:#fff;padding:1px 5px;border-radius:100px;font-family:var(--display)}
+.wf-body h4{font-family:var(--cal);font-size:18px;margin-bottom:4px}
+.wf-body p{font-size:13px;color:var(--ink-soft)}
 
-/* ========== Footer ========== */
-footer {
-  background: var(--sage-dark);
-  color: rgba(255, 255, 255, 0.8);
-  padding: 48px 0 32px;
-  text-align: center;
-}
-footer .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-footer .footer-logo {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
-}
-footer p { font-size: 13px; }
-footer .footer-links {
-  display: flex;
-  gap: 20px;
-}
-footer .footer-links a {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 13px;
-  transition: color var(--transition);
-}
-footer .footer-links a:hover { color: white; }
+/* ===== Books ===== */
+.book-section{background:var(--rice)}
+.book-grid{display:grid;gap:20px}
+.book-group h4{font-family:var(--display);font-size:15px;color:var(--vermillion);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.book-group h4::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--aged-dark),transparent)}
+.book-chips{display:flex;flex-wrap:wrap;gap:7px}
+.b-chip{background:var(--paper);border:1px solid var(--aged-dark);border-radius:4px;padding:5px 12px;font-size:13px;color:var(--ink);transition:var(--t);font-family:var(--serif)}
+.b-chip:hover{border-color:var(--gold);color:var(--vermillion);transform:translateY(-1px);background:rgba(184,159,107,.04)}
+.b-chip.community{background:rgba(184,64,64,.06);border-color:rgba(184,64,64,.2);color:var(--vermillion)}
 
-/* ========== Toast ========== */
-.toast {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--ink);
-  color: white;
-  padding: 12px 28px;
-  border-radius: 100px;
-  font-size: 14px;
-  z-index: 300;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-}
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-}
+/* ===== Community ===== */
+.com-card{background:var(--paper);border:1px solid rgba(184,159,107,.15);border-radius:8px;padding:40px 32px;text-align:center;box-shadow:var(--shadow);max-width:560px;margin:0 auto;position:relative}
+.com-card::before{content:'卷';position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--vermillion);color:#fff;font-family:var(--cal);font-size:14px;display:flex;align-items:center;justify-content:center}
+.com-card h3{font-family:var(--cal);font-size:24px;margin-bottom:10px}
+.com-card p{color:var(--ink-soft);font-size:14px;margin-bottom:24px;line-height:1.8}
+.com-methods{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.com-m{background:var(--aged);border:1px solid var(--aged-dark);border-radius:6px;padding:10px 22px;font-size:14px;color:var(--ink);transition:var(--t);font-family:var(--display)}
+.com-m:hover{background:var(--vermillion);color:#fff;border-color:var(--vermillion)}
 
-/* ========== Scroll Reveal ========== */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ===== Usage ===== */
+.use-section{background:var(--rice-light)}
+.use-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.use-tab{padding:8px 20px;border-radius:4px;font-size:14px;font-family:var(--display);background:var(--aged);color:var(--ink-soft);border:1px solid transparent;transition:var(--t)}
+.use-tab.active{background:var(--vermillion);color:#fff;border-color:var(--vermillion-dark)}
+.use-content{display:none;background:var(--paper);border-radius:8px;padding:28px;border:1px solid rgba(184,159,107,.12)}
+.use-content.active{display:block}
+.use-step{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.use-step:last-child{margin-bottom:0}
+.use-step .n{width:26px;height:26px;border-radius:50%;background:rgba(184,159,107,.12);color:var(--gold-dark);font-size:13px;font-family:var(--cal);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.use-step .t{font-size:14px;color:var(--ink);line-height:1.8}
+.use-step .t code{background:rgba(184,159,107,.1);padding:2px 8px;border-radius:4px;font-size:13px;color:var(--vermillion);font-family:var(--display)}
 
-/* ========== Mobile ========== */
-@media (max-width: 640px) {
-  .hero { padding: 100px 0 60px; }
-  section { padding: 60px 0; }
-  .domain-card { padding: 24px 20px; }
-  .modal { padding: 28px 20px; }
-  .community-card { padding: 32px 24px; }
-  .hero-stats { gap: 20px; }
-  .stat-num { font-size: 26px; }
-  .workflow-step { gap: 14px; }
-  .workflow-num { width: 40px; height: 40px; font-size: 15px; }
-  .workflow-step:not(:last-child)::after { left: 19px; top: 44px; }
-}
+/* ===== Footer ===== */
+footer{background:var(--ink);color:rgba(255,253,247,.7);padding:44px 0 28px;text-align:center}
+footer .inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+footer .f-logo{font-family:var(--cal);font-size:22px;color:#fff;display:flex;align-items:center;gap:8px}
+footer .f-logo .s{width:28px;height:28px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+footer p{font-size:12px}
+footer .f-links{display:flex;gap:18px}
+footer .f-links a{color:rgba(255,253,247,.6);font-size:12px;font-family:var(--display);transition:color var(--t)}
+footer .f-links a:hover{color:#fff}
 
-@media (max-width: 380px) {
-  .hero-actions { flex-direction: column; align-items: stretch; }
-  .btn-primary, .btn-secondary { width: 100%; }
+/* ===== Toast ===== */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:#fff;padding:11px 26px;border-radius:4px;font-size:14px;z-index:400;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;font-family:var(--display)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== Reveal ===== */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){
+  .hero{min-height:auto;padding:100px 18px 48px}
+  .hero-stats{gap:20px}
+  .stat-n{font-size:28px}
+  .d-card{padding:22px 18px}
+  .com-card{padding:32px 20px}
+  .wf-step{gap:12px}
+  .wf-num{width:40px;height:40px;font-size:16px}
+  .wf-step:not(:last-child)::after{left:19px;top:42px}
+}
+@media(max-width:380px){
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .btn-consult,.btn-ghost{width:100%;text-align:center}
 }
 </style>
 </head>
-<body>
+<body class="paper-tex">
 
-<!-- ===== Nav ===== -->
 <nav>
-  <div class="container">
-    <a href="#" class="logo">
-      <span class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-        </svg>
-      </span>
-      BookPill
-    </a>
+  <div class="inner">
+    <a href="#" class="logo"><span class="logo-seal">方</span>纸上良方</a>
     <div class="nav-links">
-      <a href="#domains">问题域</a>
-      <a href="#workflow">工作流</a>
-      <a href="#books">知识库</a>
-      <a href="#community">社区</a>
-      <a href="#usage">使用方法</a>
+      <a href="#domains">问诊</a>
+      <a href="#workflow">成方</a>
+      <a href="#books">典籍</a>
+      <a href="#community">同道</a>
+      <a href="#usage">用法</a>
     </div>
-    <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="nav-cta">GitHub</a>
+    <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="nav-cta">查看仓库</a>
   </div>
 </nav>
 
-<!-- ===== Hero ===== -->
 <header class="hero">
   <div class="hero-bg"></div>
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-badge">v2.0 社区共建版上线</div>
-      <h1>读过的书，<span class="accent">终于能用了</span></h1>
-      <p class="hero-tagline">纸上良方 BookPill</p>
-      <p class="hero-desc">基于21本经典书籍的个人问题诊断与建议引擎<br>拖延 · 焦虑 · 内耗 · 表达 · 情商 — 五大问题域，七步良方</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="document.getElementById('domains').scrollIntoView({behavior:'smooth'})">开始问诊</button>
-        <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-secondary">查看仓库</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-num">21+</div>
-          <div class="stat-label">经典书籍</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">5</div>
-          <div class="stat-label">问题域</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">7</div>
-          <div class="stat-label">步工作流</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">4</div>
-          <div class="stat-label">平台支持</div>
-        </div>
-      </div>
+  <div class="hero-content">
+    <div class="hero-seal">v2.0 社区共建 · 良方上线</div>
+    <h1>纸上<span class="red">良方</span></h1>
+    <div class="hero-sub">读过的书 · 终于能用了</div>
+    <p class="hero-desc">基于二十一本经典书籍的个人问题诊断与建议引擎<br>拖延 · 焦虑 · 内耗 · 表达 · 情商 — 五脉七步，对症下书</p>
+    <div class="hero-btns">
+      <button class="btn-consult" onclick="scrollToDomains()">开始问诊</button>
+      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-ghost">查看仓库</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">21+</div><div class="stat-l">经典书籍</div></div>
+      <div class="stat"><div class="stat-n">5</div><div class="stat-l">问题脉</div></div>
+      <div class="stat"><div class="stat-n">7</div><div class="stat-l">步成方</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">平台可用</div></div>
     </div>
   </div>
 </header>
 
-<!-- ===== Problem Domains ===== -->
-<section id="domains" class="reveal">
-  <div class="container">
-    <div class="section-title">
+<section id="domains" class="domain-section rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">问 · 诊 · 台</div>
       <h2>你遇到了什么困扰？</h2>
+      <p>点一个最贴切的，直接跟良方聊 — 不用跳转，不用复制</p>
     </div>
-    <p class="section-subtitle">选一个最贴近你当下状态的问题域，点击即可复制提问话术</p>
 
     <div class="domain-grid">
-
-      <!-- 拖延 -->
-      <div class="domain-card" style="--domain-color:#8B7EC8" onclick="openModal('delay')">
-        <div class="domain-icon" style="background:#EDE8F8;color:#8B7EC8">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-          </svg>
+      <div class="d-card" style="--dc:#8B7EC8" onclick="startChat('delay')">
+        <div class="d-icon" style="background:#EDE8F8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#8B7EC8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
         <h3>拖延</h3>
-        <p class="desc">明明知道该做，就是动不起来</p>
-        <div class="domain-tags">
-          <span class="domain-tag">启动困难</span>
-          <span class="domain-tag">完美主义</span>
-          <span class="domain-tag">行动力</span>
-        </div>
+        <p class="d-desc">明明知道该做，就是动不起来</p>
+        <div class="d-tags"><span class="d-tag">启动困难</span><span class="d-tag">完美主义</span><span class="d-tag">行动力</span></div>
+        <span class="d-arrow">点击问诊 →</span>
       </div>
 
-      <!-- 焦虑 -->
-      <div class="domain-card" style="--domain-color:#C97B5A" onclick="openModal('anxiety')">
-        <div class="domain-icon" style="background:#F8E8E0;color:#C97B5A">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/>
-            <path d="M9 12l2 2 4-4"/>
-          </svg>
+      <div class="d-card" style="--dc:#C97B5A" onclick="startChat('anxiety')">
+        <div class="d-icon" style="background:#F8E8E0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C97B5A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
         <h3>焦虑</h3>
-        <p class="desc">什么都想做好，结果什么都没做好</p>
-        <div class="domain-tags">
-          <span class="domain-tag">压力</span>
-          <span class="domain-tag">紧绷</span>
-          <span class="domain-tag">失眠</span>
-        </div>
+        <p class="d-desc">什么都想做好，结果什么都没做好</p>
+        <div class="d-tags"><span class="d-tag">压力</span><span class="d-tag">紧绷</span><span class="d-tag">失眠</span></div>
+        <span class="d-arrow">点击问诊 →</span>
       </div>
 
-      <!-- 内耗 -->
-      <div class="domain-card" style="--domain-color:#6B8E9E" onclick="openModal('internal')">
-        <div class="domain-icon" style="background:#E0EBF0;color:#6B8E9E">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
+      <div class="d-card" style="--dc:#6B8E9E" onclick="startChat('internal')">
+        <div class="d-icon" style="background:#E0EBF0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6B8E9E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
         <h3>内耗</h3>
-        <p class="desc">反复纠结同一件事，停不下来</p>
-        <div class="domain-tags">
-          <span class="domain-tag">自我怀疑</span>
-          <span class="domain-tag">纠结</span>
-          <span class="domain-tag">情绪消耗</span>
-        </div>
+        <p class="d-desc">反复纠结同一件事，停不下来</p>
+        <div class="d-tags"><span class="d-tag">自我怀疑</span><span class="d-tag">纠结</span><span class="d-tag">情绪消耗</span></div>
+        <span class="d-arrow">点击问诊 →</span>
       </div>
 
-      <!-- 表达 -->
-      <div class="domain-card" style="--domain-color:#D4A04C" onclick="openModal('express')">
-        <div class="domain-icon" style="background:#F8F0E0;color:#D4A04C">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
+      <div class="d-card" style="--dc:#D4A04C" onclick="startChat('express')">
+        <div class="d-icon" style="background:#F8F0E0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#D4A04C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
         <h3>表达</h3>
-        <p class="desc">想说的说不出口，词不达意</p>
-        <div class="domain-tags">
-          <span class="domain-tag">沟通</span>
-          <span class="domain-tag">社交</span>
-          <span class="domain-tag">开口</span>
-        </div>
+        <p class="d-desc">想说的说不出口，词不达意</p>
+        <div class="d-tags"><span class="d-tag">沟通</span><span class="d-tag">社交</span><span class="d-tag">开口</span></div>
+        <span class="d-arrow">点击问诊 →</span>
       </div>
 
-      <!-- 情商 -->
-      <div class="domain-card" style="--domain-color:#7a9b76" onclick="openModal('eq')">
-        <div class="domain-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
+      <div class="d-card" style="--dc:#6B8E6F" onclick="startChat('eq')">
+        <div class="d-icon" style="background:#E0EBE0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6B8E6F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
         <h3>情商</h3>
-        <p class="desc">控制不住情绪，人际关系紧张</p>
-        <div class="domain-tags">
-          <span class="domain-tag">情绪管理</span>
-          <span class="domain-tag">人际</span>
-          <span class="domain-tag">共情</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== Workflow ===== -->
-<section id="workflow" class="workflow-section reveal">
-  <div class="container">
-    <div class="section-title">
-      <h2>七步良方工作流</h2>
-    </div>
-    <p class="section-subtitle">从共情到跟进，每一步都有据可依</p>
-
-    <div class="workflow-steps">
-      <div class="workflow-step">
-        <div class="workflow-num">1</div>
-        <div class="workflow-body">
-          <h4>共情开场</h4>
-          <p>识别你的情绪状态，让你感到被理解、被接纳</p>
-        </div>
-      </div>
-      <div class="workflow-step">
-        <div class="workflow-num">2</div>
-        <div class="workflow-body">
-          <h4>问题诊断</h4>
-          <p>定位问题域，评估严重程度，判断是否需要专业帮助</p>
-        </div>
-      </div>
-      <div class="workflow-step">
-        <div class="workflow-num">3</div>
-        <div class="workflow-body">
-          <h4>原因分析</h4>
-          <p>从行为、情绪、认知、环境四个层面挖掘深层原因</p>
-        </div>
-      </div>
-      <div class="workflow-step">
-        <div class="workflow-num">4</div>
-        <div class="workflow-body">
-          <h4>问题拆解</h4>
-          <p>把大问题拆成小问题，标注哪些可立即行动</p>
-        </div>
-      </div>
-      <div class="workflow-step">
-        <div class="workflow-num">5</div>
-        <div class="workflow-body">
-          <h4>良方输出</h4>
-          <p>基于书籍给出具体、可操作的建议，标注难度等级</p>
-        </div>
-      </div>
-      <div class="workflow-step">
-        <div class="workflow-num">6</div>
-        <div class="workflow-body">
-          <h4>收尾</h4>
-          <p>鼓励你，指出接下来第一步做什么，为跟进埋下种子</p>
-        </div>
-      </div>
-      <div class="workflow-step v2">
-        <div class="workflow-num">7</div>
-        <div class="workflow-body">
-          <h4>跟进闭环</h4>
-          <p>下次对话主动回顾上次建议的执行情况，形成闭环</p>
-        </div>
+        <p class="d-desc">控制不住情绪，人际关系紧张</p>
+        <div class="d-tags"><span class="d-tag">情绪管理</span><span class="d-tag">人际</span><span class="d-tag">共情</span></div>
+        <span class="d-arrow">点击问诊 →</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== Books ===== -->
-<section id="books" class="books-section reveal">
-  <div class="container">
-    <div class="section-title">
+<section id="workflow" class="wf-section rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">七 · 步 · 成 · 方</div>
+      <h2>从共情到跟进</h2>
+      <p>每一步都有据可依，每一方都对症下书</p>
+    </div>
+    <div class="wf-steps">
+      <div class="wf-step"><div class="wf-num">一</div><div class="wf-body"><h4>共情开场</h4><p>识别你的情绪状态，让你感到被理解、被接纳</p></div></div>
+      <div class="wf-step"><div class="wf-num">二</div><div class="wf-body"><h4>问题诊断</h4><p>定位问题域，评估严重程度，判断是否需要专业帮助</p></div></div>
+      <div class="wf-step"><div class="wf-num">三</div><div class="wf-body"><h4>原因分析</h4><p>从行为、情绪、认知、环境四个层面挖掘深层原因</p></div></div>
+      <div class="wf-step"><div class="wf-num">四</div><div class="wf-body"><h4>问题拆解</h4><p>把大问题拆成小问题，标注哪些可立即行动</p></div></div>
+      <div class="wf-step"><div class="wf-num">五</div><div class="wf-body"><h4>良方输出</h4><p>基于书籍给出具体、可操作的建议，标注难度等级</p></div></div>
+      <div class="wf-step"><div class="wf-num">六</div><div class="wf-body"><h4>收尾</h4><p>鼓励你，指出接下来第一步做什么，为跟进埋下种子</p></div></div>
+      <div class="wf-step v2"><div class="wf-num">七</div><div class="wf-body"><h4>跟进闭环</h4><p>下次对话主动回顾上次建议的执行情况，形成闭环</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="books" class="book-section rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">典 · 籍 · 阁</div>
       <h2>知识库</h2>
+      <p>二十一本核心经典，社区共建持续扩展</p>
     </div>
-    <p class="section-subtitle">21本核心书籍 + 社区共建持续扩展</p>
-
-    <div class="book-domains">
-      <div class="book-domain-group">
-        <h4>拖延域</h4>
-        <div class="book-chips">
-          <span class="book-chip">拖延心理学</span>
-          <span class="book-chip">微习惯</span>
-          <span class="book-chip">原子习惯</span>
-          <span class="book-chip">把时间当作朋友</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>焦虑域</h4>
-        <div class="book-chips">
-          <span class="book-chip">被讨厌的勇气</span>
-          <span class="book-chip">当下的力量</span>
-          <span class="book-chip">焦虑的人</span>
-          <span class="book-chip">身份的焦虑</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>内耗域</h4>
-        <div class="book-chips">
-          <span class="book-chip">蛤蟆先生去看心理医生</span>
-          <span class="book-chip">被忽视的孩子</span>
-          <span class="book-chip">也许你该找个人聊聊</span>
-          <span class="book-chip">自我关怀</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>表达域</h4>
-        <div class="book-chips">
-          <span class="book-chip">非暴力沟通</span>
-          <span class="book-chip">关键对话</span>
-          <span class="book-chip">影响力</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>情商域</h4>
-        <div class="book-chips">
-          <span class="book-chip">情商</span>
-          <span class="book-chip">社交天性</span>
-          <span class="book-chip">高效能人士的七个习惯</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>跨域书籍</h4>
-        <div class="book-chips">
-          <span class="book-chip">心流</span>
-          <span class="book-chip">活出生命的意义</span>
-          <span class="book-chip">牧羊少年奇幻之旅</span>
-        </div>
-      </div>
-      <div class="book-domain-group">
-        <h4>社区共建</h4>
-        <div class="book-chips">
-          <span class="book-chip community">等待你的投稿 →</span>
-        </div>
-      </div>
+    <div class="book-grid">
+      <div class="book-group"><h4>拖延脉</h4><div class="book-chips"><span class="b-chip">拖延心理学</span><span class="b-chip">微习惯</span><span class="b-chip">原子习惯</span><span class="b-chip">把时间当作朋友</span></div></div>
+      <div class="book-group"><h4>焦虑脉</h4><div class="book-chips"><span class="b-chip">被讨厌的勇气</span><span class="b-chip">当下的力量</span><span class="b-chip">焦虑的人</span><span class="b-chip">身份的焦虑</span></div></div>
+      <div class="book-group"><h4>内耗脉</h4><div class="book-chips"><span class="b-chip">蛤蟆先生去看心理医生</span><span class="b-chip">被忽视的孩子</span><span class="b-chip">也许你该找个人聊聊</span><span class="b-chip">自我关怀</span></div></div>
+      <div class="book-group"><h4>表达脉</h4><div class="book-chips"><span class="b-chip">非暴力沟通</span><span class="b-chip">关键对话</span><span class="b-chip">影响力</span></div></div>
+      <div class="book-group"><h4>情商脉</h4><div class="book-chips"><span class="b-chip">情商</span><span class="b-chip">社交天性</span><span class="b-chip">高效能人士的七个习惯</span></div></div>
+      <div class="book-group"><h4>通脉</h4><div class="book-chips"><span class="b-chip">心流</span><span class="b-chip">活出生命的意义</span><span class="b-chip">牧羊少年奇幻之旅</span></div></div>
+      <div class="book-group"><h4>社区共建</h4><div class="book-chips"><span class="b-chip community" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'})">等待你的投稿 →</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ===== Community ===== -->
-<section id="community" class="community-section reveal">
-  <div class="container">
-    <div class="community-card">
+<section id="community" class="rv">
+  <div class="wrap">
+    <div class="com-card">
       <h3>把你读过的书变成别人的良方</h3>
-      <p>每一本被收录的书，都可能成为某个人人生转折点的"良方"<br>三种投稿方式，任选其一</p>
-      <div class="community-methods">
-        <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank" class="method-chip">GitHub PR</a>
-        <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank" class="method-chip">Issue 模板</a>
-        <span class="method-chip" onclick="showToast('在线表单即将上线')">在线表单</span>
+      <p>每一本被收录的书，都可能成为某个人人生转折点的那一剂良方<br>三种投稿方式，任选其一</p>
+      <div class="com-methods">
+        <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank" class="com-m">GitHub PR</a>
+        <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank" class="com-m">Issue 投稿</a>
+        <button class="com-m" onclick="showToast('在线表单即将上线')">在线表单</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== Usage ===== -->
-<section id="usage" class="usage-section reveal">
-  <div class="container">
-    <div class="section-title">
+<section id="usage" class="use-section rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="deco">用 · 法 · 示</div>
       <h2>怎么用</h2>
+      <p>选一个你常用的平台，三步搞定</p>
     </div>
-    <p class="section-subtitle">选一个你常用的平台，三步搞定</p>
-
-    <div class="usage-tabs">
-      <div class="usage-tab active" onclick="switchTab('trae')">TRAE</div>
-      <div class="usage-tab" onclick="switchTab('chatgpt')">ChatGPT</div>
-      <div class="usage-tab" onclick="switchTab('claude')">Claude</div>
-      <div class="usage-tab" onclick="switchTab('workbuddy')">WorkBuddy</div>
+    <div class="use-tabs">
+      <button class="use-tab active" onclick="useTab('trae',this)">TRAE</button>
+      <button class="use-tab" onclick="useTab('gpt',this)">ChatGPT</button>
+      <button class="use-tab" onclick="useTab('claude',this)">Claude</button>
+      <button class="use-tab" onclick="useTab('wb',this)">WorkBuddy</button>
     </div>
-
-    <div class="usage-content active" id="tab-trae">
-      <div class="usage-step">
-        <div class="usage-step-num">1</div>
-        <div class="usage-step-text">打开 TRAE，在对话中直接表达你的困扰，比如：<code>"我最近总是拖延，怎么办"</code></div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">2</div>
-        <div class="usage-step-text">BookPill 会自动触发，开始七步工作流：共情 → 诊断 → 分析 → 拆解 → 良方 → 收尾</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">3</div>
-        <div class="usage-step-text">下次对话时说 <code>"上次你说的方法我试了"</code>，触发第七步跟进闭环</div>
-      </div>
+    <div class="use-content active" id="uc-trae">
+      <div class="use-step"><div class="n">一</div><div class="t">打开 TRAE，直接说你的困扰，比如 <code>"我最近总是拖延，怎么办"</code></div></div>
+      <div class="use-step"><div class="n">二</div><div class="t">BookPill 自动触发七步工作流：共情 → 诊断 → 分析 → 拆解 → 良方</div></div>
+      <div class="use-step"><div class="n">三</div><div class="t">下次说 <code>"上次你说的方法我试了"</code>，触发第七步跟进闭环</div></div>
     </div>
-
-    <div class="usage-content" id="tab-chatgpt">
-      <div class="usage-step">
-        <div class="usage-step-num">1</div>
-        <div class="usage-step-text">从 GitHub 下载 SKILL.md，将内容粘贴到 ChatGPT 的 Custom Instructions 或 System Prompt</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">2</div>
-        <div class="usage-step-text">将 <code>references/</code> 目录下的书籍文件作为知识库上传</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">3</div>
-        <div class="usage-step-text">直接对话：<code>"我最近很焦虑，帮我分析一下"</code>，BookPill 工作流自动启动</div>
-      </div>
+    <div class="use-content" id="uc-gpt">
+      <div class="use-step"><div class="n">一</div><div class="t">从 GitHub 下载 SKILL.md，粘贴到 ChatGPT 的 Custom Instructions</div></div>
+      <div class="use-step"><div class="n">二</div><div class="t">将 <code>references/</code> 下的书籍文件作为知识库上传</div></div>
+      <div class="use-step"><div class="n">三</div><div class="t">直接对话 <code>"我最近很焦虑，帮我分析"</code>，工作流自动启动</div></div>
     </div>
-
-    <div class="usage-content" id="tab-claude">
-      <div class="usage-step">
-        <div class="usage-step-num">1</div>
-        <div class="usage-step-text">将 SKILL.md 内容粘贴到 Claude 的 Project 或对话开头</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">2</div>
-        <div class="usage-step-text">上传 <code>references/</code> 目录下的书籍文件到 Project</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">3</div>
-        <div class="usage-step-text">直接对话：<code>"内心很内耗，反复纠结同一件事"</code>，即可触发工作流</div>
-      </div>
+    <div class="use-content" id="uc-claude">
+      <div class="use-step"><div class="n">一</div><div class="t">将 SKILL.md 内容粘贴到 Claude 的 Project 中</div></div>
+      <div class="use-step"><div class="n">二</div><div class="t">上传 <code>references/</code> 目录下的书籍文件到 Project</div></div>
+      <div class="use-step"><div class="n">三</div><div class="t">对话 <code>"内心很内耗，反复纠结"</code>，触发工作流</div></div>
     </div>
-
-    <div class="usage-content" id="tab-workbuddy">
-      <div class="usage-step">
-        <div class="usage-step-num">1</div>
-        <div class="usage-step-text">将 SKILL.md 作为 Skill 加载到 WorkBuddy</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">2</div>
-        <div class="usage-step-text">将 <code>references/</code> 作为参考资料上传</div>
-      </div>
-      <div class="usage-step">
-        <div class="usage-step-num">3</div>
-        <div class="usage-step-text">对话结束后保存"良方档案"，下次粘贴即可恢复上下文</div>
-      </div>
+    <div class="use-content" id="uc-wb">
+      <div class="use-step"><div class="n">一</div><div class="t">将 SKILL.md 作为 Skill 加载到 WorkBuddy</div></div>
+      <div class="use-step"><div class="n">二</div><div class="t">将 <code>references/</code> 作为参考资料上传</div></div>
+      <div class="use-step"><div class="n">三</div><div class="t">对话结束后保存"良方档案"，下次粘贴即可恢复上下文</div></div>
     </div>
   </div>
 </section>
 
-<!-- ===== Footer ===== -->
 <footer>
-  <div class="container">
-    <div class="footer-logo">纸上良方 BookPill</div>
+  <div class="inner">
+    <div class="f-logo"><span class="s">方</span>纸上良方</div>
     <p>读过的书，终于能用了。</p>
-    <div class="footer-links">
+    <div class="f-links">
       <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank">GitHub</a>
       <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank">贡献指南</a>
       <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank">投稿</a>
       <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/LICENSE" target="_blank">MIT License</a>
     </div>
-    <p style="opacity:0.5;font-size:12px;">v2.0.0 — 社区共建 Agent · 2026</p>
+    <p style="opacity:.4;font-size:11px;">v2.0.0 · 社区共建 · 本草堂 · 2026</p>
   </div>
 </footer>
 
-<!-- ===== Modal ===== -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" id="modal-content">
-    <button class="modal-close" onclick="closeModalDirect()">✕</button>
-    <h3 id="modal-title"></h3>
-    <p class="modal-desc" id="modal-desc"></p>
-    <div class="prompt-box" id="modal-prompt"></div>
-    <div class="modal-actions">
-      <button class="btn-copy" id="btn-copy" onclick="copyPrompt()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-        </svg>
-        <span id="copy-text">复制话术</span>
+<!-- Chat Overlay & Panel -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <div class="h-seal">方</div>
+    <div class="h-info"><h4 id="chatTitle">纸上良方</h4><span id="chatSub">正在问诊...</span></div>
+    <button class="chat-close" onclick="closeChat()">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-foot" id="chatFoot">
+    <div class="chat-input-wrap">
+      <textarea class="chat-input" id="chatInput" rows="1" placeholder="说说你的具体情况..."></textarea>
+      <button class="chat-send" id="chatSend" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
-      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-github">前往使用</a>
     </div>
+    <div class="chat-quick" id="chatQuick"></div>
   </div>
 </div>
 
-<!-- ===== Toast ===== -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ========== Prompt Data ==========
-const prompts = {
+// ========== Conversation Scripts ==========
+const scripts = {
   delay: {
-    title: '拖延',
-    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
-    prompt: '我最近总是拖延，明明知道该做却迟迟不动。特别是面对重要但不紧急的事情，总是找各种理由推到明天。一天下来什么都没做，又很自责，但第二天还是一样。帮我分析一下，有什么书里的方法可以帮我打破这个循环？'
+    name:'拖延',sub:'拖延脉 · 启动困难',
+    quick:['就是不想开始','完美主义','总是拖到deadline'],
+    flow:[
+      {t:'bot',d:'听得出来，你对自己有些失望。明明想动，却就是卡在那里，这种"知道该做但就是不做"的滋味，确实很难受。\n\n跟我说说，你最近最想开始做、却一直拖着没做的是什么事情？'},
+      {t:'user',wait:true},
+      {t:'bot',d:'我明白了。这不是你不够自律——《拖延心理学》里说得很清楚：拖延本质不是时间管理问题，而是情绪调节问题。你在用拖延来回避某种不舒服的感觉，可能是"怕做不好"，也可能是"任务太大不知道从哪开始"。\n\n给你开一剂良方 👇',delay:800},
+      {t:'prescription',book:'《微习惯》— 斯蒂芬·盖斯',insight:'改变不需要意志力，只需要一个"小到不可能失败"的行动。',steps:['★ 选一个最想做的事，把目标缩小到"每天做1个"——1页阅读、1个俯卧撑','★ 把它绑定到一个已有习惯之后——"刷牙后→1个俯卧撑"','★★ 记录完成情况，只记不评，不因没做到而自责'],quote:'不是你不够自律，而是你的目标太大了。缩小它，直到它变得可笑——然后你会发现，它不再可笑了。'},
+      {t:'end',prompt:'我最近总是拖延，明明知道该做却迟迟不动。特别是面对重要但不紧急的事情，总是找各种理由推到明天。一天下来什么都没做，又很自责，但第二天还是一样。帮我分析一下，有什么书里的方法可以帮我打破这个循环？'}
+    ]
   },
   anxiety: {
-    title: '焦虑',
-    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
-    prompt: '最近特别焦虑，感觉什么都想做又什么都做不好。工作压力大，晚上睡不着，脑子里停不下来。有时候心跳加速，胸口闷闷的。我知道自己可能想太多了，但就是控制不住。有什么书里的智慧能帮我缓解一下吗？'
+    name:'焦虑',sub:'焦虑脉 · 压力紧绷',
+    quick:'最近压力很大|睡不着|什么都想做好',
+    flow:[
+      {t:'bot',d:'听起来你现在绷得很紧。什么都想做，又怕什么都做不好，脑子里停不下来——这种感觉真的很消耗人。\n\n这种状态持续多久了？最近生活里有没有发生什么变化？'},
+      {t:'user',wait:true},
+      {t:'bot',d:'谢谢你告诉我。焦虑不是你的错——《被讨厌的勇气》里有个观点很适合你现在的状态：很多焦虑来自于"想要被所有人认可"，当我们放下这个执念，自由就开始了。\n\n给你开一剂良方 👇',delay:800},
+      {t:'prescription',book:'《被讨厌的勇气》— 岸见一郎',insight:'自由就是被别人讨厌。不再寻求认可，反而获得了真正的自由。',steps:['★ 每天问自己："这件事的结果最终由谁承担？"——如果是你，大胆去做','★ 练习课题分离：别人的评价是别人的课题，你无法控制也不需要控制','★★ 每晚花3分钟写下今天"被讨厌也没关系"的一件事'],quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'},
+      {t:'end',prompt:'最近特别焦虑，感觉什么都想做又什么都做不好。工作压力大，晚上睡不着，脑子里停不下来。有时候心跳加速，胸口闷闷的。我知道自己可能想太多了，但就是控制不住。有什么书里的智慧能帮我缓解一下吗？'}
+    ]
   },
   internal: {
-    title: '内耗',
-    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
-    prompt: '内心很内耗，反复纠结同一件事停不下来。做了决定又后悔，没做又焦虑。经常自我怀疑，觉得自己不够好。别人一句话我能想三天。感觉很累，但又说不出具体在累什么。有什么书能帮我理清这种状态吗？'
+    name:'内耗',sub:'内耗脉 · 反复纠结',
+    quick:'想太多|自我怀疑|做了决定又后悔',
+    flow:[
+      {t:'bot',d:'你一定很累吧。反复纠结同一件事，做了决定又后悔，没做又焦虑——这种内耗比真正做事还累人。\n\n你现在最纠结的是什么事？如果能说说的话。'},
+      {t:'user',wait:true},
+      {t:'bot',d:'我听到了。内耗的本质，在《蛤蟆先生去看心理医生》里有个很好的解释：你的"内在父母"一直在批评你的"内在儿童"，两个声音打架，消耗了你所有的能量。\n\n给你开一剂良方 👇',delay:800},
+      {t:'prescription',book:'《自我关怀》— 克里斯汀·内夫',insight:'对自己说你会对好朋友说的话——自我同情比自我批评更能带来改变。',steps:['★ 当你又开始自我批评时，停下来问："我会对好朋友说这些话吗？"','★ 把"我不够好"改成"我正在学习"——成长心态代替固定心态','★★ 每天给自己一个"允许"——"今天允许自己不完美"'],quote:'你不需要变得完美才值得被爱——包括被你自己爱。'},
+      {t:'end',prompt:'内心很内耗，反复纠结同一件事停不下来。做了决定又后悔，没做又焦虑。经常自我怀疑，觉得自己不够好。别人一句话我能想三天。感觉很累，但又说不出具体在累什么。有什么书能帮我理清这种状态吗？'}
+    ]
   },
   express: {
-    title: '表达',
-    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
-    prompt: '我经常想说的说不出口，或者说了之后发现完全不是想表达的意思。开会时明明有想法但不敢开口，和同事沟通时总是词不达意。有时候话说重了得罪人，有时候又太委婉对方没 get 到。有什么书里的方法能帮我提升表达？'
+    name:'表达',sub:'表达脉 · 词不达意',
+    quick:'不敢开口|说了对方没get到|社交紧张',
+    flow:[
+      {t:'bot',d:'表达这件事，真的是"知道该说什么"和"实际能说出来"之间隔着一道坎。你并不是不会想，而是卡在了"说出来"这一步。\n\n你最近在什么场景下觉得表达最困难？开会？和同事？还是和特定的人？'},
+      {t:'user',wait:true},
+      {t:'bot',d:'明白了。表达困难的背后，往往不是"没话说"，而是"怕说错"。《非暴力沟通》提供了一个很实用的框架，帮你把"想说但不敢说"变成"有结构地说"。\n\n给你开一剂良方 👇',delay:800},
+      {t:'prescription',book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'观察→感受→需要→请求。四步走完，你说的话对方才听得进去。',steps:['★ 练习"观察"而非"评判"——说"你这周三次没回我消息"而非"你总是不理我"','★ 表达感受而非想法——"我感到焦虑"而非"我觉得你不靠谱"','★★ 准备一个"表达模板"：当___时，我感到___，因为我需要___，你是否愿意___？'],quote:'当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。'},
+      {t:'end',prompt:'我经常想说的说不出口，或者说了之后发现完全不是想表达的意思。开会时明明有想法但不敢开口，和同事沟通时总是词不达意。有时候话说重了得罪人，有时候又太委婉对方没get到。有什么书里的方法能帮我提升表达？'}
+    ]
   },
   eq: {
-    title: '情商',
-    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
-    prompt: '我发现自己情绪管理很差，容易冲动发火，事后又后悔。和家人的关系越来越紧张，和同事也经常因为小事摩擦。有时候明明知道不该那样反应，但情绪上来了就控制不住。有什么书能帮我提升情商和情绪管理能力？'
+    name:'情商',sub:'情商脉 · 情绪管理',
+    quick:'容易发火|人际关系紧张|控制不住',
+    flow:[
+      {t:'bot',d:'能意识到"控制不住情绪"这一点，说明你的觉察力其实不差——很多人发完火还觉得是别人的问题。\n\n你说"控制不住"，能具体说说最近哪次让你印象最深吗？是什么事、什么人触发的？'},
+      {t:'user',wait:true},
+      {t:'bot',d:'我理解了。情商不是"不发火"，而是"知道自己在发火、为什么发火、发完之后怎么办"。《情商》这本书里说，情绪管理的前提是"情绪标注"——给情绪起名字，它就不那么可怕了。\n\n给你开一剂良方 👇',delay:800},
+      {t:'prescription',book:'《情商》— 丹尼尔·戈尔曼',insight:'情商的核心不是压抑情绪，而是识别情绪、理解情绪、然后选择回应方式。',steps:['★ 情绪上头时先做一件事：在心里给情绪命名——"这是愤怒/委屈/恐惧"','★ 设一个"6秒缓冲"——情绪爆发前默数6秒，让杏仁核冷静下来','★★ 每晚回顾：今天哪次情绪反应我处理得不错？哪次可以更好？'],quote:'你不能阻止波浪，但你可以学会冲浪。情绪也是一样。'},
+      {t:'end',prompt:'我发现自己情绪管理很差，容易冲动发火，事后又后悔。和家人的关系越来越紧张，和同事也经常因为小事摩擦。有时候明明知道不该那样反应，但情绪上来了就控制不住。有什么书能帮我提升情商和情绪管理能力？'}
+    ]
   }
 };
 
-let currentPrompt = '';
+let currentScript=null;
+let currentStep=0;
+let waitingForUser=false;
 
-// ========== Modal ==========
-function openModal(domain) {
-  const data = prompts[domain];
-  document.getElementById('modal-title').textContent = data.title;
-  document.getElementById('modal-desc').textContent = data.desc;
-  document.getElementById('modal-prompt').textContent = data.prompt;
-  currentPrompt = data.prompt;
-  document.getElementById('modal-overlay').classList.add('active');
-  document.getElementById('copy-text').textContent = '复制话术';
-  document.getElementById('btn-copy').classList.remove('copied');
+// ========== Chat Logic ==========
+function startChat(domain){
+  currentScript=scripts[domain];
+  currentStep=0;
+  document.getElementById('chatTitle').textContent=currentScript.name;
+  document.getElementById('chatSub').textContent=currentScript.sub;
+  document.getElementById('chatBody').innerHTML='';
+  document.getElementById('chatQuick').innerHTML='';
+  
+  // Show quick replies
+  if(currentScript.quick){
+    const qArr=Array.isArray(currentScript.quick)?currentScript.quick:currentScript.quick.split('|');
+    qArr.forEach(q=>{
+      const b=document.createElement('button');
+      b.className='quick-btn';b.textContent=q;
+      b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};
+      document.getElementById('chatQuick').appendChild(b);
+    });
+  }
+
+  document.getElementById('chatPanel').classList.add('open');
+  document.getElementById('chatOverlay').classList.add('show');
+  setTimeout(()=>processStep(),400);
 }
 
-function closeModal(e) {
-  if (e.target === e.currentTarget) {
-    closeModalDirect();
+function processStep(){
+  if(currentStep>=currentScript.flow.length)return;
+  const step=currentScript.flow[currentStep];
+  
+  if(step.t==='bot'){
+    showTyping();
+    setTimeout(()=>{
+      hideTyping();
+      addBotMsg(step.d);
+      currentStep++;
+      processStep();
+    },step.delay||600);
+  }else if(step.t==='user'){
+    waitingForUser=true;
+    document.getElementById('chatInput').focus();
+  }else if(step.t==='prescription'){
+    showTyping();
+    setTimeout(()=>{
+      hideTyping();
+      addPrescription(step);
+      currentStep++;
+      processStep();
+    },300);
+  }else if(step.t==='end'){
+    addEndTip(step.prompt);
   }
 }
 
-function closeModalDirect() {
-  document.getElementById('modal-overlay').classList.remove('active');
+function sendMessage(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text||!waitingForUser)return;
+  
+  addMsg('user',text);
+  input.value='';
+  input.style.height='auto';
+  waitingForUser=false;
+  document.getElementById('chatQuick').innerHTML='';
+  
+  // Advance past the user step
+  currentStep++;
+  setTimeout(()=>processStep(),300);
 }
 
-// ========== Copy ==========
-function copyPrompt() {
-  navigator.clipboard.writeText(currentPrompt).then(() => {
-    const btn = document.getElementById('btn-copy');
-    document.getElementById('copy-text').textContent = '已复制！去粘贴吧';
-    btn.classList.add('copied');
-    showToast('话术已复制，粘贴到对话框即可开始');
-  }).catch(() => {
-    // Fallback
-    const textarea = document.createElement('textarea');
-    textarea.value = currentPrompt;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('话术已复制，粘贴到对话框即可开始');
+function addMsg(who,text){
+  const div=document.createElement('div');
+  div.className='msg '+who;
+  if(who==='bot'){
+    div.innerHTML='<span class="b-name">良方</span>'+text.replace(/\n/g,'<br>');
+  }else{
+    div.textContent=text;
+  }
+  document.getElementById('chatBody').appendChild(div);
+  scrollChat();
+}
+function addBotMsg(text){addMsg('bot',text)}
+
+function addPrescription(step){
+  const div=document.createElement('div');
+  div.className='prescription';
+  div.innerHTML=`
+    <div class="p-title">📖 处方笺</div>
+    <div class="p-book">来自：${step.book}</div>
+    <div class="p-insight">${step.insight}</div>
+    <ul class="p-steps">${step.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+    <div class="p-quote">"${step.quote}"</div>
+  `;
+  document.getElementById('chatBody').appendChild(div);
+  scrollChat();
+}
+
+function addEndTip(prompt){
+  const div=document.createElement('div');
+  div.className='chat-end-tip';
+  div.innerHTML=`这是简化版体验。完整七步工作流（含记忆系统、跟进闭环）请在 TRAE / ChatGPT / Claude 中使用。<br><button onclick="copyFullPrompt('${prompt.replace(/'/g,"\\'")}')">复制完整问诊话术 →</button>`;
+  document.getElementById('chatBody').appendChild(div);
+  scrollChat();
+}
+
+function showTyping(){
+  const div=document.createElement('div');
+  div.className='chat-typing';div.id='typing';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chatBody').appendChild(div);
+  scrollChat();
+}
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove()}
+
+function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight}
+
+function closeChat(){
+  document.getElementById('chatPanel').classList.remove('open');
+  document.getElementById('chatOverlay').classList.remove('show');
+}
+
+function copyFullPrompt(prompt){
+  navigator.clipboard.writeText(prompt).then(()=>{
+    showToast('话术已复制，粘贴到 TRAE / ChatGPT / Claude 即可开始完整体验');
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=prompt;
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('话术已复制，粘贴到 TRAE / ChatGPT / Claude 即可开始完整体验');
   });
 }
 
 // ========== Toast ==========
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// ========== Tabs ==========
-function switchTab(platform) {
-  document.querySelectorAll('.usage-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.usage-content').forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('tab-' + platform).classList.add('active');
+// ========== Usage Tabs ==========
+function useTab(id,btn){
+  document.querySelectorAll('.use-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.use-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('uc-'+id).classList.add('active');
 }
+
+// ========== Scroll ==========
+function scrollToDomains(){document.getElementById('domains').scrollIntoView({behavior:'smooth'})}
 
 // ========== Scroll Reveal ==========
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(e=>obs.observe(e));
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ========== Esc to close modal ==========
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModalDirect();
+// ========== Chat Input Auto-resize ==========
+const ci=document.getElementById('chatInput');
+ci.addEventListener('input',()=>{
+  ci.style.height='auto';
+  ci.style.height=Math.min(ci.scrollHeight,80)+'px';
 });
+ci.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+});
+
+// ========== Esc to close chat ==========
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat()});
 </script>
 
 </body>
