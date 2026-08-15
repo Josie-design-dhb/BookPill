@@ -1,0 +1,149 @@
+name: 📚 书籍投稿
+description: 为 BookPill 知识库推荐一本新书
+title: "[书籍投稿] 《书名》— 问题域"
+labels: ["book-submission", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你为 BookPill 贡献书籍！请按照以下模板填写信息。
+        
+        提交前请先搜索 [已有 Issues](https://github.com/Josie3218/BookPill/issues?q=label%3Abook-submission) 确认该书未被重复投稿。
+        
+        详细投稿指南请参考 [CONTRIBUTING.md](https://github.com/Josie3218/BookPill/blob/main/CONTRIBUTING.md)。
+
+  - type: input
+    id: book-title
+    attributes:
+      label: 书名
+      description: 书籍的完整中文名称（如有英文原名可附上）
+      placeholder: "例：《被讨厌的勇气》"
+    validations:
+      required: true
+
+  - type: input
+    id: book-author
+    attributes:
+      label: 作者
+      description: 原作者姓名（如有译者可附上）
+      placeholder: "例：岸见一郎 / 古贺史健"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: problem-domain
+    attributes:
+      label: 主要问题域
+      description: 该书主要解决哪个问题域的问题
+      options:
+        - 拖延 — 行动力、效率、习惯养成
+        - 焦虑 — 压力、内耗、紧绷、失眠
+        - 内耗 — 自我怀疑、纠结、情绪内耗
+        - 表达 — 沟通、社交、表达困难
+        - 情商 — 情绪管理、人际关系、共情
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cross-domain
+    attributes:
+      label: 交叉问题域（可选）
+      description: 如果该书也适用于其他问题域，选择一个
+      options:
+        - 无 — 仅适用于主问题域
+        - 拖延
+        - 焦虑
+        - 内耗
+        - 表达
+        - 情商
+    validations:
+      required: false
+
+  - type: input
+    id: recommend-scene
+    attributes:
+      label: 推荐场景
+      description: 一句话描述这本书适合在什么情况下推荐给用户
+      placeholder: "例：当用户表达'总是担心别人怎么看自己'时"
+    validations:
+      required: true
+
+  - type: textarea
+    id: core-ideas
+    attributes:
+      label: 核心观点摘要
+      description: 该书的3-5条核心理念，每条一句话概括
+      placeholder: |
+        1. 课题分离：区分"自己的课题"和"他人的课题"
+        2. 自由就是被别人讨厌——不再寻求认可
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: prescription
+    attributes:
+      label: 良方（至少1个）
+      description: |
+        基于该书核心观点，给出可直接推荐给用户的可操作建议。
+        每条建议需包含"做什么"+"怎么做"，并标注难度（★入门/★★进阶/★★★挑战）。
+        详见 templates/book-template.md 中的良方部分。
+      placeholder: |
+        良方一：课题分离练习
+        ★ 当你担心别人怎么看你时，问自己一个问题："这件事的结果最终由谁承担？"
+        如果答案是"我自己"——那是你的课题，大胆去做。
+        如果答案是"对方"——那是对方的课题，放下它。
+        
+        良方二：...
+    validations:
+      required: true
+
+  - type: textarea
+    id: golden-quote
+    attributes:
+      label: 金句
+      description: 1-2句书中的原文或改编金句，用于良方结尾的"送你一句话"
+      placeholder: "例：自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: target-audience
+    attributes:
+      label: 适用人群
+      description: 这本书适合什么样的人？尽量具体
+      placeholder: "例：总是在意他人评价、不敢表达真实需求、人际关系中感到疲惫的人"
+    validations:
+      required: true
+
+  - type: input
+    id: contributor-name
+    attributes:
+      label: 你的名字/GitHub ID
+      description: 用于在 CONTRIBUTORS.md 中记录你的贡献
+      placeholder: "例：Josie3218"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: 补充说明（可选）
+      description: 任何你想补充的内容，如个人使用体验、书籍搭配建议等
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 投稿确认
+      description: 请确认以下事项
+      options:
+        - label: 我已搜索现有 Issues，确认该书未被重复投稿
+          required: true
+        - label: 我已阅读 CONTRIBUTING.md 中的审核标准，确认投稿内容符合要求
+          required: true
+        - label: 书籍核心观点忠实于原书，未歪曲作者意图
+          required: true
+        - label: 良方为原创或合理改编，未直接复制他人书评
+          required: true
