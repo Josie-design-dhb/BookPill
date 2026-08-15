@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>纸上良方 BookPill — 读过的书，终于能用了</title>
+<meta name="description" content="基于21本经典书籍的个人问题诊断与建议引擎。拖延、焦虑、内耗、表达、情商，五大问题域，七步良方工作流。">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --sage: #7a9b76;
+  --sage-light: #a8c4a3;
+  --sage-pale: #e4ede1;
+  --sage-dark: #5a7a56;
+  --sand: #ddcba8;
+  --sand-light: #f0e7d6;
+  --sand-pale: #f7f2e8;
+  --cream: #fbf9f4;
+  --paper: #ffffff;
+  --ink: #3a3a38;
+  --ink-soft: #6b6b66;
+  --ink-faint: #a0a09a;
+  --accent: #c97b5a;
+  --accent-soft: #e8c9b8;
+  --radius: 24px;
+  --radius-sm: 14px;
+  --radius-xs: 8px;
+  --shadow: 0 2px 20px rgba(122, 155, 118, 0.08);
+  --shadow-hover: 0 8px 32px rgba(122, 155, 118, 0.16);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========== Reset ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Noto Sans SC', 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ========== Typography ========== */
+.serif { font-family: 'Noto Serif SC', serif; }
+h1, h2, h3 { font-family: 'Noto Serif SC', serif; font-weight: 700; line-height: 1.3; }
+
+/* ========== Container ========== */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (max-width: 768px) {
+  .container { padding: 0 18px; }
+}
+
+/* ========== Nav ========== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(251, 249, 244, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(122, 155, 118, 0.08);
+  transition: var(--transition);
+}
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--sage-dark);
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--ink-soft);
+  transition: color var(--transition);
+}
+.nav-links a:hover { color: var(--sage); }
+.nav-cta {
+  background: var(--sage);
+  color: white !important;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+.nav-cta:hover { background: var(--sage-dark); }
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-cta { display: flex; }
+}
+
+/* ========== Hero ========== */
+.hero {
+  padding: 120px 0 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, var(--sage-pale) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, var(--sand-pale) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, var(--sage-pale) 0%, transparent 60%);
+  z-index: -1;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sage-pale);
+  color: var(--sage-dark);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease-out both;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 16px;
+  animation: fadeUp 0.6s 0.1s ease-out both;
+}
+.hero h1 .accent {
+  color: var(--sage);
+  position: relative;
+}
+.hero h1 .accent::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 0; right: 0;
+  height: 8px;
+  background: var(--sand);
+  border-radius: 4px;
+  z-index: -1;
+  opacity: 0.6;
+}
+.hero-tagline {
+  font-size: clamp(16px, 3vw, 20px);
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  animation: fadeUp 0.6s 0.2s ease-out both;
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--ink-faint);
+  margin-bottom: 36px;
+  animation: fadeUp 0.6s 0.3s ease-out both;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.4s ease-out both;
+}
+.btn-primary {
+  background: var(--sage);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(122, 155, 118, 0.3);
+}
+.btn-primary:hover {
+  background: var(--sage-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(122, 155, 118, 0.4);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--sage-dark);
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1.5px solid var(--sage-light);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary:hover {
+  background: var(--sage-pale);
+  border-color: var(--sage);
+}
+
+/* ========== Stats ========== */
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 48px;
+  animation: fadeUp 0.6s 0.5s ease-out both;
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--sage);
+}
+.stat-label {
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Section ========== */
+section { padding: 80px 0; }
+.section-title {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.section-title h2 {
+  font-size: clamp(24px, 4vw, 34px);
+  color: var(--ink);
+}
+.section-subtitle {
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: 15px;
+  margin-bottom: 48px;
+}
+
+/* ========== Domain Cards ========== */
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.domain-card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(122, 155, 118, 0.06);
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.domain-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--domain-color, var(--sage));
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.domain-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--domain-color, var(--sage));
+}
+.domain-card:hover::before { opacity: 1; }
+.domain-card:hover .domain-icon {
+  background: var(--domain-color, var(--sage));
+  color: white;
+}
+.domain-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: var(--sage-pale);
+  color: var(--sage-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+.domain-icon svg { width: 28px; height: 28px; }
+.domain-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.domain-card .desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.domain-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.domain-tag {
+  background: var(--sand-pale);
+  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+}
+
+/* ========== Modal ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(58, 58, 56, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.2s ease;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 40px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border: none;
+  background: var(--sand-pale);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal h3 { font-size: 22px; margin-bottom: 8px; }
+.modal .modal-desc { color: var(--ink-soft); font-size: 14px; margin-bottom: 24px; }
+.prompt-box {
+  background: var(--cream);
+  border: 1px solid var(--sage-pale);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+.btn-copy {
+  flex: 1;
+  background: var(--sage);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-copy:hover { background: var(--sage-dark); }
+.btn-copy.copied {
+  background: var(--sage-dark);
+}
+.btn-github {
+  background: var(--ink);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-github:hover { opacity: 0.85; }
+
+/* ========== Workflow ========== */
+.workflow-section { background: var(--paper); }
+.workflow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.workflow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 32px;
+}
+.workflow-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 52px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--sage-light), transparent);
+}
+.workflow-num {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--sage);
+  color: var(--sage);
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+}
+.workflow-step:hover .workflow-num {
+  background: var(--sage);
+  color: white;
+}
+.workflow-step.v2 .workflow-num {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.workflow-step.v2 .workflow-num::after {
+  content: 'NEW';
+  position: absolute;
+  top: -8px; right: -12px;
+  font-size: 9px;
+  background: var(--accent);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 100px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 600;
+}
+.workflow-body h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+.workflow-body p {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* ========== Books ========== */
+.books-section { background: var(--sand-pale); }
+.book-domains {
+  display: grid;
+  gap: 24px;
+}
+.book-domain-group h4 {
+  font-size: 16px;
+  color: var(--sage-dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.book-domain-group h4::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sand);
+}
+.book-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.book-chip {
+  background: var(--paper);
+  border: 1px solid var(--sand);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--ink);
+  transition: var(--transition);
+}
+.book-chip:hover {
+  border-color: var(--sage);
+  color: var(--sage-dark);
+  transform: translateY(-1px);
+}
+.book-chip.community {
+  background: var(--sage-pale);
+  border-color: var(--sage-light);
+  color: var(--sage-dark);
+}
+
+/* ========== Community ========== */
+.community-section { text-align: center; }
+.community-card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 48px 40px;
+  box-shadow: var(--shadow);
+  max-width: 640px;
+  margin: 0 auto;
+}
+.community-card h3 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+.community-card p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.community-methods {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.method-chip {
+  background: var(--sand-pale);
+  border: 1px solid var(--sand);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  color: var(--ink);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.method-chip:hover {
+  background: var(--sage);
+  color: white;
+  border-color: var(--sage);
+}
+
+/* ========== Usage ========== */
+.usage-section { background: var(--paper); }
+.usage-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.usage-tab {
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--sand-pale);
+  color: var(--ink-soft);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+.usage-tab.active {
+  background: var(--sage);
+  color: white;
+}
+.usage-content {
+  display: none;
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+.usage-content.active { display: block; }
+.usage-step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+.usage-step:last-child { margin-bottom: 0; }
+.usage-step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--sage-pale);
+  color: var(--sage-dark);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.usage-step-text {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+.usage-step-text code {
+  background: var(--sage-pale);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--sage-dark);
+  font-family: 'Inter', monospace;
+}
+
+/* ========== Footer ========== */
+footer {
+  background: var(--sage-dark);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 48px 0 32px;
+  text-align: center;
+}
+footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+footer .footer-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+footer p { font-size: 13px; }
+footer .footer-links {
+  display: flex;
+  gap: 20px;
+}
+footer .footer-links a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  transition: color var(--transition);
+}
+footer .footer-links a:hover { color: white; }
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-size: 14px;
+  z-index: 300;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== Scroll Reveal ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Mobile ========== */
+@media (max-width: 640px) {
+  .hero { padding: 100px 0 60px; }
+  section { padding: 60px 0; }
+  .domain-card { padding: 24px 20px; }
+  .modal { padding: 28px 20px; }
+  .community-card { padding: 32px 24px; }
+  .hero-stats { gap: 20px; }
+  .stat-num { font-size: 26px; }
+  .workflow-step { gap: 14px; }
+  .workflow-num { width: 40px; height: 40px; font-size: 15px; }
+  .workflow-step:not(:last-child)::after { left: 19px; top: 44px; }
+}
+
+@media (max-width: 380px) {
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-secondary { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Nav ===== -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo">
+      <span class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+      </span>
+      BookPill
+    </a>
+    <div class="nav-links">
+      <a href="#domains">问题域</a>
+      <a href="#workflow">工作流</a>
+      <a href="#books">知识库</a>
+      <a href="#community">社区</a>
+      <a href="#usage">使用方法</a>
+    </div>
+    <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="nav-cta">GitHub</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">v2.0 社区共建版上线</div>
+      <h1>读过的书，<span class="accent">终于能用了</span></h1>
+      <p class="hero-tagline">纸上良方 BookPill</p>
+      <p class="hero-desc">基于21本经典书籍的个人问题诊断与建议引擎<br>拖延 · 焦虑 · 内耗 · 表达 · 情商 — 五大问题域，七步良方</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('domains').scrollIntoView({behavior:'smooth'})">开始问诊</button>
+        <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-secondary">查看仓库</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">21+</div>
+          <div class="stat-label">经典书籍</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">5</div>
+          <div class="stat-label">问题域</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">7</div>
+          <div class="stat-label">步工作流</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4</div>
+          <div class="stat-label">平台支持</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Problem Domains ===== -->
+<section id="domains" class="reveal">
+  <div class="container">
+    <div class="section-title">
+      <h2>你遇到了什么困扰？</h2>
+    </div>
+    <p class="section-subtitle">选一个最贴近你当下状态的问题域，点击即可复制提问话术</p>
+
+    <div class="domain-grid">
+
+      <!-- 拖延 -->
+      <div class="domain-card" style="--domain-color:#8B7EC8" onclick="openModal('delay')">
+        <div class="domain-icon" style="background:#EDE8F8;color:#8B7EC8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h3>拖延</h3>
+        <p class="desc">明明知道该做，就是动不起来</p>
+        <div class="domain-tags">
+          <span class="domain-tag">启动困难</span>
+          <span class="domain-tag">完美主义</span>
+          <span class="domain-tag">行动力</span>
+        </div>
+      </div>
+
+      <!-- 焦虑 -->
+      <div class="domain-card" style="--domain-color:#C97B5A" onclick="openModal('anxiety')">
+        <div class="domain-icon" style="background:#F8E8E0;color:#C97B5A">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <h3>焦虑</h3>
+        <p class="desc">什么都想做好，结果什么都没做好</p>
+        <div class="domain-tags">
+          <span class="domain-tag">压力</span>
+          <span class="domain-tag">紧绷</span>
+          <span class="domain-tag">失眠</span>
+        </div>
+      </div>
+
+      <!-- 内耗 -->
+      <div class="domain-card" style="--domain-color:#6B8E9E" onclick="openModal('internal')">
+        <div class="domain-icon" style="background:#E0EBF0;color:#6B8E9E">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <h3>内耗</h3>
+        <p class="desc">反复纠结同一件事，停不下来</p>
+        <div class="domain-tags">
+          <span class="domain-tag">自我怀疑</span>
+          <span class="domain-tag">纠结</span>
+          <span class="domain-tag">情绪消耗</span>
+        </div>
+      </div>
+
+      <!-- 表达 -->
+      <div class="domain-card" style="--domain-color:#D4A04C" onclick="openModal('express')">
+        <div class="domain-icon" style="background:#F8F0E0;color:#D4A04C">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h3>表达</h3>
+        <p class="desc">想说的说不出口，词不达意</p>
+        <div class="domain-tags">
+          <span class="domain-tag">沟通</span>
+          <span class="domain-tag">社交</span>
+          <span class="domain-tag">开口</span>
+        </div>
+      </div>
+
+      <!-- 情商 -->
+      <div class="domain-card" style="--domain-color:#7a9b76" onclick="openModal('eq')">
+        <div class="domain-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <h3>情商</h3>
+        <p class="desc">控制不住情绪，人际关系紧张</p>
+        <div class="domain-tags">
+          <span class="domain-tag">情绪管理</span>
+          <span class="domain-tag">人际</span>
+          <span class="domain-tag">共情</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Workflow ===== -->
+<section id="workflow" class="workflow-section reveal">
+  <div class="container">
+    <div class="section-title">
+      <h2>七步良方工作流</h2>
+    </div>
+    <p class="section-subtitle">从共情到跟进，每一步都有据可依</p>
+
+    <div class="workflow-steps">
+      <div class="workflow-step">
+        <div class="workflow-num">1</div>
+        <div class="workflow-body">
+          <h4>共情开场</h4>
+          <p>识别你的情绪状态，让你感到被理解、被接纳</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">2</div>
+        <div class="workflow-body">
+          <h4>问题诊断</h4>
+          <p>定位问题域，评估严重程度，判断是否需要专业帮助</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">3</div>
+        <div class="workflow-body">
+          <h4>原因分析</h4>
+          <p>从行为、情绪、认知、环境四个层面挖掘深层原因</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">4</div>
+        <div class="workflow-body">
+          <h4>问题拆解</h4>
+          <p>把大问题拆成小问题，标注哪些可立即行动</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">5</div>
+        <div class="workflow-body">
+          <h4>良方输出</h4>
+          <p>基于书籍给出具体、可操作的建议，标注难度等级</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">6</div>
+        <div class="workflow-body">
+          <h4>收尾</h4>
+          <p>鼓励你，指出接下来第一步做什么，为跟进埋下种子</p>
+        </div>
+      </div>
+      <div class="workflow-step v2">
+        <div class="workflow-num">7</div>
+        <div class="workflow-body">
+          <h4>跟进闭环</h4>
+          <p>下次对话主动回顾上次建议的执行情况，形成闭环</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Books ===== -->
+<section id="books" class="books-section reveal">
+  <div class="container">
+    <div class="section-title">
+      <h2>知识库</h2>
+    </div>
+    <p class="section-subtitle">21本核心书籍 + 社区共建持续扩展</p>
+
+    <div class="book-domains">
+      <div class="book-domain-group">
+        <h4>拖延域</h4>
+        <div class="book-chips">
+          <span class="book-chip">拖延心理学</span>
+          <span class="book-chip">微习惯</span>
+          <span class="book-chip">原子习惯</span>
+          <span class="book-chip">把时间当作朋友</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>焦虑域</h4>
+        <div class="book-chips">
+          <span class="book-chip">被讨厌的勇气</span>
+          <span class="book-chip">当下的力量</span>
+          <span class="book-chip">焦虑的人</span>
+          <span class="book-chip">身份的焦虑</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>内耗域</h4>
+        <div class="book-chips">
+          <span class="book-chip">蛤蟆先生去看心理医生</span>
+          <span class="book-chip">被忽视的孩子</span>
+          <span class="book-chip">也许你该找个人聊聊</span>
+          <span class="book-chip">自我关怀</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>表达域</h4>
+        <div class="book-chips">
+          <span class="book-chip">非暴力沟通</span>
+          <span class="book-chip">关键对话</span>
+          <span class="book-chip">影响力</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>情商域</h4>
+        <div class="book-chips">
+          <span class="book-chip">情商</span>
+          <span class="book-chip">社交天性</span>
+          <span class="book-chip">高效能人士的七个习惯</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>跨域书籍</h4>
+        <div class="book-chips">
+          <span class="book-chip">心流</span>
+          <span class="book-chip">活出生命的意义</span>
+          <span class="book-chip">牧羊少年奇幻之旅</span>
+        </div>
+      </div>
+      <div class="book-domain-group">
+        <h4>社区共建</h4>
+        <div class="book-chips">
+          <span class="book-chip community">等待你的投稿 →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Community ===== -->
+<section id="community" class="community-section reveal">
+  <div class="container">
+    <div class="community-card">
+      <h3>把你读过的书变成别人的良方</h3>
+      <p>每一本被收录的书，都可能成为某个人人生转折点的"良方"<br>三种投稿方式，任选其一</p>
+      <div class="community-methods">
+        <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank" class="method-chip">GitHub PR</a>
+        <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank" class="method-chip">Issue 模板</a>
+        <span class="method-chip" onclick="showToast('在线表单即将上线')">在线表单</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Usage ===== -->
+<section id="usage" class="usage-section reveal">
+  <div class="container">
+    <div class="section-title">
+      <h2>怎么用</h2>
+    </div>
+    <p class="section-subtitle">选一个你常用的平台，三步搞定</p>
+
+    <div class="usage-tabs">
+      <div class="usage-tab active" onclick="switchTab('trae')">TRAE</div>
+      <div class="usage-tab" onclick="switchTab('chatgpt')">ChatGPT</div>
+      <div class="usage-tab" onclick="switchTab('claude')">Claude</div>
+      <div class="usage-tab" onclick="switchTab('workbuddy')">WorkBuddy</div>
+    </div>
+
+    <div class="usage-content active" id="tab-trae">
+      <div class="usage-step">
+        <div class="usage-step-num">1</div>
+        <div class="usage-step-text">打开 TRAE，在对话中直接表达你的困扰，比如：<code>"我最近总是拖延，怎么办"</code></div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">2</div>
+        <div class="usage-step-text">BookPill 会自动触发，开始七步工作流：共情 → 诊断 → 分析 → 拆解 → 良方 → 收尾</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">3</div>
+        <div class="usage-step-text">下次对话时说 <code>"上次你说的方法我试了"</code>，触发第七步跟进闭环</div>
+      </div>
+    </div>
+
+    <div class="usage-content" id="tab-chatgpt">
+      <div class="usage-step">
+        <div class="usage-step-num">1</div>
+        <div class="usage-step-text">从 GitHub 下载 SKILL.md，将内容粘贴到 ChatGPT 的 Custom Instructions 或 System Prompt</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">2</div>
+        <div class="usage-step-text">将 <code>references/</code> 目录下的书籍文件作为知识库上传</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">3</div>
+        <div class="usage-step-text">直接对话：<code>"我最近很焦虑，帮我分析一下"</code>，BookPill 工作流自动启动</div>
+      </div>
+    </div>
+
+    <div class="usage-content" id="tab-claude">
+      <div class="usage-step">
+        <div class="usage-step-num">1</div>
+        <div class="usage-step-text">将 SKILL.md 内容粘贴到 Claude 的 Project 或对话开头</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">2</div>
+        <div class="usage-step-text">上传 <code>references/</code> 目录下的书籍文件到 Project</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">3</div>
+        <div class="usage-step-text">直接对话：<code>"内心很内耗，反复纠结同一件事"</code>，即可触发工作流</div>
+      </div>
+    </div>
+
+    <div class="usage-content" id="tab-workbuddy">
+      <div class="usage-step">
+        <div class="usage-step-num">1</div>
+        <div class="usage-step-text">将 SKILL.md 作为 Skill 加载到 WorkBuddy</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">2</div>
+        <div class="usage-step-text">将 <code>references/</code> 作为参考资料上传</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step-num">3</div>
+        <div class="usage-step-text">对话结束后保存"良方档案"，下次粘贴即可恢复上下文</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">纸上良方 BookPill</div>
+    <p>读过的书，终于能用了。</p>
+    <div class="footer-links">
+      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank">GitHub</a>
+      <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank">贡献指南</a>
+      <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank">投稿</a>
+      <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/LICENSE" target="_blank">MIT License</a>
+    </div>
+    <p style="opacity:0.5;font-size:12px;">v2.0.0 — 社区共建 Agent · 2026</p>
+  </div>
+</footer>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <h3 id="modal-title"></h3>
+    <p class="modal-desc" id="modal-desc"></p>
+    <div class="prompt-box" id="modal-prompt"></div>
+    <div class="modal-actions">
+      <button class="btn-copy" id="btn-copy" onclick="copyPrompt()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        <span id="copy-text">复制话术</span>
+      </button>
+      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-github">前往使用</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== Prompt Data ==========
+const prompts = {
+  delay: {
+    title: '拖延',
+    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
+    prompt: '我最近总是拖延，明明知道该做却迟迟不动。特别是面对重要但不紧急的事情，总是找各种理由推到明天。一天下来什么都没做，又很自责，但第二天还是一样。帮我分析一下，有什么书里的方法可以帮我打破这个循环？'
+  },
+  anxiety: {
+    title: '焦虑',
+    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
+    prompt: '最近特别焦虑，感觉什么都想做又什么都做不好。工作压力大，晚上睡不着，脑子里停不下来。有时候心跳加速，胸口闷闷的。我知道自己可能想太多了，但就是控制不住。有什么书里的智慧能帮我缓解一下吗？'
+  },
+  internal: {
+    title: '内耗',
+    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
+    prompt: '内心很内耗，反复纠结同一件事停不下来。做了决定又后悔，没做又焦虑。经常自我怀疑，觉得自己不够好。别人一句话我能想三天。感觉很累，但又说不出具体在累什么。有什么书能帮我理清这种状态吗？'
+  },
+  express: {
+    title: '表达',
+    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
+    prompt: '我经常想说的说不出口，或者说了之后发现完全不是想表达的意思。开会时明明有想法但不敢开口，和同事沟通时总是词不达意。有时候话说重了得罪人，有时候又太委婉对方没 get 到。有什么书里的方法能帮我提升表达？'
+  },
+  eq: {
+    title: '情商',
+    desc: '点击复制以下话术，粘贴到 TRAE / ChatGPT / Claude 即可开始',
+    prompt: '我发现自己情绪管理很差，容易冲动发火，事后又后悔。和家人的关系越来越紧张，和同事也经常因为小事摩擦。有时候明明知道不该那样反应，但情绪上来了就控制不住。有什么书能帮我提升情商和情绪管理能力？'
+  }
+};
+
+let currentPrompt = '';
+
+// ========== Modal ==========
+function openModal(domain) {
+  const data = prompts[domain];
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-desc').textContent = data.desc;
+  document.getElementById('modal-prompt').textContent = data.prompt;
+  currentPrompt = data.prompt;
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('copy-text').textContent = '复制话术';
+  document.getElementById('btn-copy').classList.remove('copied');
+}
+
+function closeModal(e) {
+  if (e.target === e.currentTarget) {
+    closeModalDirect();
+  }
+}
+
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// ========== Copy ==========
+function copyPrompt() {
+  navigator.clipboard.writeText(currentPrompt).then(() => {
+    const btn = document.getElementById('btn-copy');
+    document.getElementById('copy-text').textContent = '已复制！去粘贴吧';
+    btn.classList.add('copied');
+    showToast('话术已复制，粘贴到对话框即可开始');
+  }).catch(() => {
+    // Fallback
+    const textarea = document.createElement('textarea');
+    textarea.value = currentPrompt;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('话术已复制，粘贴到对话框即可开始');
+  });
+}
+
+// ========== Toast ==========
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ========== Tabs ==========
+function switchTab(platform) {
+  document.querySelectorAll('.usage-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.usage-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + platform).classList.add('active');
+}
+
+// ========== Scroll Reveal ==========
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ========== Esc to close modal ==========
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+</script>
+
+</body>
+</html>
