@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>纸上良方 — 读过的书，终于能用了</title>
 <meta name="description" content="基于21本经典书籍的个人问题诊断与建议引擎。拖延、焦虑、内耗、表达、情商。">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --ink:#2C2825;--ink-soft:#5C544E;--ink-faint:#9C948C;
@@ -49,7 +47,7 @@ nav .inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items
 .hero-seal{display:inline-flex;align-items:center;gap:8px;background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.2);color:var(--vermillion);padding:5px 14px;border-radius:4px;font-size:12px;font-family:var(--display);margin-bottom:28px;animation:fu .6s ease both}
 .hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
 @keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{font-family:var(--cal);font-size:clamp(40px,8vw,76px);color:var(--ink);line-height:1.15;margin-bottom:16px;animation:fu .6s .1s ease both}
+.hero h1{font-family:var(--cal);font-size:clamp(32px,6vw,56px);color:var(--ink);line-height:1.15;margin-bottom:16px;animation:fu .6s .1s ease both;white-space:nowrap}
 .hero h1 .red{color:var(--vermillion)}
 .hero-desc{font-size:14px;color:var(--ink-faint);margin-bottom:40px;animation:fu .6s .2s ease both}
 .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .6s .3s ease both}
@@ -73,7 +71,7 @@ section{padding:72px 0;position:relative}
 
 .domain-section{background:var(--rice-light)}
 .domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.d-card{background:var(--paper);border-radius:8px;padding:28px 24px;box-shadow:var(--shadow);border:1px solid rgba(184,159,107,.12);transition:var(--t);cursor:pointer;position:relative;overflow:hidden}
+.d-card{background:var(--paper);border-radius:8px;padding:28px 24px;padding-bottom:48px;box-shadow:var(--shadow);border:1px solid rgba(184,159,107,.12);transition:var(--t);cursor:pointer;position:relative;overflow:hidden}
 .d-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dc,var(--vermillion));transform:scaleY(.3);transform-origin:top;transition:transform var(--t)}
 .d-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--dc,var(--vermillion))}
 .d-card:hover::before{transform:scaleY(1)}
@@ -84,8 +82,8 @@ section{padding:72px 0;position:relative}
 .d-card .d-desc{font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6}
 .d-tags{display:flex;flex-wrap:wrap;gap:6px}
 .d-tag{background:var(--aged);color:var(--ink-soft);padding:3px 10px;border-radius:100px;font-size:11px;font-family:var(--display)}
-.d-arrow{position:absolute;bottom:20px;right:20px;color:var(--ink-faint);font-size:14px;transition:var(--t);opacity:0}
-.d-card:hover .d-arrow{opacity:1;transform:translateX(-4px)}
+.d-cta{position:absolute;bottom:16px;left:24px;right:24px;font-size:13px;color:var(--ink-faint);font-family:var(--display);display:flex;align-items:center;justify-content:space-between;transition:var(--t)}
+.d-card:hover .d-cta{color:var(--dc,var(--vermillion))}
 
 .chat-panel{position:fixed;top:0;right:-100%;width:100%;max-width:440px;height:100svh;background:var(--rice-light);z-index:300;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(44,40,37,.15)}
 .chat-panel.open{right:0}
@@ -115,8 +113,7 @@ section{padding:72px 0;position:relative}
 .prescription .p-book{font-size:13px;color:var(--gold-dark);margin-bottom:8px;font-family:var(--display)}
 .prescription .p-insight{font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-style:italic;padding:8px 10px;background:rgba(184,159,107,.06);border-radius:6px;line-height:1.7}
 .prescription .p-steps{list-style:none;margin-bottom:12px}
-.prescription .p-steps li{font-size:13px;color:var(--ink);padding:4px 0;padding-left:18px;position:relative;line-height:1.7}
-.prescription .p-steps li::before{content:'';position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.prescription .p-steps li{font-size:13px;color:var(--ink);padding:5px 0;padding-left:0;line-height:1.7}
 .prescription .p-quote{font-family:var(--cal);font-size:15px;color:var(--vermillion-dark);text-align:center;padding:10px 0;border-top:1px dashed var(--aged-dark);margin-top:8px;line-height:1.6}
 
 .chat-foot{padding:14px 16px;background:var(--paper);border-top:1px solid rgba(184,159,107,.12);flex-shrink:0}
@@ -130,7 +127,6 @@ section{padding:72px 0;position:relative}
 .chat-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .quick-btn{background:var(--aged);color:var(--ink-soft);padding:5px 12px;border-radius:100px;font-size:12px;transition:var(--t);font-family:var(--display)}
 .quick-btn:hover{background:var(--gold);color:#fff}
-
 .chat-overlay{position:fixed;inset:0;background:rgba(44,40,37,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:250;opacity:0;pointer-events:none;transition:opacity .3s}
 .chat-overlay.show{opacity:1;pointer-events:auto}
 @media(max-width:520px){.chat-panel{max-width:100%;border-radius:0}}
@@ -174,15 +170,13 @@ footer .f-links a:hover{color:#fff}
 
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:#fff;padding:11px 26px;border-radius:4px;font-size:14px;z-index:400;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;font-family:var(--display)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
 .rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
-
 @media(max-width:640px){
   .hero{min-height:auto;padding:100px 18px 48px}
   .hero-stats{gap:24px}
   .stat-n{font-size:36px}
-  .d-card{padding:22px 18px}
+  .d-card{padding:22px 18px;padding-bottom:48px}
   .com-card{padding:32px 20px}
   .wf-step{gap:12px}
   .wf-num{width:40px;height:40px;font-size:16px}
@@ -227,41 +221,37 @@ footer .f-links a:hover{color:#fff}
 
 <section id="domains" class="domain-section rv">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="deco">问 · 诊 · 台</div>
-      <h2>你遇到了什么困扰？</h2>
-      <p>点一个最贴切的，直接跟良方聊</p>
-    </div>
+    <div class="sec-head"><div class="deco">问 · 诊 · 台</div><h2>你遇到了什么困扰？</h2><p>点一个最贴切的，直接跟良方聊</p></div>
     <div class="domain-grid">
       <div class="d-card" style="--dc:#8B7EC8" onclick="startChat('delay')">
         <div class="d-icon" style="background:#EDE8F8"><svg viewBox="0 0 24 24" fill="none" stroke="#8B7EC8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <h3>拖延</h3><p class="d-desc">明明知道该做，就是动不起来</p>
         <div class="d-tags"><span class="d-tag">启动困难</span><span class="d-tag">完美主义</span><span class="d-tag">行动力</span></div>
-        <span class="d-arrow">点击问诊 →</span>
+        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
       </div>
       <div class="d-card" style="--dc:#C97B5A" onclick="startChat('anxiety')">
         <div class="d-icon" style="background:#F8E8E0"><svg viewBox="0 0 24 24" fill="none" stroke="#C97B5A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
         <h3>焦虑</h3><p class="d-desc">什么都想做好，结果什么都没做好</p>
         <div class="d-tags"><span class="d-tag">压力</span><span class="d-tag">紧绷</span><span class="d-tag">失眠</span></div>
-        <span class="d-arrow">点击问诊 →</span>
+        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
       </div>
       <div class="d-card" style="--dc:#6B8E9E" onclick="startChat('internal')">
         <div class="d-icon" style="background:#E0EBF0"><svg viewBox="0 0 24 24" fill="none" stroke="#6B8E9E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>内耗</h3><p class="d-desc">反复纠结同一件事，停不下来</p>
         <div class="d-tags"><span class="d-tag">自我怀疑</span><span class="d-tag">纠结</span><span class="d-tag">情绪消耗</span></div>
-        <span class="d-arrow">点击问诊 →</span>
+        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
       </div>
       <div class="d-card" style="--dc:#D4A04C" onclick="startChat('express')">
         <div class="d-icon" style="background:#F8F0E0"><svg viewBox="0 0 24 24" fill="none" stroke="#D4A04C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <h3>表达</h3><p class="d-desc">想说的说不出口，词不达意</p>
         <div class="d-tags"><span class="d-tag">沟通</span><span class="d-tag">社交</span><span class="d-tag">开口</span></div>
-        <span class="d-arrow">点击问诊 →</span>
+        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
       </div>
       <div class="d-card" style="--dc:#6B8E6F" onclick="startChat('eq')">
         <div class="d-icon" style="background:#E0EBE0"><svg viewBox="0 0 24 24" fill="none" stroke="#6B8E6F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
         <h3>情商</h3><p class="d-desc">控制不住情绪，人际关系紧张</p>
         <div class="d-tags"><span class="d-tag">情绪管理</span><span class="d-tag">人际</span><span class="d-tag">共情</span></div>
-        <span class="d-arrow">点击问诊 →</span>
+        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
       </div>
     </div>
   </div>
@@ -321,7 +311,7 @@ footer .f-links a:hover{color:#fff}
       <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank">投稿</a>
       <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/LICENSE" target="_blank">MIT License</a>
     </div>
-    <p style="opacity:.4;font-size:11px;">v2.0.0 · 社区共建 · 本草堂 · 2026</p>
+    <p style="opacity:.4;font-size:11px;">v2.0.0 · 社区共建 · 2026</p>
   </div>
 </footer>
 
@@ -347,47 +337,88 @@ footer .f-links a:hover{color:#fff}
 <div class="toast" id="toast"></div>
 
 <script>
-// ========== Keyword Analysis Engine ==========
-function extractTime(text){return text.match(/(\d+)\s*[个月周年天]/g)||[]}
-function extractFirstClause(text){return text.split(/[，。！？,.\n]/)[0].trim()}
-function hasAny(text,words){return words.some(w=>text.includes(w))}
+function extractTime(t){return t.match(/(\d+)\s*[个月周年天]/g)||[]}
+function extractFirstClause(t){return t.split(/[，。！？,.\n]/)[0].trim()}
+function hasAny(t,w){return w.some(x=>t.includes(x))}
 
-// ========== Domain Conversation Engines ==========
-const engines = {
+// Generate tailored, actionable steps based on user's actual input
+function genSteps(domain,userText){
+  const t=userText;
+  if(domain==='delay'){
+    if(/简历|投简历|找工作|求职|招聘|boss|BOSS/.test(t))return['★ 今天：打开招聘网站，看3个你感兴趣的职位。不投，只看','★★ 明天：选1个最想投的职位，投出去。简历不完美也投','★★★ 本周：投出3份简历。不求回复，只求"投了"'];
+    if(/论文|写论文|文章|写作|报告|毕业/.test(t))return['★ 今天：打开文档，写一个标题。只写标题','★★ 明天：写第一段，100字就行。不好没关系','★★★ 本周：每天写200字。连续7天就算成功'];
+    if(/学习|看书|准备|研究|上课|课程/.test(t))return['★ 今天：放下书和课，做1件你一直在"准备"的事。只做5分钟','★★ 明天：学习和行动各30分钟。先行动，后学习','★★★ 本周：每天结束时记录"今天做了什么"——不是"学了什么"'];
+    if(/健身|运动|锻炼|跑步|减肥/.test(t))return['★ 今天：穿上运动鞋，出门走5分钟。可以回来','★★ 明天：做1个俯卧撑。就1个','★★★ 本周：每天运动10分钟。不论做什么，动就行'];
+    if(/报告|PPT|方案|计划|项目/.test(t))return['★ 今天：打开文件，写1行字。不追求内容，只追求"打开了"','★★ 明天：写10分钟。闹钟响了可以停','★★★ 本周：每天打开文件写10分钟。不连续也行，累计够5天就赢'];
+    return['★ 今天：选一件最想做的事，只做5分钟。做完可以停','★★ 明天：同样的事，做10分钟。不追求结果','★★★ 本周：每天做15分钟。连续7天就算成功'];
+  }
+  if(domain==='anxiety'){
+    if(/睡不着|失眠|睡不好|醒来|早醒/.test(t))return['★ 今晚睡前：做"4-7-8呼吸"3次。吸气4秒→屏息7秒→呼气8秒','★★ 明天：睡前1小时不看手机。看纸质书或听白噪音','★★★ 本周：固定一个上床时间。哪怕睡不着，也按时躺下'];
+    if(/工作|项目|任务|deadline|deadline/.test(t))return['★ 今天：把脑子里的事全写下来。不排序，不计划，只写','★★ 明天：从写下来的事里选1件最重要的。只做这1件','★★★ 本周：每天只选3件事做。做完3件就停，不多做'];
+    if(/别人|评价|眼光|认可|看法/.test(t))return['★ 今天：问自己"这件事的结果最终由谁承担？"如果是你，大胆做','★★ 明天：做一件"可能被别人否定"的小事。比如发一条朋友圈','★★★ 本周：每晚写3件"今天我做好的事"。不跟别人比'];
+    if(/心跳|胸闷|喘|手抖|头晕|身体/.test(t))return['★ 现在：做"4-7-8呼吸"3次。吸气4秒→屏息7秒→呼气8秒','★★ 今天：把焦虑的事写下来。写出来就从脑子搬到了纸上','★★★ 本周：每天给自己15分钟"无责任时间"——什么都不用做'];
+    return['★ 今天：做"3件事着陆"——说出你现在看到的3样东西、听到的3种声音','★★ 明天：焦虑时问自己"此刻这一秒有什么危险？"通常没有','★★★ 本周：每天5分钟只关注呼吸。不评判，只数'];
+  }
+  if(domain==='internal'){
+    if(/决定|选择|选|纠结|不知道该/.test(t))return['★ 今天：给纠结的事设一个"截止时间"。到点必须做决定','★★ 明天：做了决定后对自己说"我尽力了，这是当时最好的选择"','★★★ 本周：练习"无后悔日"——今天做的所有决定都不后悔'];
+    if(/不够好|没用|废物|差|不行|自责/.test(t))return['★ 今天：当"我不够好"冒出来时，在心里说"这是旧声音，不是事实"','★★ 明天：把"我不够好"改成"我正在学习"。说出来，写下来','★★★ 本周：每天给自己一个"允许"——"今天允许自己不完美"'];
+    if(/别人.*话|一句话|他说|她说|别人怎么看/.test(t))return['★ 今天：别人说完后问自己"他说的是事实，还是只是他的观点？"','★★ 明天：写"今天我做得好的3件事"。不跟别人比','★★★ 本周：当在意别人的话时，在心里说"这是他的事，不是我的事"'];
+    if(/想太多|反复|停不下来|脑子|转/.test(t))return['★ 今天：给纠结设时间上限"只想15分钟，到点就停"','★★ 明天：做一件需要动手的事（洗碗、散步、整理）打断反复想','★★★ 本周：把纠结的事写下来。写出来它就从脑子搬到了纸上'];
+    return['★ 今天：当内耗开始时，把手放在胸口说"这很难，我在这里陪自己"','★★ 明天：问自己"我会对好朋友说这些话吗？"不会的话，也别对自己说','★★★ 本周：每天给自己一个"停"字——想够了就说停，然后去做一件具体的事'];
+  }
+  if(domain==='express'){
+    if(/开会|会议|发言|报告/.test(t))return['★ 下次开会前：写一句话"如果今天只说一句话，说什么"。只说这一句','★★ 明天：用"我观察到…我猜测…"开头说话，而不是"我认为…应该…"','★★★ 本周：每次会后给自己打分——不是"说得好不好"，而是"说了没有"'];
+    if(/同事|领导|老板|上级/.test(t))return['★ 今天：准备一个表达模板"当___时，我感到___，我需要___"','★★ 明天：跟同事沟通时先说背景"我最近发现…"帮对方进入你的语境','★★★ 本周：每天主动表达一次自己的感受。哪怕只是"今天有点累"'];
+    if(/家人|父母|老婆|老公|伴侣/.test(t))return['★ 今天：想一件想对ta说的话。先写在纸上，不急着说','★★ 明天：把纸上的话读出来。对着镜子读也行','★★★ 本周：找一个放松的时刻，把那句话说给ta听。不好听也没关系'];
+    if(/得罪|说重了|伤人|冲|发火/.test(t))return['★ 今天：把"你总是"改成"当你…时，我感到…"','★★ 明天：情绪上来时先说"我现在情绪有点激动，给我1分钟"','★★★ 本周：每天区分一次"观察"和"评判"——说"你三次没回消息"而非"你总不理我"'];
+    if(/词不达意|说不出口|不知道怎么说|表达不出来/.test(t))return['★ 今天：每次说话前问自己"用一句话说，我要说什么？"然后只说这一句','★★ 明天：去掉"那个…就是…怎么说呢"。停顿可以，不用填充词拖延','★★★ 本周：每天练习一次"1分钟表达"——用1分钟说一件事，不超时'];
+    return['★ 今天：想说但不敢说时问自己"不说会后悔吗？"如果会，就说','★★ 明天：用"我感觉…"开头说话，比"我认为…"更安全也更真实','★★★ 本周：每天主动表达一次自己的感受——哪怕只是"今天有点累"'];
+  }
+  if(domain==='eq'){
+    if(/家人|父母|妈|爸|老婆|老公|孩子/.test(t))return['★ 今天：发火前那几秒，在心里给情绪命名"这是愤怒/委屈/恐惧"','★★ 明天：设"6秒缓冲"——情绪爆发前默数6秒，让理性脑上线','★★★ 本周：每次对家人发完火后，道歉时说具体的话"我刚才不该那样说，对不起"'];
+    if(/同事|领导|老板|客户|工作/.test(t))return['★ 今天：情绪上头时说一句"我需要5分钟"——离开现场，不是忍，是缓冲','★★ 明天：找一个安全的出口（运动、写日记、跟朋友吐槽）释放积攒的情绪','★★★ 本周：每周给自己一次"情绪清空"——把积攒的情绪释放掉，别等到满溢'];
+    if(/后悔|不该|事后|后来想想/.test(t))return['★ 今天：回忆上次发火前的身体信号（胸口热/手握紧/脑子空白）——记住它','★★ 明天：捕捉到身体信号后默数6秒。给理性脑上线的时间','★★★ 本周：每晚回顾"今天哪次情绪反应我处理得不错？哪次可以更好？"'];
+    if(/容易发火|脾气|暴|冲|控制不住/.test(t))return['★ 今天：情绪上头时先在心里给情绪命名——"这是愤怒/委屈/恐惧"','★★ 明天：设"6秒缓冲"——爆发前默数6秒','★★★ 本周：每晚回顾"今天哪次情绪反应我处理得不错？哪次可以更好？"'];
+    return['★ 今天：情绪上头时先做一件事——在心里给情绪命名"这是愤怒/委屈/恐惧"','★★ 明天：设"6秒缓冲"——情绪爆发前默数6秒','★★★ 本周：每晚回顾"今天哪次情绪反应我处理得不错？哪次可以更好？"'];
+  }
+  return['★ 今天：选一件最想做的事，只做5分钟','★★ 明天：同样的那件事，做10分钟','★★★ 本周：每天做15分钟'];
+}
+
+const engines={
 delay:{
   name:'拖延',sub:'拖延脉 · 启动困难',
   quick:['就是不想开始','完美主义','总是拖到deadline'],
   opening(){return'听得出来你有事压在心里。说说看，最近什么事让你觉得"该做但就是动不了"？'},
   respond1(text){
     const time=extractTime(text);
-    const hasStudy=hasAny(text,['学习','看书','准备','研究','计划','上课']);
-    const hasNotAction=hasAny(text,['没去','还没','一直没','迟迟','不想','不敢','没开始']);
+    const hasStudy=hasAny(text,['学习','看书','准备','研究','计划','上课','课程']);
+    const hasNotAction=hasAny(text,['没去','还没','一直没','迟迟','不想','不敢','没开始','一致没','一直没']);
     const hasFear=hasAny(text,['害怕','怕','担心','恐惧','不敢']);
     const hasPerfectionism=hasAny(text,['完美','最好','应该','必须','不够好','差','差劲']);
     const hasComparison=hasAny(text,['别人都','同龄人','别人已经','人家']);
     let r='';
     if(time.length>0)r+=`你说${time[0]}了`;
-    if(hasStudy&&hasNotAction){r+=`，一直在学习但还没开始行动。我注意到一个模式——学习让你觉得"我在进步"，但它同时成了一种安全的回避：用"准备"来替代"开始"。学习本身没错，但它变成了一种"安全的忙碌"，帮你回避真正需要面对的事。`}
-    else if(hasPerfectionism){r+=`。我听到一个信号：你可能有点完美主义——不是不想做，而是怕做出来的不够好。这种"要么做到最好，要么干脆不做"的想法，恰恰是拖延最大的帮凶。`}
-    else if(hasFear){r+=`。你提到了"害怕"。这其实才是拖延的真正原因——《拖延心理学》说得很清楚：拖延不是时间管理问题，是情绪调节问题。你在用拖延来回避某种不舒服的感觉。`}
-    else if(hasComparison){r+=`。我听到你在和"别人"比较——这种比较会增加焦虑，让行动变得更难。你不是没有行动力，是焦虑压住了你。`}
-    else{const fc=extractFirstClause(text);r+=`。你说的"${fc}"，我听到了。拖延的本质不是懒——它在帮你回避某种不舒服的感觉。`}
+    if(hasStudy&&hasNotAction)r+=`，一直在准备但还没开始行动。我注意到一个模式——学习让你觉得"我在进步"，但它同时成了一种安全的回避：用"准备"来替代"开始"。学习本身没错，但它变成了一种"安全的忙碌"，帮你回避真正需要面对的事。`;
+    else if(hasPerfectionism)r+=`。我听到一个信号：你可能有点完美主义——不是不想做，而是怕做出来的不够好。这种"要么做到最好，要么干脆不做"的想法，恰恰是拖延最大的帮凶。`;
+    else if(hasFear)r+=`。你提到了"害怕"。这其实才是拖延的真正原因——《拖延心理学》说得很清楚：拖延不是时间管理问题，是情绪调节问题。你在用拖延来回避某种不舒服的感觉。`;
+    else if(hasComparison)r+=`。我听到你在和"别人"比较——这种比较会增加焦虑，让行动变得更难。你不是没有行动力，是焦虑压住了你。`;
+    else{const fc=extractFirstClause(text);r+=`。你说的"${fc}"，我听到了。拖延的本质不是懒——它在帮你回避某种不舒服的感觉。`;}
     r+='\n\n我想问你：当你想到要做这件事的时候，身体是什么感觉？是胸口发紧？还是想去做别的？';
     return{response:r,patterns:{hasStudy,hasNotAction,hasFear,hasPerfectionism,hasComparison}};
   },
-  respond2(text,p){
+  respond2(text,p,userText1){
     let r='';
     if(/胸口|紧|发紧|身体|闷|堵/.test(text))r+=`你注意到了身体的反应——这很重要。胸口发紧说明这件事触发了你的"威胁感"，大脑把它当成危险，所以本能地想逃。这不是你意志力差，是大脑在保护你。`;
     else if(/想.*做别的|转移|逃避|刷手机|看视频|干别的|分心/.test(text))r+=`你说的"想做别的"，这就是拖延的机制——大脑在帮你"逃跑"，从让你不舒服的事逃到让你舒服的事上。不是你不想做，是大脑自动帮你按了"逃避键"。`;
-    else if(/怕|害怕|担心|做不好|不够好|被拒|被否/.test(text))r+=`你说的"怕"——怕做不好、怕被否定、怕白费力气——这个"怕"才是你拖延的真正原因。不是你不够自律，是你的大脑在保护你不被伤害。`;
+    else if(/怕|害怕|担心|做不好|不够好|被拒|被否|睡不着|着急|心慌/.test(text))r+=`你说的这些感觉——不管是不安、心慌还是怕——它们才是你拖延的真正原因。不是你不够自律，是你的大脑在保护你不被伤害。`;
     else r+=`谢谢你告诉我。不管那个感觉是什么，它都是真实的，值得被认真对待。`;
     r+='\n\n《拖延心理学》里有一句话："拖延不是性格缺陷，而是一种应对策略——虽然它最终会伤害你，但在当下，它确实帮你回避了不舒服。"\n\n现在，我给你开一剂良方 👇';
     let px;
-    if(p.hasStudy&&p.hasNotAction)px={book:'《拖延心理学》— 简·博克',insight:'用"准备"来回避"行动"是最隐蔽的拖延——因为准备让你觉得在做事，但它其实是一种"安全的忙碌"。',steps:['★ 设一个"准备上限"：给自己3天准备时间，3天后必须开始第一步，哪怕只是"打开文档写个标题"','★ 把"学习"和"行动"分开：每天前30分钟学习，后30分钟必须做实际的事','★★ 每天结束时问自己：今天"做了"什么，而不是"学了"什么'],quote:'你不需要准备好才开始，你需要开始才能准备好。'};
-    else if(p.hasPerfectionism)px={book:'《微习惯》— 斯蒂芬·盖斯',insight:'完美主义的解药不是"更努力"，而是"更小"——把目标缩小到"不可能失败"的程度。',steps:['★ 选一个最想做的事，把目标缩小到"每天做1个"——不是"投完简历"，而是"打开招聘网站看1个职位"','★ 把它绑定到一个已有习惯之后——"刷牙后→打开招聘网站看1个职位"','★★ 记录完成情况，只记不评。做了就是成功，不论多少'],quote:'不是你不够自律，而是你的目标太大了。缩小它，直到它变得可笑——然后你会发现，它不再可笑了。'};
-    else if(p.hasFear)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'害怕被拒绝的本质，是把自己的价值建立在别人的认可上。自由就是被别人讨厌。',steps:['★ 每天问自己："这件事的结果最终由谁承担？"——如果是你，大胆去做','★ 练习课题分离：别人是否认可你，是别人的课题，你无法控制也不需要控制','★★ 每晚花3分钟写下今天"被拒绝也没关系"的一件事'],quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
-    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样——人生不是赛跑，是旅行。',steps:['★ 每次比较时问自己："他的人生真的适合我吗？"','★ 关注"今天的我"比"昨天的我"进步了什么，而不是"别人"已经到了哪里','★★ 设一个"比较上限"：每天只允许自己比较一次，超过就停'],quote:'人生的意义不在于跑得比别人快，而在于找到自己的节奏。'};
-    else px={book:'《拖延心理学》— 简·博克',insight:'拖延不是时间管理问题，而是情绪调节问题。你在用拖延来回避某种不舒服的感觉。',steps:['★ 找到那个"不舒服"——问自己：做这件事时，我在害怕什么？','★ 把任务拆到最小：不是"完成项目"，而是"打开文档写第一个字"','★★ 给自己"5分钟起步"：只做5分钟，做完可以停——通常你不会停'],quote:'你不需要准备好才开始，你需要开始才能准备好。'};
+    if(p.hasStudy&&p.hasNotAction)px={book:'《拖延心理学》— 简·博克',insight:'用"准备"来回避"行动"是最隐蔽的拖延——因为准备让你觉得在做事，但它其实是一种"安全的忙碌"。',steps:genSteps('delay',userText1),quote:'你不需要准备好才开始，你需要开始才能准备好。'};
+    else if(p.hasPerfectionism)px={book:'《微习惯》— 斯蒂芬·盖斯',insight:'完美主义的解药不是"更努力"，而是"更小"——把目标缩小到"不可能失败"的程度。',steps:genSteps('delay',userText1),quote:'不是你不够自律，而是你的目标太大了。缩小它，直到它变得可笑。'};
+    else if(p.hasFear)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'害怕被拒绝的本质，是把自己的价值建立在别人的认可上。自由就是被别人讨厌。',steps:genSteps('delay',userText1),quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
+    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样——人生不是赛跑，是旅行。',steps:genSteps('delay',userText1),quote:'人生的意义不在于跑得比别人快，而在于找到自己的节奏。'};
+    else px={book:'《拖延心理学》— 简·博克',insight:'拖延不是时间管理问题，而是情绪调节问题。你在用拖延来回避某种不舒服的感觉。',steps:genSteps('delay',userText1),quote:'你不需要准备好才开始，你需要开始才能准备好。'};
     return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，今晚就试试。\n\n下次来的时候，告诉我你试了没有——哪怕只做了一天，也可以来跟我说。我会在这里等你。';}
@@ -398,24 +429,23 @@ anxiety:{
   opening(){return'听起来你现在绷得比较紧。跟我说说，最近什么事让你觉得焦虑？'},
   respond1(text){
     const time=extractTime(text);
-    const hasSleep=hasAny(text,['睡不着','失眠','睡不好','梦','醒来']);
+    const hasSleep=hasAny(text,['睡不着','失眠','睡不好','醒来','早醒']);
     const hasOthers=hasAny(text,['别人怎么看','评价','眼光','认可','看法']);
     const hasEverything=hasAny(text,['什么都想做','什么都做好','所有','每件事']);
-    const hasPhysical=hasAny(text,['心跳','胸闷','喘','手抖','出汗','头晕']);
+    const hasPhysical=hasAny(text,['心跳','胸闷','喘','手抖','出汗','头晕','心慌']);
     const hasComparison=hasAny(text,['别人都','同龄人','人家','别人已经']);
     let r='';
     if(time.length>0)r+=`你说${time[0]}了`;
     if(hasSleep&&hasEverything)r+=`，什么都想做又睡不着。我听到两个信号叠加在一起：白天追求完美，晚上大脑停不下来——它们其实是同一个问题：你太想控制一切了。`;
     else if(hasOthers)r+=`。我听到一个关键词——"别人"。你的焦虑很大一部分来自"别人怎么看"。这种焦虑的本质是：你把自我价值建立在别人的认可上，而别人的认可你无法控制。`;
-    else if(hasPhysical)r+=`。你提到身体的反应——心跳、胸闷。这说明焦虑已经不只是想法了，身体也参与了进来。这是身体在提醒你：你绷得太紧了。`;
+    else if(hasPhysical)r+=`。你提到身体的反应——心跳、胸闷、心慌。这说明焦虑已经不只是想法了，身体也参与了进来。这是身体在提醒你：你绷得太紧了。`;
     else if(hasEverything)r+=`。你说"什么都想做好"——但人的精力是有限的。什么都想做好，结果就是什么都做不好，然后更焦虑。这是一个死循环。`;
     else if(hasComparison)r+=`。我听到你在和"别人"比较——比较是焦虑的燃料，它让你总觉得"自己落后了"。`;
-    else{const fc=extractFirstClause(text);r+=`。你说的"${fc}"，我听到了。焦虑的本质是：大脑在预演未来的危险，而你现在拿它没办法。`;
-    }
+    else{const fc=extractFirstClause(text);r+=`。你说的"${fc}"，我听到了。焦虑的本质是：大脑在预演未来的危险，而你现在拿它没办法。`;}
     r+='\n\n我想问你：如果把你现在的焦虑拆开，最大的那一块是什么？是"怕做不好"？是"怕被否定"？还是"怕失控"？';
     return{response:r,patterns:{hasSleep,hasOthers,hasEverything,hasPhysical,hasComparison}};
   },
-  respond2(text,p){
+  respond2(text,p,userText1){
     let r='';
     if(/怕做不好|不够好|完美/.test(text))r+=`"怕做不好"——这三个字背后是一种深层信念：你觉得只有做好才值得被认可。但《被讨厌的勇气》里说，这种信念本身就是焦虑的根源。`;
     else if(/怕被否|被否|评价|眼光|认可/.test(text))r+=`"怕被否定"——你把评价权交给了别人。阿德勒心理学说，这是"认可欲求"——寻求别人的认可，反而失去了自由。`;
@@ -423,12 +453,12 @@ anxiety:{
     else r+=`谢谢你告诉我。不管是哪种"怕"，它都是真实的。`;
     r+='\n\n《当下的力量》里有一句话："焦虑不会消除明天的悲伤，它只会榨干今天的力量。"\n\n现在，我给你开一剂良方 👇';
     let px;
-    if(p.hasSleep&&p.hasEverything)px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑活在"未来"，平静活在"当下"。你睡不着，是因为身体在现在，脑子在未来。',steps:['★ 睡前做"5感着陆"：说出5个你看到的、4个摸到的、3个听到的、2个闻到的、1个尝到的东西','★ 把"什么都想做好"改成"今天只做好一件事"——选最重要的那一件','★★ 每天给自己设一个"焦虑时间"：只在那15分钟里焦虑，时间到了就停'],quote:'你无法阻止波浪，但你可以学会冲浪。'};
-    else if(p.hasOthers)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'自由就是被别人讨厌。不再寻求认可，反而获得了真正的自由。',steps:['★ 每天问自己："这件事的结果最终由谁承担？"——如果是你，大胆去做','★ 练习课题分离：别人的评价是别人的课题，你无法控制也不需要控制','★★ 每晚花3分钟写下今天"被讨厌也没关系"的一件事'],quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
-    else if(p.hasPhysical)px={book:'《焦虑的人》— 弗雷德里克·巴克曼',insight:'焦虑不是因为你有问题，而是因为你在乎得太多。能焦虑说明你还活着，还在乎。',steps:['★ 焦虑发作时做"4-7-8呼吸"：吸气4秒→屏息7秒→呼气8秒，重复3次','★ 每天给自己15分钟"无责任时间"——什么都不用做，什么都不用想','★★ 把焦虑写下来：担心的事写出来，它就从脑子里搬到了纸上'],quote:'焦虑的人不是懦弱，他们只是太在乎了。在乎到身体都跟着紧张。'};
-    else if(p.hasEverything)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'什么都想做好，是因为你觉得"只有做好才有价值"。但你的价值不取决于你做了多少。',steps:['★ 每天选"一件事"做好就够了——不是十件，是一件','★ 问自己："如果只做一件事，哪件最重要？"然后只做那件','★★ 每晚写3件"今天做好的事"——不多不少，就3件'],quote:'人生的意义不在于什么都做好，而在于找到值得做的那一件事。'};
-    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样。',steps:['★ 每次比较时问自己："他的人生真的适合我吗？"','★ 关注"今天的我"比"昨天的我"进步了什么','★★ 设一个"比较上限"：每天只允许比较一次，超过就停'],quote:'人生不是赛跑，是旅行。旅行的意义不在于谁先到，而在于看到了什么。'};
-    else px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑是对未来的恐惧。把你拉回现在，焦虑就无处立足。',steps:['★ 焦虑时做"3件事着陆"：说出你现在看到的3样东西，听到的3种声音','★ 问自己："此刻，此刻这一秒，有什么危险？"通常没有','★★ 每天5分钟"只关注呼吸"：不评判，不思考，只数呼吸'],quote:'焦虑不会消除明天的悲伤，它只会榨干今天的力量。'};
+    if(p.hasSleep&&p.hasEverything)px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑活在"未来"，平静活在"当下"。你睡不着，是因为身体在现在，脑子在未来。',steps:genSteps('anxiety',userText1),quote:'你无法阻止波浪，但你可以学会冲浪。'};
+    else if(p.hasOthers)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'自由就是被别人讨厌。不再寻求认可，反而获得了真正的自由。',steps:genSteps('anxiety',userText1),quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
+    else if(p.hasPhysical)px={book:'《焦虑的人》— 弗雷德里克·巴克曼',insight:'焦虑不是因为你有问题，而是因为你在乎得太多。能焦虑说明你还活着，还在乎。',steps:genSteps('anxiety',userText1),quote:'焦虑的人不是懦弱，他们只是太在乎了。'};
+    else if(p.hasEverything)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'什么都想做好，是因为你觉得"只有做好才有价值"。但你的价值不取决于你做了多少。',steps:genSteps('anxiety',userText1),quote:'人生的意义不在于什么都做好，而在于找到值得做的那一件事。'};
+    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样。',steps:genSteps('anxiety',userText1),quote:'人生不是赛跑，是旅行。'};
+    else px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑是对未来的恐惧。把你拉回现在，焦虑就无处立足。',steps:genSteps('anxiety',userText1),quote:'焦虑不会消除明天的悲伤，它只会榨干今天的力量。'};
     return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，今晚睡前试试。\n\n下次来的时候，告诉我你的焦虑有没有轻一点——哪怕轻了一点点，也来跟我说。';}
@@ -443,8 +473,7 @@ internal:{
     const hasOverthink=hasAny(text,['想太多','反复','停不下来','脑子','想三天','转']);
     const hasOthers=hasAny(text,['别人一句话','别人的话','他说','她说','别人怎么看']);
     const hasDecision=hasAny(text,['决定','选择','选','纠结','不知道该']);
-    let r='';
-    const fc=extractFirstClause(text);r+=`你说的"${fc}"，我听到了。`;
+    let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"，我听到了。`;
     if(hasRegret&&hasDecision)r+=`\n\n做了决定又后悔——这其实不是"选择"问题，是"不接纳"问题。你总觉得自己选的那条路是错的，但其实任何选择都会有遗憾。内耗就来自于"想要一个完美的选择"——但它不存在。`;
     else if(hasSelfDoubt)r+=`\n\n"我不够好"——这句话是不是经常在脑子里转？《蛤蟆先生去看心理医生》里说，这是你的"内在批评者"在说话。它不是你的声音，是从小被灌输的。`;
     else if(hasOverthink&&hasOthers)r+=`\n\n别人一句话，你能想三天——这不是"敏感"，是你的"内在批评者"在拿着别人的话反复攻击你。你觉得是在"分析"，其实是在"自我审判"。`;
@@ -454,19 +483,19 @@ internal:{
     r+='\n\n我想问你：当你在纠结的时候，脑子里那个批评你的声音，听起来像谁？是你自己的声音，还是某个长辈、老师的声音？';
     return{response:r,patterns:{hasRegret,hasSelfDoubt,hasOverthink,hasOthers,hasDecision}};
   },
-  respond2(text,p){
+  respond2(text,p,userText1){
     let r='';
     if(/像.*妈|像.*爸|像.*老师|长辈|父母|不是我自己/.test(text))r+=`对——那个批评你的声音，其实不是你的。它是某个长辈、老师的声音，被你内化了。你用别人批评你的方式，在批评自己。这不是你的错，但你需要知道：那个声音不是你的，你可以不让它说话。`;
     else if(/自己的声音|我自己|就是我自己/.test(text))r+=`你说那个声音是你自己的——那说明它已经内化得很深了。但《自我关怀》里说，自我批评不是"自己跟自己说话"，是"用别人批评你的方式跟自己说话"。它的根源，仍然是外在的。`;
     else r+=`不管那个声音像谁，重要的是：它不是"事实"，它只是"想法"。想法不代表真相。`;
     r+='\n\n《自我关怀》里有一句话："你不需要变得完美才值得被爱——包括被你自己爱。"\n\n现在，我给你开一剂良方 👇';
     let px;
-    if(p.hasRegret&&p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'重要的不是选对，是选了之后对自己好。任何选择都会有遗憾，但你可以选择善待做出选择的自己。',steps:['★ 做了决定后，给自己一句："我尽力了，在当时的信息和状态下，这是我能做的最好选择"','★ 区分"后悔"和"反思"：后悔是攻击自己，反思是帮自己下次做得更好','★★ 每次纠结时问："如果好朋友做了同样的选择，我会怎么对他说？"——然后对自己说同样的话'],quote:'你不需要做出完美的选择，你需要学会善待做出了选择的自己。'};
-    else if(p.hasSelfDoubt)px={book:'《蛤蟆先生去看心理医生》— 罗伯特·戴博德',insight:'你脑子里的批评声不是你的声音——它是从小被内化的"内在父母"。你可以学会不让它说话。',steps:['★ 当"我不够好"冒出来时，在心里说："这是旧声音，不是事实"','★ 把"我不够好"改成"我正在学习"——成长心态代替固定心态','★★ 每天给自己一个"允许"——"今天允许自己不完美"'],quote:'你不需要变得完美才值得被爱——包括被你自己爱。'};
-    else if(p.hasOverthink&&p.hasOthers)px={book:'《被忽视的孩子》— 乔尼丝·韦伯',insight:'别人的话能伤你三天，是因为你心里有一个"我不值得被好好对待"的信念。改变从看见它开始。',steps:['★ 别人说了一句话后，问自己："他说的是事实，还是只是他的观点？"','★ 每天花5分钟写"今天我做得好的3件事"——重建自我认可','★★ 当你在意别人的话时，在心里说："这是他的事，不是我的事"'],quote:'你不需要别人的认可才知道自己值多少。你本来就值得。'};
-    else if(p.hasOverthink)px={book:'《也许你该找个人聊聊》— 洛莉·戈特利布',insight:'反复想不是在解决问题，是在咀嚼情绪。你需要做的是"停下来"而不是"想清楚"。',steps:['★ 给纠结设一个时间上限："我只想15分钟，时间到了就停"','★ 做一件需要动手的事（洗碗、散步、整理）来打断反复想','★★ 把纠结的事写下来——写出来它就从脑子里搬到了纸上，不一样'],quote:'你以为你在解决问题，其实你只是在原地转圈。走出来比想清楚更重要。'};
-    else if(p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'害怕选错，其实是害怕"选错之后自己不值得被善待"。但你可以选择善待自己。',steps:['★ 做决定前问自己："最坏的结果是什么？我能承受吗？"如果可以，就做','★ 做完后对自己说："不管结果如何，我善待做出选择的自己"','★★ 每周给自己一次"无后悔日"——今天做的所有决定都不后悔'],quote:'自由不是选对，是选了之后对自己好。'};
-    else px={book:'《自我关怀》— 克里斯汀·内夫',insight:'内耗的本质是用别人的声音跟自己打架。停下来的方式不是"想通"，是"对自己温柔一点"。',steps:['★ 当内耗开始时，把手放在胸口说："这很难，我在这里陪自己"','★ 问自己："我会对好朋友说这些话吗？"——不会的话，也别对自己说','★★ 每天给自己一个"停"字——想够了就说"停"，然后去做一件具体的事'],quote:'对自己说你会对好朋友说的话。自我同情比自我批评更能带来改变。'};
+    if(p.hasRegret&&p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'重要的不是选对，是选了之后对自己好。任何选择都会有遗憾，但你可以选择善待做出选择的自己。',steps:genSteps('internal',userText1),quote:'你不需要做出完美的选择，你需要学会善待做出了选择的自己。'};
+    else if(p.hasSelfDoubt)px={book:'《蛤蟆先生去看心理医生》— 罗伯特·戴博德',insight:'你脑子里的批评声不是你的声音——它是从小被内化的"内在父母"。你可以学会不让它说话。',steps:genSteps('internal',userText1),quote:'你不需要变得完美才值得被爱——包括被你自己爱。'};
+    else if(p.hasOverthink&&p.hasOthers)px={book:'《被忽视的孩子》— 乔尼丝·韦伯',insight:'别人的话能伤你三天，是因为你心里有一个"我不值得被好好对待"的信念。改变从看见它开始。',steps:genSteps('internal',userText1),quote:'你不需要别人的认可才知道自己值多少。你本来就值得。'};
+    else if(p.hasOverthink)px={book:'《也许你该找个人聊聊》— 洛莉·戈特利布',insight:'反复想不是在解决问题，是在咀嚼情绪。你需要做的是"停下来"而不是"想清楚"。',steps:genSteps('internal',userText1),quote:'你以为你在解决问题，其实你只是在原地转圈。走出来比想清楚更重要。'};
+    else if(p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'害怕选错，其实是害怕"选错之后自己不值得被善待"。但你可以选择善待自己。',steps:genSteps('internal',userText1),quote:'自由不是选对，是选了之后对自己好。'};
+    else px={book:'《自我关怀》— 克里斯汀·内夫',insight:'内耗的本质是用别人的声音跟自己打架。停下来的方式不是"想通"，是"对自己温柔一点"。',steps:genSteps('internal',userText1),quote:'对自己说你会对好朋友说的话。自我同情比自我批评更能带来改变。'};
     return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，纠结的时候就试试。\n\n下次来的时候，告诉我那个批评的声音有没有小一点——哪怕小了一点点，也来跟我说。';}
@@ -481,8 +510,7 @@ express:{
     const hasMiscomm=hasAny(text,['没懂','没get','误解','没听懂','说了但']);
     const hasOffend=hasAny(text,['得罪','说重了','伤人','冲','发火']);
     const hasVague=hasAny(text,['词不达意','说不出口','不知道怎么说','表达不出来']);
-    let r='';
-    const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
+    let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
     if(hasMeeting)r+=`\n\n开会不敢发言——这其实不是"不会说"，是"怕说错被否定"。开会时人多，你觉得每个人的眼光都在评判你。但其实《关键对话》里说，会议里大部分人只关心结论，不关心你说得完美不完美。`;
     else if(hasMiscomm)r+=`\n\n"说了但对方没懂"——这说明你的表达跳了步骤。你可能脑子里想清楚了，但说出来时跳过了对方需要的背景信息。《非暴力沟通》说，好的表达不是"说自己想说的"，是"说对方能接住的"。`;
     else if(hasOffend)r+=`\n\n"说重了伤人"——你其实不是"太冲动"，是"情绪来了就直接输出"。《非暴力沟通》说，问题不在情绪本身，在于你把"评判"当成了"表达"。`;
@@ -492,20 +520,20 @@ express:{
     r+='\n\n我想问你：当你想说但说不出口的时候，心里在怕什么？是怕"说错被笑话"？怕"对方不高兴"？还是怕"暴露自己的真实想法"？';
     return{response:r,patterns:{hasMeeting,hasMiscomm,hasOffend,hasVague,hasSpecific}};
   },
-  respond2(text,p){
+  respond2(text,p,userText1){
     let r='';
-    if(/怕.*错|笑话|丢人|出丑|笑话/.test(text))r+=`"怕说错被笑话"——这个"怕"让你把每句话都过滤了三遍，最后说出来的是"安全的话"，不是"真实的话"。但安全的话恰恰是最容易被忽略的。`;
+    if(/怕.*错|笑话|丢人|出丑/.test(text))r+=`"怕说错被笑话"——这个"怕"让你把每句话都过滤了三遍，最后说出来的是"安全的话"，不是"真实的话"。但安全的话恰恰是最容易被忽略的。`;
     else if(/不高兴|生气|得罪|对方不/.test(text))r+=`"怕对方不高兴"——你把"表达自己"和"伤害别人"搞混了。表达你的感受不是伤害对方，不说才会在心里积攒成更大的问题。`;
     else if(/暴露|真实|被看穿|真实想法/.test(text))r+=`"怕暴露真实想法"——这其实是在害怕"如果别人看到了真实的我，会不会不喜欢我"。但《非暴力沟通》说，恰恰是真实表达，才能建立真正的关系。`;
     else r+=`谢谢你告诉我。不管怕的是什么，那个"怕"才是你表达不出来的真正原因。`;
     r+='\n\n《非暴力沟通》里有一句话："当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。"\n\n现在，我给你开一剂良方 👇';
     let px;
-    if(p.hasMeeting)px={book:'《关键对话》— 科里·帕特森',insight:'开会不敢发言不是因为没想法，是因为你把"安全"看得比"真实"重。但会议上被记住的，恰恰是说了真话的人。',steps:['★ 开会前写一句话："如果今天只说一句话，说什么？"——只说这一句','★ 用"我观察到…我猜测…"开头，而不是"我认为…应该…"——前者不怕错','★★ 会后给自己打分：不是"说得好不好"，而是"说了没有"'],quote:'会议上被记住的，不是说得最完美的人，是说了别人不敢说的真话的人。'};
-    else if(p.hasMiscomm)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'好的表达不是说你想说的，是说对方能接住的。四步：观察→感受→需要→请求。',steps:['★ 说话前先给背景："我最近发现…"——帮对方进入你的语境','★ 表达感受而非想法："我感到焦虑"而非"我觉得不对"','★★ 准备一个模板：当___时，我感到___，因为我需要___，你是否愿意___？'],quote:'当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。'};
-    else if(p.hasOffend)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'问题不在情绪本身，在于你把"评判"当成了"表达"。说"你总是"是评判，说"我感到"是表达。',steps:['★ 把"你总是…"改成"当…时，我感到…"','★ 区分"观察"和"评判"：说"你三次没回消息"而非"你总不理我"','★★ 情绪上来时先说："我现在情绪有点激动，给我1分钟整理一下"'],quote:'愤怒时说的话，通常不是你想说的话，是情绪在替你说。'};
-    else if(p.hasVague)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达越简单越有力量。不是你没能力，是你太想把话说"好"了。',steps:['★ 每次表达前问自己："用一句话说，我要说什么？"——然后只说这一句','★ 去掉"那个…就是…怎么说呢"——停顿可以，但不要用填充词拖延','★★ 每天练习一次"1分钟表达"：用1分钟说一件事，不超时'],quote:'最好的表达不是最精巧的，是最真实的。'};
-    else if(p.hasSpecific)px={book:'《关键对话》— 科里·帕特森',insight:'面对特定的人说不出话，不是表达能力问题，是关系紧张。解药不在"怎么说"，在"怎么看待这段关系"。',steps:['★ 告诉自己："他也是普通人，也在怕说错话"','★ 先说容易的话（天气、工作）暖场，再慢慢过渡到想说的话','★★ 如果面对面太难，先写一封信或发一条消息——文字比面对面压力小'],quote:'你怕的不是说错话，你怕的是说完之后关系变了。但不说，关系也在变。'};
-    else px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达困难的本质是"怕"。怕说错、怕被否定、怕暴露。但不说才是最大的遗憾。',steps:['★ 每次想说但不敢说时，问自己："不说会后悔吗？"如果会，就说','★ 用"我感觉…"开头，比"我认为…"更安全也更真实','★★ 每天主动表达一次自己的感受——哪怕只是"今天有点累"'],quote:'你不需要说得好，你只需要说出来。'};
+    if(p.hasMeeting)px={book:'《关键对话》— 科里·帕特森',insight:'开会不敢发言不是因为没想法，是因为你把"安全"看得比"真实"重。但会议上被记住的，恰恰是说了真话的人。',steps:genSteps('express',userText1),quote:'会议上被记住的，不是说得最完美的人，是说了别人不敢说的真话的人。'};
+    else if(p.hasMiscomm)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'好的表达不是说你想说的，是说对方能接住的。四步：观察→感受→需要→请求。',steps:genSteps('express',userText1),quote:'当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。'};
+    else if(p.hasOffend)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'问题不在情绪本身，在于你把"评判"当成了"表达"。说"你总是"是评判，说"我感到"是表达。',steps:genSteps('express',userText1),quote:'愤怒时说的话，通常不是你想说的话，是情绪在替你说。'};
+    else if(p.hasVague)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达越简单越有力量。不是你没能力，是你太想把话说"好"了。',steps:genSteps('express',userText1),quote:'最好的表达不是最精巧的，是最真实的。'};
+    else if(p.hasSpecific)px={book:'《关键对话》— 科里·帕特森',insight:'面对特定的人说不出话，不是表达能力问题，是关系紧张。解药不在"怎么说"，在"怎么看待这段关系"。',steps:genSteps('express',userText1),quote:'你怕的不是说错话，你怕的是说完之后关系变了。但不说，关系也在变。'};
+    else px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达困难的本质是"怕"。怕说错、怕被否定、怕暴露。但不说才是最大的遗憾。',steps:genSteps('express',userText1),quote:'你不需要说得好，你只需要说出来。'};
     return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，明天遇到要开口的场景就试试。\n\n下次来的时候，告诉我你试了没有——哪怕只说了一句话，也来跟我说。';}
@@ -517,11 +545,9 @@ eq:{
   respond1(text){
     const hasFamily=hasAny(text,['家人','父母','妈','爸','老婆','老公','孩子']);
     const hasWork=hasAny(text,['同事','领导','老板','客户','工作']);
-    const hasAnger=hasAny(text,['发火','发火','生气','暴','冲','骂']);
+    const hasAnger=hasAny(text,['发火','生气','暴','冲','骂']);
     const hasRegret=hasAny(text,['后悔','不该','不应该','事后','后来想想']);
-    const hasTrigger=hasAny(text,['因为','他说','她说','他做','一件事','那一次']);
-    let r='';
-    const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
+    let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
     if(hasFamily&&hasAnger)r+=`\n\n跟家人发火——这很常见。我们最容易对最亲近的人发火，因为潜意识里觉得"他们不会离开我"。但这也意味着，家人承受了你最多的情绪。`;
     else if(hasWork&&hasAnger)r+=`\n\n工作中发火——职业场合的情绪爆发通常代价更大。《情商》里说，职场情商的核心不是"不发火"，是"知道什么时候可以发、什么时候不能"。`;
     else if(hasRegret)r+=`\n\n发完火就后悔——这说明你的"理性脑"比"情绪脑"慢了几秒。情绪先冲出来，理性才跟上。《情商》里说，这叫"杏仁核劫持"——情绪直接短路了理性。`;
@@ -530,7 +556,7 @@ eq:{
     r+='\n\n我想问你：发火之前那几秒，你身体是什么感觉？是胸口发热？手握紧？还是脑子一片空白？';
     return{response:r,patterns:{hasFamily,hasWork,hasAnger,hasRegret}};
   },
-  respond2(text,p){
+  respond2(text,p,userText1){
     let r='';
     if(/胸口.*热|发热|火|烧/.test(text))r+=`胸口发热——这是愤怒的"身体信号"。《情商》里说，情绪爆发前身体会提前几秒发出信号。你如果能捕捉到这个信号，就能在爆发前按暂停键。`;
     else if(/握紧|紧|拳头|手/.test(text))r+=`手握紧——这是身体在准备"战斗"。大脑检测到"威胁"，自动进入了战斗模式。你要做的不是"忍住不发"，是在这个信号出现时给自己6秒钟。`;
@@ -538,27 +564,20 @@ eq:{
     else r+=`谢谢你告诉我。不管那个感觉是什么，它就是你的"情绪预警信号"。抓住它，你就能在爆发前按暂停。`;
     r+='\n\n《情商》里有一句话："你不能阻止波浪，但你可以学会冲浪。情绪也是一样。"\n\n现在，我给你开一剂良方 👇';
     let px;
-    if(p.hasFamily)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'对家人发火不是"脾气差"，是"安全感"带来的放纵。你不会对陌生人这样，因为你知道家人不会离开。',steps:['★ 发火前那几秒，在心里给情绪命名："这是愤怒/委屈/恐惧"——命名本身就能降温','★ 设一个"6秒缓冲"：情绪爆发前默数6秒，让杏仁核冷静下来','★★ 每次对家人发完火后，道歉时说具体的话："我刚才不该那样说，对不起"——而不是含糊的"别生气了"'],quote:'你对最亲近的人发的火，其实是对"安全"的消耗。终有一天会用完。'};
-    else if(p.hasWork)px={book:'《社交天性》— 马修·利伯曼',insight:'职场情商的核心不是"忍住不发"，是"在安全的场合释放"。压抑的情绪不会消失，只会改道。',steps:['★ 情绪上头时说一句："我需要5分钟"——离开现场，不是忍，是缓冲','★ 找一个安全的出口：运动、写日记、跟朋友吐槽——不压抑也不乱发','★★ 每周给自己一次"情绪清空"：把积攒的情绪释放掉，别等到满溢'],quote:'情绪不会因为你忍了就消失，它会换一种方式出来。'};
-    else if(p.hasRegret)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'发完火就后悔，说明你的理性比情绪慢了6秒。解药不是"忍住不发"，是"缩短这个时间差"。',steps:['★ 捕捉身体信号：每次发火前你的身体会发出预警（胸口热/手握紧/脑子空白）——抓住它','★ 6秒缓冲：捕捉到信号后默数6秒，给理性脑上线的时间','★★ 每晚回顾：今天哪次情绪反应我处理得不错？哪次可以更好？'],quote:'你不能阻止波浪，但你可以学会冲浪。情绪也是一样。'};
-    else px={book:'《情商》— 丹尼尔·戈尔曼',insight:'情商的核心不是压抑情绪，而是识别情绪、理解情绪、然后选择回应方式。',steps:['★ 情绪上头时先做一件事：在心里给情绪命名——"这是愤怒/委屈/恐惧"','★ 设一个"6秒缓冲"——情绪爆发前默数6秒，让杏仁核冷静下来','★★ 每晚回顾：今天哪次情绪反应我处理得不错？哪次可以更好？'],quote:'你不能阻止波浪，但你可以学会冲浪。情绪也是一样。'};
+    if(p.hasFamily)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'对家人发火不是"脾气差"，是"安全感"带来的放纵。你不会对陌生人这样，因为你知道家人不会离开。',steps:genSteps('eq',userText1),quote:'你对最亲近的人发的火，其实是对"安全"的消耗。终有一天会用完。'};
+    else if(p.hasWork)px={book:'《社交天性》— 马修·利伯曼',insight:'职场情商的核心不是"忍住不发"，是"在安全的场合释放"。压抑的情绪不会消失，只会改道。',steps:genSteps('eq',userText1),quote:'情绪不会因为你忍了就消失，它会换一种方式出来。'};
+    else if(p.hasRegret)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'发完火就后悔，说明你的理性比情绪慢了6秒。解药不是"忍住不发"，是"缩短这个时间差"。',steps:genSteps('eq',userText1),quote:'你不能阻止波浪，但你可以学会冲浪。'};
+    else px={book:'《情商》— 丹尼尔·戈尔曼',insight:'情商的核心不是压抑情绪，而是识别情绪、理解情绪、然后选择回应方式。',steps:genSteps('eq',userText1),quote:'你不能阻止波浪，但你可以学会冲浪。情绪也是一样。'};
     return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，下次情绪上来的时候试试。\n\n下次来的时候，告诉我你有没有"抓住"那个信号——哪怕只有一次，也来跟我说。';}
 }
 };
 
-// ========== Chat State ==========
-let curDomain=null;
-let chatStep=0;
-let waitingForUser=false;
-let savedPatterns={};
+let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='';
 
-// ========== Chat Functions ==========
 function startChat(domain){
-  curDomain=engines[domain];
-  chatStep=0;
-  savedPatterns={};
+  curDomain=engines[domain];chatStep=0;savedPatterns={};savedUserText1='';
   document.getElementById('chatTitle').textContent=curDomain.name;
   document.getElementById('chatSub').textContent=curDomain.sub;
   document.getElementById('chatBody').innerHTML='';
@@ -574,8 +593,7 @@ function sendMessage(){
   const input=document.getElementById('chatInput');
   const text=input.value.trim();
   if(!text||!waitingForUser)return;
-  addUser(text);
-  input.value='';input.style.height='auto';
+  addUser(text);input.value='';input.style.height='auto';
   waitingForUser=false;
   document.getElementById('chatQuick').innerHTML='';
   setTimeout(()=>handleUserInput(text),400);
@@ -583,27 +601,26 @@ function sendMessage(){
 
 function handleUserInput(text){
   if(chatStep===1){
+    savedUserText1=text;
     const result=curDomain.respond1(text);
     savedPatterns=result.patterns||{};
     showTyping();
     setTimeout(()=>{hideTyping();addBot(result.response);chatStep=2;waitingForUser=true;document.getElementById('chatInput').focus();},800);
   }else if(chatStep===2){
-    const result=curDomain.respond2(text,savedPatterns);
+    const result=curDomain.respond2(text,savedPatterns,savedUserText1);
     showTyping();
     setTimeout(()=>{hideTyping();addBot(result.response);
       setTimeout(()=>{addPrescription(result.prescription);
         setTimeout(()=>{showTyping();
           setTimeout(()=>{hideTyping();addBot(curDomain.wrapUp());chatStep=3;
-            const div=document.createElement('div');div.style.textAlign='center';div.style.padding='12px';div.style.background='rgba(184,159,107,.08)';div.style.borderRadius='8px';div.style.fontSize='13px';div.style.color='var(--ink-soft)';div.style.marginTop='4px';
+            const div=document.createElement('div');div.style.cssText='text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
             div.innerHTML='良方已开 · 可关闭面板，或再选一个问题域继续问诊';
             document.getElementById('chatBody').appendChild(div);scrollChat();
-            // Show quick options to start another domain
             const qd=document.createElement('div');qd.className='chat-quick';
             ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
               const dk=['delay','anxiety','internal','express','eq'][i];
               const b=document.createElement('button');b.className='quick-btn';b.textContent=n;
-              b.onclick=()=>startChat(dk);
-              qd.appendChild(b);
+              b.onclick=()=>startChat(dk);qd.appendChild(b);
             });
             document.getElementById('chatBody').appendChild(qd);scrollChat();
           },400);
@@ -626,15 +643,12 @@ function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.
 function closeChat(){document.getElementById('chatPanel').classList.remove('open');document.getElementById('chatOverlay').classList.remove('show');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 function scrollToDomains(){document.getElementById('domains').scrollIntoView({behavior:'smooth'})}
-
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(e=>obs.observe(e));
-
 const ci=document.getElementById('chatInput');
 ci.addEventListener('input',()=>{ci.style.height='auto';ci.style.height=Math.min(ci.scrollHeight,80)+'px';});
 ci.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat()});
 </script>
-
 </body>
 </html>
