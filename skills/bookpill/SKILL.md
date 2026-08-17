@@ -11,7 +11,7 @@ description: |
   不负责：严重心理疾病诊断（建议就医）、纯学术讨论（走研究类 skill）。
 author: community
 license: MIT
-repo: https://github.com/Josie3218/BookPill
+repo: https://github.com/Josie-design-dhb/BookPill
 platforms:
   - TRAE
   - ChatGPT
@@ -494,10 +494,13 @@ BookPill 根据记忆中的用户档案，在以下维度进行个性化适配�
 BookPill v2 是社区共建项目，欢迎所有人贡献：
 
 - **投稿新书**：详见 `CONTRIBUTING.md` 和 `templates/book-template.md`
-- **三种投稿方式**：GitHub PR / Issue 模板 / 在线表单
+- **三种投稿方式**：GitHub PR / Issue 模板 / [在线表单](https://josie-design-dhb.github.io/BookPill/submit.html)
 - **审核标准**：详见 `CONTRIBUTING.md` 中的审核标准章节
 - **贡献者体系**：详见 `CONTRIBUTORS.md`
 - **社区书籍目录**：`references/community/`
+- **社区动态**：[实时查看投稿动态、新增书籍、贡献者活动](https://josie-design-dhb.github.io/BookPill/community.html)
+
+社区成员可以互相看到谁投了什么书、系统新增了哪些书籍，真正做到共建共享。
 
 ## 十、使用示例
 

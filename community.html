@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同道·共建 — 纸上良方社区</title>
+<meta name="description" content="纸上良方社区动态。实时展示社区投稿、新增书籍、贡献者与知识库覆盖。每一本好书都可能成为某个人的良方。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2C2825;--ink-soft:#5C544E;--ink-faint:#9C948C;
+  --vermillion:#B84040;--vermillion-dark:#9A3434;
+  --gold:#B89F6B;--gold-dark:#968055;
+  --rice:#F5EDE0;--rice-light:#FAF4EA;
+  --aged:#E8DCC8;--aged-dark:#D4C4A8;
+  --bamboo:#6B8E6F;--indigo:#3A5F7A;
+  --paper:#FFFDF7;
+  --shadow:0 1px 12px rgba(44,40,37,.06);
+  --shadow-lift:0 6px 28px rgba(44,40,37,.12);
+  --t:.35s cubic-bezier(.4,0,.2,1);
+  --serif:'Noto Serif SC',serif;--cal:'Ma Shan Zheng',cursive;--display:'ZCOOL XiaoWei',serif;
+  --c-delay:#8B7EC8;--c-anxiety:#C97B5A;--c-internal:#6B8E9E;--c-express:#D4A04C;--c-eq:#6B8E6F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--serif);background:var(--rice);color:var(--ink);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.paper-tex::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
+
+/* ===== Nav ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,237,224,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(184,159,107,.1);backdrop-saturate:140%}
+nav .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:70px}
+nav .inner .logo{justify-self:start}
+nav .inner .nav-links{justify-self:center}
+nav .inner .nav-cta{justify-self:end}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--cal);font-size:23px;color:var(--vermillion);letter-spacing:.02em}
+.logo-seal{width:32px;height:32px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 10px rgba(184,64,64,.28)}.logo-seal img{width:72%;height:72%;object-fit:contain;display:block}
+.logo-sub{font-family:var(--display);font-size:11px;color:var(--ink-faint);letter-spacing:.35em;margin-left:4px;border-left:1px solid rgba(44,40,37,.18);padding-left:12px}
+.nav-links{display:flex;gap:48px;align-items:center}
+.nav-links a{font-size:13px;color:var(--ink-soft);font-family:var(--display);transition:color var(--t);letter-spacing:.15em;padding-bottom:2px;border-bottom:1px solid transparent}
+.nav-links a:hover{color:var(--vermillion);border-bottom-color:rgba(184,64,64,.4)}
+.nav-links a.active{color:var(--vermillion);border-bottom-color:var(--vermillion)}
+.nav-cta{background:var(--vermillion);color:#fff!important;padding:8px 22px;border-radius:4px;font-size:13px;font-family:var(--display);transition:var(--t);letter-spacing:.15em;box-shadow:0 2px 10px rgba(184,64,64,.24)}
+.nav-cta:hover{background:var(--vermillion-dark);transform:translateY(-1px)}
+@media(max-width:640px){.nav-links,.logo-sub{display:none}nav .inner{padding:0 18px;grid-template-columns:1fr auto;grid-template-areas:"logo cta"}nav .inner .logo{grid-area:logo}nav .inner .nav-cta{grid-area:cta}}
+
+/* ===== Hero ===== */
+.hero{min-height:80svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:110px 0 56px}
+.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 30% 20%,rgba(184,159,107,.14) 0%,transparent 55%),radial-gradient(ellipse at 70% 60%,rgba(184,64,64,.07) 0%,transparent 50%),radial-gradient(ellipse at 50% 90%,rgba(107,142,111,.08) 0%,transparent 55%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
+.hero-content{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 36px}
+.hero-seal{display:inline-flex;align-items:center;gap:10px;background:rgba(184,64,64,.07);border:1px solid rgba(184,64,64,.22);color:var(--vermillion);padding:6px 16px;border-radius:100px;font-size:12px;font-family:var(--display);margin-bottom:36px;animation:fu .6s ease both;letter-spacing:.25em}
+.hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--cal);font-size:clamp(44px,6.4vw,76px);color:var(--ink);line-height:1.08;margin-bottom:28px;animation:fu .6s .1s ease both;letter-spacing:.02em}
+.hero h1 .red{color:var(--vermillion)}
+.hero-lead{font-family:var(--display);font-size:18px;color:var(--ink-soft);line-height:1.9;margin-bottom:14px;letter-spacing:.04em;animation:fu .6s .15s ease both}
+.hero-desc{font-size:14.5px;color:var(--ink-faint);margin-bottom:44px;animation:fu .6s .2s ease both;line-height:2}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .6s .3s ease both}
+.btn-consult{background:var(--vermillion);color:#fff;padding:15px 40px;border-radius:4px;font-size:15px;font-family:var(--display);letter-spacing:.2em;box-shadow:0 4px 18px rgba(184,64,64,.28);transition:var(--t)}
+.btn-consult:hover{background:var(--vermillion-dark);transform:translateY(-2px);box-shadow:0 5px 20px rgba(184,64,64,.4)}
+.btn-ghost{border:1.5px solid var(--aged-dark);color:var(--gold-dark);padding:15px 40px;border-radius:4px;font-size:15px;font-family:var(--display);letter-spacing:.2em;transition:var(--t);background:rgba(255,253,247,.3)}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(184,159,107,.06)}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;animation:fu .6s .4s ease both;flex-wrap:wrap;max-width:560px;margin-left:auto;margin-right:auto}
+.stat{text-align:center;flex:1;min-width:90px}
+.stat-n{font-family:var(--cal);font-size:48px;color:var(--vermillion);line-height:1;letter-spacing:.04em;font-weight:700;text-shadow:0 1px 0 rgba(184,64,64,.18)}
+.stat-l{font-size:12px;color:var(--ink-soft);margin-top:10px;letter-spacing:.32em;font-family:var(--display);font-weight:600}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== Sections ===== */
+section{padding:72px 0;position:relative}
+.wrap{max-width:1160px;margin:0 auto;padding:0 36px;position:relative;z-index:1}
+@media(max-width:768px){.wrap{padding:0 20px}section{padding:56px 0}}
+.sec-head{text-align:center;margin-bottom:72px;position:relative}
+.sec-head .deco{font-family:var(--display);color:var(--gold-dark);font-size:11px;letter-spacing:.6em;margin-bottom:20px;display:inline-flex;align-items:center;gap:18px;opacity:.85}
+.sec-head .deco::before,.sec-head .deco::after{content:'';display:inline-block;width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--aged-dark),transparent);opacity:.7}
+.sec-head h2{font-family:var(--cal);font-size:clamp(28px,3.6vw,38px);color:var(--ink);letter-spacing:.06em;margin-bottom:16px;font-weight:400;line-height:1.3}
+.sec-head p{color:var(--ink-faint);font-size:14px;margin-top:0;letter-spacing:.05em;font-family:var(--display);line-height:1.9}
+
+/* ===== Submission feed ===== */
+.feed-section{background:var(--rice-light)}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.sub-card{background:var(--paper);border:1px solid rgba(184,159,107,.15);border-radius:8px;padding:22px 20px;box-shadow:var(--shadow);transition:var(--t);cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+.sub-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dc,var(--gold));transform:scaleY(.3);transform-origin:top;transition:transform var(--t)}
+.sub-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--dc,var(--gold))}
+.sub-card:hover::before{transform:scaleY(1)}
+.sub-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sub-status{font-size:11px;font-family:var(--display);padding:3px 10px;border-radius:100px;white-space:nowrap}
+.sub-status.pending{background:rgba(184,159,107,.18);color:var(--gold-dark)}
+.sub-status.accepted{background:rgba(107,142,111,.16);color:var(--bamboo)}
+.sub-status.rejected{background:rgba(184,64,64,.12);color:var(--vermillion)}
+.sub-time{font-size:11px;color:var(--ink-faint);font-family:var(--display)}
+.sub-domain{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--display);padding:2px 9px;border-radius:100px;color:#fff;align-self:flex-start}
+.sub-title{font-family:var(--cal);font-size:19px;color:var(--ink);line-height:1.4}
+.sub-meta{font-size:12px;color:var(--ink-faint)}
+.sub-author{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-soft)}
+.sub-author img{width:22px;height:22px;border-radius:50%;border:1px solid var(--aged-dark)}
+.sub-foot{font-size:12px;color:var(--ink-faint);display:flex;align-items:center;justify-content:space-between;border-top:1px dashed rgba(184,159,107,.25);padding-top:8px;margin-top:auto}
+.sub-foot .go{color:var(--dc,var(--gold-dark));font-family:var(--display);transition:var(--t)}
+.sub-card:hover .sub-foot .go{transform:translateX(3px)}
+
+/* ===== Skeleton ===== */
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk{background:linear-gradient(90deg,var(--aged) 25%,var(--aged-dark) 50%,var(--aged) 75%);background-size:200% 100%;animation:sk 1.4s ease-in-out infinite;border-radius:4px}
+.sk-card{background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:8px;padding:22px 20px;display:flex;flex-direction:column;gap:10px;min-height:180px}
+.sk-line{height:13px;border-radius:3px}
+.sk-line.t{height:18px;width:70%}
+.sk-line.s{width:40%}
+.sk-line.m{width:90%}
+
+/* ===== Error state ===== */
+.err-state{grid-column:1/-1;flex:1 1 100%;width:100%;box-sizing:border-box;text-align:center;padding:56px 32px;background:var(--paper);border:1.5px dashed rgba(184,159,107,.45);border-radius:14px;box-shadow:0 2px 16px rgba(184,159,107,.08)}
+.err-state .err-icon{font-family:var(--cal);font-size:42px;color:var(--ink-faint);margin-bottom:14px;opacity:.9}
+.err-state p{color:var(--ink-soft);font-size:15px;margin-bottom:22px;font-family:var(--display);letter-spacing:.06em}
+.btn-retry{background:var(--vermillion);color:#fff;padding:10px 30px;border-radius:6px;font-size:14px;font-family:var(--display);letter-spacing:.2em;transition:var(--t);display:inline-block;box-shadow:0 3px 14px rgba(184,64,64,.24)}
+.btn-retry:hover{background:var(--vermillion-dark)}
+
+/* ===== New books (commits) ===== */
+.books-section{background:var(--paper)}
+.commit-list{display:flex;flex-direction:column;gap:14px}
+.commit-item{display:flex;gap:14px;align-items:flex-start;background:var(--rice-light);border:1px solid rgba(184,159,107,.18);border-radius:12px;padding:18px 22px;transition:var(--t);box-shadow:0 2px 12px rgba(184,159,107,.06);width:100%;box-sizing:border-box}
+.commit-item:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.commit-seal{width:36px;height:36px;border-radius:6px;background:var(--vermillion);color:#fff;font-family:var(--cal);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(184,64,64,.2)}
+.commit-body{flex:1;min-width:0}
+.commit-msg{font-family:var(--cal);font-size:16px;color:var(--ink);line-height:1.4;word-break:break-word}
+.commit-meta{display:flex;gap:12px;align-items:center;margin-top:6px;font-size:12px;color:var(--ink-faint);flex-wrap:wrap}
+.commit-meta img{width:18px;height:18px;border-radius:50%;border:1px solid var(--aged-dark)}
+.commit-sha{font-family:monospace;font-size:11px;background:var(--aged);padding:1px 7px;border-radius:3px;color:var(--ink-soft)}
+
+/* ===== Contributors wall ===== */
+.contrib-section{background:var(--rice-light)}
+.contrib-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.contrib-chip{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid rgba(184,159,107,.15);border-radius:100px;padding:6px 18px 6px 6px;transition:var(--t);box-shadow:var(--shadow)}
+.contrib-chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift);border-color:var(--gold)}
+.contrib-chip img{width:34px;height:34px;border-radius:50%;border:2px solid var(--aged-dark)}
+.contrib-chip.founder img{border-color:var(--vermillion)}
+.contrib-name{font-size:13px;color:var(--ink);font-family:var(--display)}
+.contrib-count{font-size:11px;color:var(--ink-faint)}
+.contrib-chip.founder .contrib-name{color:var(--vermillion)}
+.founder-badge{font-size:9px;background:var(--vermillion);color:#fff;padding:1px 6px;border-radius:100px;font-family:var(--display);margin-left:4px}
+
+/* ===== Knowledge coverage ===== */
+.cov-section{background:var(--paper)}
+.cov-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.cov-card{background:var(--rice-light);border:1px solid rgba(184,159,107,.18);border-radius:12px;padding:24px 28px;transition:var(--t);box-shadow:0 2px 14px rgba(184,159,107,.08)}
+.cov-card:hover{box-shadow:var(--shadow);border-color:var(--dc,var(--gold))}
+.cov-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cov-domain{display:flex;align-items:center;gap:8px}
+.cov-dot{width:10px;height:10px;border-radius:50%;background:var(--dc,var(--gold))}
+.cov-name{font-family:var(--cal);font-size:18px;color:var(--ink)}
+.cov-count{font-family:var(--cal);font-size:22px;color:var(--dc,var(--gold-dark))}
+.cov-count span{font-size:12px;color:var(--ink-faint);font-family:var(--display)}
+.cov-bar{height:10px;background:var(--aged);border-radius:100px;overflow:hidden;margin-bottom:12px}
+.cov-fill{height:100%;border-radius:100px;background:var(--dc,var(--gold));width:0;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.cov-need{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cov-need .label{color:var(--ink-faint);font-family:var(--display);font-size:13px}
+.cov-need .tag{background:rgba(184,64,64,.08);color:var(--vermillion);padding:3px 11px;border-radius:100px;font-size:12px;font-family:var(--display);letter-spacing:.06em}
+
+/* ===== CTA ===== */
+.cta-section{background:var(--rice)}
+.com-card{background:var(--paper);border:1px solid rgba(184,159,107,.18);border-radius:14px;padding:52px 48px 44px;text-align:center;box-shadow:0 4px 24px rgba(184,159,107,.12);position:relative}
+.com-card::before{content:'卷';position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;background:var(--vermillion);color:#fff;font-family:var(--cal);font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(184,64,64,.3);border:2px solid rgba(255,253,247,.9)}
+.com-card h3{font-family:var(--cal);font-size:28px;margin-bottom:14px;letter-spacing:.05em;line-height:1.3}
+.com-card p{color:var(--ink-soft);font-size:15.5px;margin-bottom:28px;line-height:1.9;font-family:var(--display);letter-spacing:.05em}
+.com-methods{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
+.com-m{background:var(--aged);border:1.5px solid var(--aged-dark);border-radius:8px;padding:12px 30px;font-size:15px;color:var(--ink);transition:var(--t);font-family:var(--display);letter-spacing:.18em;font-weight:600;box-shadow:0 2px 10px rgba(184,159,107,.12)}
+.com-m:hover{background:var(--vermillion);color:#fff;border-color:var(--vermillion)}
+
+/* ===== Footer ===== */
+footer{background:var(--ink);color:rgba(255,253,247,.7);padding:44px 0 28px;text-align:center}
+footer .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:flex;flex-direction:column;align-items:center;gap:14px}
+footer .f-logo{font-family:var(--cal);font-size:22px;color:#fff;display:flex;align-items:center;gap:8px}
+footer .f-logo .s{width:28px;height:28px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+footer .f-logo .s img{width:70%;height:70%;object-fit:contain;display:block}
+footer p{font-size:12px}
+footer .f-links{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+footer .f-links a{color:rgba(255,253,247,.6);font-size:12px;font-family:var(--display);transition:color var(--t)}
+footer .f-links a:hover{color:#fff}
+
+/* ===== Scroll reveal ===== */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* ===== Toast ===== */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:#fff;padding:11px 26px;border-radius:4px;font-size:14px;z-index:400;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;font-family:var(--display)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== Rate-limit banner ===== */
+.rl-banner{background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.2);color:var(--vermillion);padding:10px 18px;border-radius:6px;font-size:13px;text-align:center;margin-bottom:20px;font-family:var(--display)}
+
+@media(max-width:640px){
+  .hero{min-height:auto;padding:100px 0 48px}
+  .hero h1{font-size:clamp(32px,8vw,40px);line-height:1.12}
+  .hero-lead{font-size:16px}
+  .hero-btns .btn-consult{padding:14px 32px;font-size:14px;letter-spacing:.18em}
+  .hero-btns .btn-ghost{padding:14px 32px;font-size:14px;letter-spacing:.18em}
+  .hero-stats{gap:18px}
+  .stat-n{font-size:36px;font-weight:700}
+  .sec-head{margin-bottom:48px}
+  .sec-head h2{font-size:26px;letter-spacing:.05em}
+  .sec-head .deco{letter-spacing:.4em;font-size:10px;margin-bottom:16px}
+  .sec-head .deco::before,.sec-head .deco::after{width:28px}
+  .com-card{padding:36px 24px 32px}
+  .com-card h3{font-size:22px}
+  .com-card p{font-size:14px}
+  .com-m{padding:11px 26px;font-size:14px;letter-spacing:.14em}
+  .com-card::before{width:32px;height:32px;font-size:15px;top:-16px}
+}
+@media(max-width:380px){.hero-btns{flex-direction:column;align-items:stretch}.btn-consult,.btn-ghost{width:100%;text-align:center}}
+</style>
+</head>
+<body class="paper-tex">
+
+<nav>
+  <div class="inner">
+    <a href="index.html" class="logo"><span class="logo-seal"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方<span class="logo-sub">BOOKPILL</span></a>
+    <div class="nav-links">
+      <a href="index.html#domains">问诊</a>
+      <a href="index.html#workflow">成方</a>
+      <a href="index.html#books">典籍</a>
+      <a href="community.html" class="active">同道</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-seal">v2.0 社区共建 · 同道同行</div>
+    <h1>同道·<span class="red">共建</span></h1>
+    <p class="hero-lead">每一本好书都可能成为某个人的良方</p><p class="hero-desc">实时呈现社区投稿、新增典籍与贡献者</p>
+    <div class="hero-btns">
+      <a href="submit.html" class="btn-consult">投稿新书</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n" id="statSub">—</div><div class="stat-l">总投稿</div></div>
+      <div class="stat"><div class="stat-n" id="statAcc">—</div><div class="stat-l">已收录</div></div>
+      <div class="stat"><div class="stat-n" id="statContrib">—</div><div class="stat-l">贡献者</div></div>
+      <div class="stat"><div class="stat-n" id="statBooks">21</div><div class="stat-l">核心典籍</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="feed" class="feed-section rv">
+  <div class="wrap">
+    <div class="sec-head"><div class="deco">投 · 稿 · 动 · 态</div><h2>最近的社区投稿</h2><p>每一份投稿，都是把读过的书变成别人的良方</p></div>
+    <div class="feed-grid" id="feedGrid"></div>
+  </div>
+</section>
+
+<section id="newbooks" class="books-section rv">
+  <div class="wrap">
+    <div class="sec-head"><div class="deco">新 · 增 · 典 · 籍</div><h2>最近收录的社区书籍</h2><p>近期已收录的社区书籍投稿</p></div>
+    <div class="commit-list" id="commitList"></div>
+  </div>
+</section>
+
+<section id="contributors" class="contrib-section rv">
+  <div class="wrap">
+    <div class="sec-head"><div class="deco">同 · 道 · 之 · 墙</div><h2>社区贡献者</h2><p>每一份良方背后，都是一双愿意分享的手</p></div>
+    <div class="contrib-grid" id="contribGrid"></div>
+  </div>
+</section>
+
+<section id="coverage" class="cov-section rv">
+  <div class="wrap">
+    <div class="sec-head"><div class="deco">知 · 识 · 覆 · 盖</div><h2>五脉藏书覆盖图</h2><p>已收录典籍与急需补充的方向</p></div>
+    <div class="cov-grid" id="covGrid"></div>
+  </div>
+</section>
+
+<section id="cta" class="cta-section rv">
+  <div class="wrap">
+    <div class="com-card">
+      <h3>把你读过的书变成别人的良方</h3>
+      <p>每一本被收录的书，都可能成为某个人人生转折点的那一剂良方<br>在线投稿，一步到位</p>
+      <div class="com-methods">
+        <a href="submit.html" class="com-m">立即投稿</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div class="f-logo"><span class="s"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方</div>
+    <p>读过的书，终于能用了。</p>
+    <div class="f-links">
+      <a href="index.html">首页</a>
+      <a href="submit.html">投稿新书</a>
+      <a href="community.html">社区动态</a>
+      <a href="stats.html">管理后台</a>
+    </div>
+    <p style="opacity:.4;font-size:11px;">v2.0.0 · 社区共建 · 2026</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+/* ========== Config ========== */
+var DOMAIN_MAP={
+  '拖延':{color:'#8B7EC8',key:'delay'},
+  '焦虑':{color:'#C97B5A',key:'anxiety'},
+  '内耗':{color:'#6B8E9E',key:'internal'},
+  '表达':{color:'#D4A04C',key:'express'},
+  '情商':{color:'#6B8E6F',key:'eq'}
+};
+
+var COVERAGE=[
+  {domain:'拖延',count:4,max:8,need:['时间感知','执行功能'],color:'#8B7EC8'},
+  {domain:'焦虑',count:4,max:8,need:['社交焦虑','考试焦虑'],color:'#C97B5A'},
+  {domain:'内耗',count:4,max:8,need:['原生家庭','边界感'],color:'#6B8E9E'},
+  {domain:'表达',count:3,max:8,need:['公开演讲','写作表达'],color:'#D4A04C'},
+  {domain:'情商',count:3,max:8,need:['冲突处理','亲密关系'],color:'#6B8E6F'}
+];
+
+var STATUS_LABEL={pending:'待审核',accepted:'已收录',rejected:'未通过'};
+
+/* ========== Helpers ========== */
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm=setTimeout(function(){t.classList.remove('show')},2600);
+}
+
+function relativeTime(dateStr){
+  if(!dateStr)return'';
+  var d=new Date(dateStr);
+  var now=new Date();
+  var diff=now-d;
+  if(diff<0)diff=0;
+  var min=Math.floor(diff/60000);
+  if(min<1)return'刚刚';
+  if(min<60)return min+'分钟前';
+  var hr=Math.floor(min/60);
+  if(hr<24)return hr+'小时前';
+  var day=Math.floor(hr/24);
+  if(day<30)return day+'天前';
+  var mon=Math.floor(day/30);
+  if(mon<12)return mon+'个月前';
+  return Math.floor(mon/12)+'年前';
+}
+
+function escapeHtml(s){
+  if(!s)return'';
+  return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});
+}
+
+function contribColor(name){
+  var palette=['#B84040','#6B8E6F','#3A5F7A','#B89F6B','#8B7EC8','#C97B5A','#6B8E9E','#D4A04C'];
+  var h=0;
+  for(var i=0;i<name.length;i++){h=name.charCodeAt(i)+((h<<5)-h)}
+  return palette[Math.abs(h)%palette.length];
+}
+
+function domainColor(domain){
+  if(domain&&DOMAIN_MAP[domain])return DOMAIN_MAP[domain].color;
+  return '#B89F6B';
+}
+
+function firstChar(str){
+  if(!str)return'?';
+  return str.charAt(0).toUpperCase();
+}
+
+/* ========== Render: submissions ========== */
+function renderSubmissions(){
+  var grid=document.getElementById('feedGrid');
+  var all=BookPillData.getAll();
+  if(!all.length){
+    grid.innerHTML='<div class="err-state">'+
+      '<div class="err-icon">静</div>'+
+      '<p>还没有投稿动态。成为第一个贡献者吧！</p>'+
+      '<a href="submit.html" class="btn-retry">投稿新书</a>'+
+      '</div>';
+    return;
+  }
+  var html='';
+  all.slice(0,12).forEach(function(it){
+    var domain=it.domain||'';
+    var dc=domainColor(domain);
+    var status=it.status||'pending';
+    var book=it.title||'';
+    var contributor=it.contributor||'匿名';
+    var cc=contribColor(contributor);
+    html+='<div class="sub-card" style="--dc:'+dc+'">'+
+      '<div class="sub-top">'+
+        '<span class="sub-status '+status+'">'+STATUS_LABEL[status]+'</span>'+
+        '<span class="sub-time">'+relativeTime(it.createdAt)+'</span>'+
+      '</div>'+
+      (domain?'<span class="sub-domain" style="background:'+dc+'">'+domain+'脉</span>':'')+
+      '<div class="sub-title">《'+escapeHtml(book)+'》</div>'+
+      '<div class="sub-author">'+
+        '<span style="width:22px;height:22px;border-radius:50%;background:'+cc+';color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+escapeHtml(firstChar(contributor))+'</span>'+
+        '<span>'+escapeHtml(contributor)+'</span>'+
+      '</div>'+
+      '<div class="sub-foot"><a href="stats.html" class="go">查看详情 →</a></div>'+
+    '</div>';
+  });
+  grid.innerHTML=html;
+}
+
+/* ========== Render: new books ========== */
+function loadNewBooks(){
+  var list=document.getElementById('commitList');
+  var accepted=BookPillData.getAll().filter(function(s){return s.status==='accepted'});
+  if(!accepted.length){
+    list.innerHTML='<div class="err-state">'+
+      '<div class="err-icon">书</div>'+
+      '<p>暂无已收录的社区书籍</p>'+
+      '</div>';
+    return;
+  }
+  var html='';
+  accepted.slice(0,8).forEach(function(it){
+    var domain=it.domain||'';
+    var dc=domainColor(domain);
+    var book=it.title||'';
+    var contributor=it.contributor||'匿名';
+    html+='<div class="commit-item">'+
+      '<div class="commit-seal">书</div>'+
+      '<div class="commit-body">'+
+        '<div class="commit-msg">《'+escapeHtml(book)+'》</div>'+
+        '<div class="commit-meta">'+
+          '<span>'+escapeHtml(contributor)+'</span>'+
+          '<span>'+relativeTime(it.createdAt)+'</span>'+
+          (domain?'<span class="commit-sha" style="background:'+dc+';color:#fff">'+domain+'脉</span>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  list.innerHTML=html;
+}
+
+/* ========== Render: contributors ========== */
+function renderContributors(){
+  var grid=document.getElementById('contribGrid');
+  var contribs=BookPillData.getContributors();
+  if(!contribs.length){
+    grid.innerHTML='<div class="err-state">'+
+      '<div class="err-icon">独</div>'+
+      '<p>等待第一位同道加入</p>'+
+      '<a href="submit.html" class="btn-retry">投稿新书</a>'+
+      '</div>';
+    return;
+  }
+  var html='';
+  contribs.slice(0,30).forEach(function(c,idx){
+    var founder=idx===0;
+    var cc=contribColor(c.name);
+    var border=founder?'var(--vermillion)':'var(--aged-dark)';
+    html+='<a class="contrib-chip'+(founder?' founder':'')+'" href="submit.html">'+
+      '<span style="width:34px;height:34px;border-radius:50%;border:2px solid '+border+';background:'+cc+';color:#fff;font-family:var(--cal);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+escapeHtml(firstChar(c.name))+'</span>'+
+      '<div>'+
+        '<div class="contrib-name">'+escapeHtml(c.name)+(founder?'<span class="founder-badge">主理人</span>':'')+'</div>'+
+        '<div class="contrib-count">'+c.count+' 次投稿</div>'+
+      '</div>'+
+    '</a>';
+  });
+  grid.innerHTML=html;
+}
+
+/* ========== Render: coverage ========== */
+function renderCoverage(){
+  var grid=document.getElementById('covGrid');
+  var accepted=BookPillData.getAll().filter(function(s){return s.status==='accepted'});
+  var domainCounts={};
+  accepted.forEach(function(s){
+    var d=s.domain||'';
+    if(d)domainCounts[d]=(domainCounts[d]||0)+1;
+  });
+  var html='';
+  COVERAGE.forEach(function(c){
+    var total=c.count+(domainCounts[c.domain]||0);
+    var pct=Math.round(total/c.max*100);
+    if(pct>100)pct=100;
+    html+='<div class="cov-card" style="--dc:'+c.color+'">'+
+      '<div class="cov-top">'+
+        '<div class="cov-domain"><span class="cov-dot"></span><span class="cov-name">'+c.domain+'脉</span></div>'+
+        '<div class="cov-count">'+total+'<span> / '+c.max+' 本</span></div>'+
+      '</div>'+
+      '<div class="cov-bar"><div class="cov-fill" data-pct="'+pct+'" style="background:'+c.color+'"></div></div>'+
+      '<div class="cov-need"><span class="label">急需补充：</span>'+c.need.map(function(n){return'<span class="tag">'+n+'</span>'}).join('')+'</div>'+
+    '</div>';
+  });
+  grid.innerHTML=html;
+  setTimeout(function(){
+    grid.querySelectorAll('.cov-fill').forEach(function(f){
+      f.style.width=f.dataset.pct+'%';
+    });
+  },100);
+}
+
+/* ========== Init ========== */
+function loadAll(){
+  document.getElementById('statSub').textContent=BookPillData.count();
+  document.getElementById('statAcc').textContent=BookPillData.countByStatus('accepted');
+  document.getElementById('statContrib').textContent=BookPillData.getContributors().length;
+  document.getElementById('statBooks').textContent='21';
+  renderSubmissions();
+  loadNewBooks();
+  renderContributors();
+  renderCoverage();
+}
+
+function initReveal(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver'in window)){
+    els.forEach(function(e){e.classList.add('vis')});
+    return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('vis');
+        io.unobserve(en.target);
+      }
+    });
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  initReveal();
+  loadAll();
+});
+</script>
+</body>
+</html>

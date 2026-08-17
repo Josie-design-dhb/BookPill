@@ -23,9 +23,9 @@
 |------|--------|----------|----------|
 | GitHub PR | 熟悉 Git 的开发者 | GitHub 账号 + Markdown | 1-3天 |
 | Issue 模板 | 有 GitHub 账号即可 | GitHub 账号 | 3-7天 |
-| 在线表单 | 所有人 | 任意浏览器 | 5-7天 |
+| 在线表单 | 所有人 | 任意浏览器 | 3-7天 |
 
-**最简单的方式**：如果你有 GitHub 账号，直接通过 [Issue 模板投稿](https://github.com/Josie3218/BookPill/issues/new/choose)，选择「书籍投稿」即可。
+**最简单的方式**：如果你没有 GitHub 账号或不想操作 Git，直接通过 [在线表单投稿](https://josie-design-dhb.github.io/BookPill/submit.html) 即可，填完自动跳转 GitHub 创建 Issue。也可以查看 [社区动态](https://josie-design-dhb.github.io/BookPill/community.html) 看看大家最近投了什么书。
 
 ---
 
@@ -64,7 +64,7 @@
 
 ### 方式二：Issue 模板投稿（推荐大多数用户）
 
-1. 打开 [Issues 页面](https://github.com/Josie3218/BookPill/issues/new/choose)
+1. 打开 [Issues 页面](https://github.com/Josie-design-dhb/BookPill/issues/new/choose)
 2. 选择「📚 书籍投稿」模板
 3. 按照模板填写书籍信息
 4. 提交 Issue，等待维护者审核
@@ -74,10 +74,10 @@
 
 ### 方式三：在线表单投稿（无 GitHub 账号也可参与）
 
-1. 访问 [BookPill 书籍投稿表单](https://forms.gle/BookPill-Submit)（链接待激活）
+1. 访问 [BookPill 在线投稿表单](https://josie-design-dhb.github.io/BookPill/submit.html)
 2. 填写表单内容（与 Issue 模板一致）
-3. 提交后由维护者定期处理并创建文件
-4. 通过邮件通知审核结果
+3. 提交后自动跳转至 GitHub Issue 创建页面，确认后即完成投稿
+4. 审核结果通过 Issue 状态更新通知
 
 **注意**：在线表单提交的书籍，贡献者信息会在 `CONTRIBUTORS.md` 中标注 `via form` 标签。
 
@@ -209,6 +209,19 @@
 
 ---
 
+## 社区动态
+
+BookPill 社区动态页面实时展示最近的投稿、新增书籍和贡献者活动：
+
+- **投稿动态流**：查看社区成员最近投了什么书
+- **新增典籍**：哪些社区投稿被收录了
+- **贡献者墙**：认识为知识库做出贡献的人
+- **知识库覆盖**：五大问题域的收录进度
+
+访问 [社区动态页面](https://josie-design-dhb.github.io/BookPill/community.html) 查看实时动态。
+
+---
+
 ## 常见问题
 
 ### Q1: 我可以推荐小说吗？
@@ -242,6 +255,6 @@
 
 ---
 
-如果还有其他问题，欢迎在 [Discussions](https://github.com/Josie3218/BookPill/discussions) 中提问。
+如果还有其他问题，欢迎在 [Discussions](https://github.com/Josie-design-dhb/BookPill/discussions) 中提问。
 
 感谢你的贡献！每一本被收录的书，都可能成为某个人人生转折点的"良方"。🙏

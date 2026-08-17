@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投稿良方 — 纸上良方社区</title>
+<meta name="description" content="把你读过的书变成别人的良方。只需书名+作者+贡献者，其余由 Google Books + AI 辅助自动生成。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2C2825;--ink-soft:#5C544E;--ink-faint:#9C948C;
+  --vermillion:#B84040;--vermillion-dark:#9A3434;
+  --gold:#B89F6B;--gold-dark:#968055;
+  --rice:#F5EDE0;--rice-light:#FAF4EA;
+  --aged:#E8DCC8;--aged-dark:#D4C4A8;
+  --bamboo:#6B8E6F;--indigo:#3A5F7A;
+  --paper:#FFFDF7;
+  --shadow:0 1px 12px rgba(44,40,37,.06);
+  --shadow-lift:0 6px 28px rgba(44,40,37,.12);
+  --t:.35s cubic-bezier(.4,0,.2,1);
+  --serif:'Noto Serif SC',serif;--cal:'Ma Shan Zheng',cursive;--display:'ZCOOL XiaoWei','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --delay:#8B7EC8;--anxiety:#C97B5A;--internal:#6B8E9E;--express:#D4A04C;--eq:#6B8E6F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--serif);background:var(--rice);color:var(--ink);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit}
+.paper-tex::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
+::selection{background:rgba(184,64,64,.2);color:var(--ink)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,237,224,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(184,159,107,.1);backdrop-saturate:140%}
+nav .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:70px}
+nav .inner .logo{justify-self:start}
+nav .inner .nav-links{justify-self:center}
+nav .inner .nav-cta{justify-self:end}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--cal);font-size:23px;color:var(--vermillion);letter-spacing:.02em}
+.logo-seal{width:32px;height:32px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 10px rgba(184,64,64,.28)}.logo-seal img{width:72%;height:72%;object-fit:contain;display:block}
+.logo-sub{font-family:var(--display);font-size:11px;color:var(--ink-faint);letter-spacing:.35em;margin-left:4px;border-left:1px solid rgba(44,40,37,.18);padding-left:12px}
+.nav-links{display:flex;gap:48px;align-items:center}
+.nav-links a{font-size:13px;color:var(--ink-soft);font-family:var(--display);transition:color var(--t);letter-spacing:.15em;padding-bottom:2px;border-bottom:1px solid transparent}
+.nav-links a:hover{color:var(--vermillion);border-bottom-color:rgba(184,64,64,.4)}
+.nav-cta{background:var(--vermillion);color:#fff!important;padding:8px 22px;border-radius:4px;font-size:13px;font-family:var(--display);transition:var(--t);letter-spacing:.15em;box-shadow:0 2px 10px rgba(184,64,64,.24)}
+.nav-cta--home{font-size:14px;letter-spacing:.1em;padding:9px 22px}
+.nav-cta:hover{background:var(--vermillion-dark);transform:translateY(-1px)}
+@media(max-width:640px){.nav-links,.logo-sub{display:none}nav .inner{padding:0 18px;grid-template-columns:1fr auto;grid-template-areas:"logo cta"}nav .inner .logo{grid-area:logo}nav .inner .nav-cta{grid-area:cta}}
+
+.hero{position:relative;overflow:hidden;text-align:left;padding:140px 0 60px}
+.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 22% 18%,rgba(184,159,107,.14) 0%,transparent 48%),radial-gradient(ellipse at 82% 40%,rgba(184,64,64,.07) 0%,transparent 42%),radial-gradient(ellipse at 55% 95%,rgba(107,142,111,.09) 0%,transparent 55%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.45}
+.hero-inner{max-width:1160px;margin:0 auto;padding:0 36px;display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+.hero-seal{display:inline-flex;align-items:center;gap:10px;background:rgba(184,64,64,.07);border:1px solid rgba(184,64,64,.22);color:var(--vermillion);padding:6px 18px;border-radius:100px;font-size:11px;font-family:var(--display);margin-bottom:28px;animation:fu .6s ease both;letter-spacing:.3em}
+.hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:var(--cal);font-size:clamp(38px,5.2vw,62px);color:var(--ink);line-height:1.12;margin-bottom:18px;animation:fu .6s .1s ease both;letter-spacing:.03em}
+.hero h1 .red{color:var(--vermillion);position:relative}
+.hero h1 .red::after{content:'';position:absolute;left:-2%;right:-2%;bottom:-0.04em;height:.32em;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 32' preserveAspectRatio='none'%3E%3Cpath fill='%23B84040' fill-opacity='0.28' d='M5 18 C 40 11 85 7 130 6 S 235 9 292 14 L 296 19 C 278 24 228 27 172 26 C 116 25 66 26 32 24 C 18 23 9 22 5 20 Z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:100% 100%;z-index:-1;opacity:1}
+.hero-desc{font-size:15px;color:var(--ink-soft);max-width:620px;margin-bottom:28px;animation:fu .6s .2s ease both;line-height:1.95;letter-spacing:.02em}
+.hero-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;animation:fu .6s .3s ease both}
+.hf-step{background:var(--paper);border:1px solid rgba(184,159,107,.2);border-radius:6px;padding:10px 18px;font-size:13px;color:var(--ink-soft);font-family:var(--display);transition:var(--t);letter-spacing:.08em}
+.hf-step .n{color:var(--vermillion);font-family:var(--cal);margin-right:6px}
+.hf-arrow{color:var(--gold);font-size:14px}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-side{display:flex;align-items:center;justify-content:center;min-height:300px;animation:fu .7s .3s ease both}
+
+/* Progress bar */
+.progress-wrap{margin:0 0 22px;position:relative}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--display);font-size:11px;color:var(--ink-faint);margin-bottom:8px;letter-spacing:.15em}
+.progress-label .ok{color:var(--bamboo)}
+.progress-bar{height:6px;background:var(--aged);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--vermillion));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.steps-dots{display:flex;gap:8px;margin-top:10px}
+.step-dot{flex:1;height:3px;background:var(--aged);border-radius:3px;position:relative;transition:background var(--t)}
+.step-dot.done{background:var(--bamboo)}
+.step-dot.doing{background:var(--vermillion)}
+.step-dot span{position:absolute;top:8px;left:0;right:0;font-size:10px;color:var(--ink-faint);font-family:var(--display);text-align:center;white-space:nowrap;opacity:.8}
+.step-dot.done span{color:var(--bamboo)}
+.step-dot.doing span{color:var(--vermillion)}
+
+section{padding:56px 0;position:relative}
+.wrap{max-width:1160px;margin:0 auto;padding:0 36px;position:relative;z-index:1}
+@media(max-width:768px){.wrap{padding:0 20px}.hero-inner{grid-template-columns:1fr;gap:24px}section{padding:44px 0}}
+.sec-head{text-align:center;margin-bottom:32px}
+.sec-head .deco{font-family:var(--display);color:var(--gold-dark);font-size:12px;letter-spacing:.5em;margin-bottom:10px;display:inline-flex;align-items:center;gap:14px}
+.sec-head .deco::before,.sec-head .deco::after{content:'';display:inline-block;width:32px;height:1px;background:var(--aged-dark)}
+.sec-head h2{font-family:var(--cal);font-size:clamp(28px,4vw,40px);color:var(--ink);letter-spacing:.04em;margin-bottom:8px}
+.sec-head p{color:var(--ink-faint);font-size:13.5px;margin-top:4px;letter-spacing:.08em}
+
+.form-section{background:var(--rice)}
+.form-card{background:var(--paper);border:1.5px solid rgba(184,159,107,.2);border-radius:14px;padding:42px 40px 34px;box-shadow:var(--shadow);position:relative;margin-top:12px}
+.form-card::before{content:'卷';position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:var(--vermillion);color:#fff;font-family:var(--cal);font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(184,64,64,.3);z-index:2}
+@media(max-width:560px){.form-card{padding:34px 22px 26px}}
+
+.mini-hint{background:linear-gradient(135deg,rgba(184,159,107,.08),rgba(184,64,64,.05));border:1px solid rgba(184,159,107,.16);border-radius:10px;padding:16px 20px;margin-bottom:26px;font-size:13px;color:var(--ink-soft);line-height:1.75}
+.mini-hint strong{color:var(--vermillion);font-family:var(--display);letter-spacing:.05em}
+
+.field{margin-bottom:18px;position:relative}
+.field:last-child{margin-bottom:0}
+.field>label{display:block;font-size:13.5px;color:var(--ink);font-family:var(--display);margin-bottom:7px;letter-spacing:.1em}
+.field>label .req{color:var(--vermillion);margin-left:3px;font-size:11px}
+.field-hint{font-size:11px;color:var(--ink-faint);margin-top:5px;font-family:var(--display)}
+.autofill-tag{display:inline-block;background:rgba(107,142,111,.12);color:var(--bamboo);font-size:10px;padding:1px 8px;border-radius:3px;font-family:var(--display);margin-left:6px;vertical-align:middle;letter-spacing:.08em}
+.fetched-tag{display:inline-block;background:rgba(184,159,107,.18);color:var(--gold-dark);font-size:10px;padding:1px 8px;border-radius:3px;font-family:var(--display);margin-left:6px;vertical-align:middle;letter-spacing:.08em}
+
+input[type=text],input[type=tel],textarea,select{
+  width:100%;background:var(--rice-light);border:1px solid var(--aged-dark);border-radius:8px;
+  padding:12px 14px;font-size:14.5px;color:var(--ink);line-height:1.7;transition:var(--t);font-family:var(--serif)
+}
+textarea{resize:vertical;min-height:46px}
+input::placeholder,textarea::placeholder{color:var(--ink-faint);opacity:.7}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,159,107,.16);background:var(--paper)}
+.field input.err,.field textarea.err{border-color:var(--vermillion);box-shadow:0 0 0 3px rgba(184,64,64,.1)}
+.err-msg{font-size:11px;color:var(--vermillion);margin-top:4px;font-family:var(--display);letter-spacing:.05em;display:none}
+.field.errored .err-msg{display:block}
+
+/* Autocomplete dropdown */
+.ac-wrap{position:relative}
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--paper);border:1px solid var(--aged-dark);border-radius:8px;box-shadow:var(--shadow-lift);max-height:280px;overflow-y:auto;z-index:20;display:none}
+.ac-list.open{display:block}
+.ac-item{padding:10px 14px;cursor:pointer;transition:background var(--t);border-bottom:1px solid rgba(184,159,107,.08);display:flex;gap:12px;align-items:flex-start}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.sel{background:rgba(184,159,107,.1)}
+.ac-cover{width:36px;height:52px;border-radius:3px;background:var(--aged);flex-shrink:0;overflow:hidden;background-size:cover;background-position:center}
+.ac-body{flex:1;min-width:0}
+.ac-title{font-size:13px;color:var(--ink);font-family:var(--serif);line-height:1.3;margin-bottom:2px}
+.ac-author{font-size:11px;color:var(--ink-faint);font-family:var(--display)}
+.ac-meta{font-size:10px;color:var(--gold-dark);margin-top:3px;font-family:var(--display);letter-spacing:.06em}
+.ac-loading,.ac-empty{padding:12px 14px;font-size:12px;color:var(--ink-faint);font-family:var(--display)}
+
+.auto-section{background:linear-gradient(135deg,rgba(184,159,107,.05),rgba(58,95,122,.04));border:1.5px dashed rgba(184,159,107,.26);border-radius:12px;padding:22px 24px;margin:26px 0}
+.auto-section-title{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:13px;color:var(--gold-dark);margin-bottom:18px;letter-spacing:.1em}
+.auto-section-title .ai-badge{background:linear-gradient(135deg,var(--indigo),#5B7FA6);color:#fff;font-size:10px;padding:3px 10px;border-radius:4px;font-family:var(--display);letter-spacing:.1em}
+.auto-section-title .meta{margin-left:auto;font-size:11px;color:var(--ink-faint)}
+.auto-field{margin-bottom:16px}
+.auto-field:last-child{margin-bottom:0}
+.auto-field-label{font-size:12px;color:var(--ink-faint);font-family:var(--display);margin-bottom:5px;display:flex;align-items:center;gap:8px;letter-spacing:.12em}
+.auto-content{background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:8px;padding:11px 14px;font-size:13.5px;color:var(--ink-soft);line-height:1.8;min-height:40px}
+.auto-content.empty{color:var(--ink-faint);font-style:italic}
+.auto-content.suggested{border-color:rgba(107,142,111,.32);background:rgba(107,142,111,.05)}
+
+.dom-suggest{display:flex;gap:8px;flex-wrap:wrap}
+.dom-chip{padding:7px 16px;border-radius:100px;font-size:12.5px;font-family:var(--display);cursor:pointer;transition:var(--t);border:1.5px solid;letter-spacing:.08em}
+.dom-chip.suggested{border-color:var(--dc,var(--gold));background:rgba(0,0,0,.02);color:var(--dc,var(--ink))}
+.dom-chip.selected{border-color:var(--dc,var(--gold));background:var(--dc,var(--gold));color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.dom-chip:hover{transform:translateY(-1px)}
+.dom-chip .score{opacity:.7;font-size:10px;margin-left:5px;letter-spacing:0}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:6px}
+.tag-chip{background:rgba(184,159,107,.14);color:var(--gold-dark);padding:3px 10px;border-radius:100px;font-size:11px;font-family:var(--display)}
+
+.quote-field .auto-content{border-left:3px solid var(--gold);padding-left:14px;font-style:italic;color:var(--vermillion-dark)}
+
+.contrib-card{background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:18px 20px;margin-bottom:18px}
+.contrib-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.contrib-welcome{font-family:var(--display);font-size:12px;color:var(--bamboo);letter-spacing:.15em}
+.contrib-switch{font-size:11px;color:var(--indigo);font-family:var(--display);cursor:pointer;transition:var(--t)}
+.contrib-switch:hover{color:var(--vermillion)}
+.contrib-history{font-size:11px;color:var(--ink-faint);font-family:var(--display)}
+
+.preview-wrap{margin-top:26px;border-top:1px dashed rgba(184,159,107,.3);padding-top:22px}
+.preview-toggle{display:flex;align-items:center;gap:10px;background:rgba(184,159,107,.1);border:1px solid rgba(184,159,107,.22);color:var(--gold-dark);padding:10px 18px;border-radius:8px;font-size:13px;font-family:var(--display);transition:var(--t);letter-spacing:.12em}
+.preview-toggle:hover{background:rgba(184,159,107,.18)}
+.preview-toggle .pt-arrow{transition:transform var(--t)}
+.preview-toggle.open .pt-arrow{transform:rotate(180deg)}
+.preview-box{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}
+.preview-box.open{max-height:2000px}
+.preview-inner{margin-top:16px;background:var(--rice);border:1px solid var(--aged);border-radius:10px;padding:22px 24px;font-size:13px;color:var(--ink-soft);line-height:1.85}
+.preview-inner h4{font-family:var(--cal);font-size:17px;color:var(--vermillion);margin:14px 0 8px}
+.preview-inner h4:first-child{margin-top:0}
+.preview-inner ul{margin:6px 0 10px;padding-left:20px}
+.preview-inner li{margin:3px 0}
+.preview-inner blockquote{border-left:3px solid var(--gold);padding:6px 14px;margin:8px 0;color:var(--ink);font-style:italic;background:rgba(184,159,107,.06);border-radius:0 6px 6px 0}
+.preview-inner hr{border:none;border-top:1px dashed var(--aged-dark);margin:12px 0}
+.preview-inner strong{color:var(--ink);font-weight:600}
+.preview-inner p{margin:5px 0}
+.preview-inner .auto-note{background:rgba(107,142,111,.1);border:1px solid rgba(107,142,111,.22);color:var(--bamboo);font-size:12px;padding:8px 12px;border-radius:6px;margin:8px 0;letter-spacing:.04em}
+.preview-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.preview-meta .m-chip{font-size:11px;padding:3px 10px;border-radius:4px;font-family:var(--display);letter-spacing:.06em;background:rgba(184,159,107,.14);color:var(--gold-dark)}
+
+.confirm-block{margin-top:26px;background:rgba(184,159,107,.07);border:1px solid rgba(184,159,107,.18);border-radius:10px;padding:20px 22px}
+.confirm-block .cb-title{font-family:var(--display);font-size:13px;color:var(--gold-dark);margin-bottom:14px;letter-spacing:.15em}
+.cb-item{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px;cursor:pointer;font-size:13px;color:var(--ink-soft);line-height:1.65}
+.cb-item:last-child{margin-bottom:0}
+.cb-item input{appearance:none;-webkit-appearance:none;width:19px;height:19px;border:1.5px solid var(--aged-dark);border-radius:5px;flex-shrink:0;margin-top:3px;position:relative;transition:var(--t);cursor:pointer;background:var(--paper)}
+.cb-item input:checked{background:var(--bamboo);border-color:var(--bamboo)}
+.cb-item input:checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;line-height:1;font-weight:700}
+.cb-item:hover input{border-color:var(--gold)}
+
+.submit-bar{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+.btn-save{flex:1;min-width:140px;border:1.5px solid var(--aged-dark);color:var(--gold-dark);padding:14px 26px;border-radius:8px;font-size:14.5px;font-family:var(--display);letter-spacing:.15em;transition:var(--t);background:var(--paper)}
+.btn-save:hover{border-color:var(--gold);background:rgba(184,159,107,.07);color:var(--ink)}
+.btn-submit{flex:2;min-width:220px;background:var(--vermillion);color:#fff;padding:14px 28px;border-radius:8px;font-size:15px;font-family:var(--display);letter-spacing:.15em;box-shadow:0 4px 18px rgba(184,64,64,.28);transition:var(--t);display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-submit.full{width:100%;flex-basis:100%}
+.btn-submit:hover{background:var(--vermillion-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba(184,64,64,.4)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.btn-submit .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.retry-btn{margin-left:auto;padding:4px 12px;border:1.5px solid var(--gold);background:#fffdf7;color:var(--gold-dark);border-radius:100px;font-family:var(--display);font-size:12px;letter-spacing:.08em;cursor:pointer;transition:var(--t);white-space:nowrap}
+.retry-btn:hover{background:var(--gold);color:#fffdf7;border-color:var(--gold)}
+@media(max-width:560px){.submit-bar{flex-direction:column}.btn-save,.btn-submit{width:100%;min-width:0}}
+@media(max-width:640px){
+
+  .db-btn{padding:8px 16px;font-size:12.5px}
+}
+
+
+.rec-status.pending{background:rgba(184,159,107,.18);color:var(--gold-dark)}
+.rec-status.accepted{background:rgba(107,142,111,.16);color:var(--bamboo)}
+.rec-status.rejected{background:rgba(184,64,64,.12);color:var(--vermillion)}
+
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk-card{background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:10px;padding:20px;display:flex;gap:14px;min-height:86px}
+.sk-badge{width:44px;height:44px;border-radius:8px;flex-shrink:0;background:linear-gradient(90deg,var(--aged) 25%,var(--rice-light) 50%,var(--aged) 75%);background-size:200% 100%;animation:sk 1.4s infinite}
+.sk-line{height:13px;border-radius:3px;background:linear-gradient(90deg,var(--aged) 25%,var(--rice-light) 50%,var(--aged) 75%);background-size:200% 100%;animation:sk 1.4s infinite}
+.sk-body{flex:1;display:flex;flex-direction:column;gap:9px}
+.sk-line.t{width:60%}.sk-line.m{width:90%}.sk-line.s{width:40%}
+.err-state{grid-column:1/-1;text-align:center;padding:44px 20px;background:var(--paper);border:1px dashed var(--aged-dark);border-radius:10px}
+.err-state .err-icon{font-family:var(--cal);font-size:34px;color:var(--ink-faint);margin-bottom:10px}
+.err-state p{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
+.btn-retry{background:var(--vermillion);color:#fff;padding:10px 26px;border-radius:6px;font-size:13px;font-family:var(--display);transition:var(--t);display:inline-block;letter-spacing:.1em}
+.btn-retry:hover{background:var(--vermillion-dark)}
+
+footer{background:var(--ink);color:rgba(255,253,247,.7);padding:56px 0 32px;text-align:center;margin-top:40px}
+footer .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:flex;flex-direction:column;align-items:center;gap:18px}
+footer .f-logo{font-family:var(--cal);font-size:22px;color:#fff;display:flex;align-items:center;gap:10px;letter-spacing:.04em}
+footer .f-logo .s{width:30px;height:30px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+footer .f-logo .s img{width:70%;height:70%;object-fit:contain;display:block}
+footer .f-tag{font-family:var(--display);font-size:11px;color:rgba(255,253,247,.45);letter-spacing:.4em;margin-top:-6px}
+footer p{font-size:12px}
+footer .f-links{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+footer .f-links a{color:rgba(255,253,247,.6);font-size:12px;font-family:var(--display);transition:color var(--t);letter-spacing:.15em}
+footer .f-links a:hover{color:#fff}
+
+.toast{position:fixed;left:50%;top:9999px;transform:translate(-50%,-8px) scale(.96);opacity:0;background:var(--ink);color:#fff;padding:14px 36px;border-radius:10px;font-size:14px;z-index:500;transition:transform .35s cubic-bezier(.4,0,.2,1), opacity .35s cubic-bezier(.4,0,.2,1);font-family:var(--display);box-shadow:0 8px 32px rgba(44,40,37,.28);max-width:calc(100% - 48px);letter-spacing:.05em;pointer-events:none}
+.toast.show{transform:translate(-50%,0) scale(1);opacity:1}
+.toast.success{background:var(--bamboo)}
+.toast.error{background:var(--vermillion)}
+.toast.info{background:var(--indigo)}
+
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+
+
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr;gap:24px;padding:0 36px}
+  .hero-side{display:none}
+}
+</style>
+</head>
+<body class="paper-tex">
+
+<nav>
+  <div class="inner">
+    <a href="index.html" class="logo"><span class="logo-seal"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方<span class="logo-sub">BOOKPILL</span></a>
+    <div class="nav-links">
+      <a href="index.html#domains">问诊</a>
+      <a href="index.html#workflow">成方</a>
+      <a href="index.html#books">典籍</a>
+      <a href="community.html">同道</a>
+    </div>
+    <a href="index.html" class="nav-cta nav-cta--home"><span style="display:inline-block;margin-right:6px;position:relative;top:-0.5px">←</span>首页</a>
+  </div>
+</nav>
+
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-main">
+      <div class="hero-seal">v2.1 · 社区共建 · 极简投稿</div>
+      <h1>把你读过的书<br>变成别人的<span class="red">良方</span></h1>
+      <p class="hero-desc">只需书名 + 作者 + 贡献者信息。Google Books 自动抓取出版信息，AI 辅助识别问题域、生成核心观点、推荐场景、核心金句与三步建议。</p>
+      <div class="hero-flow">
+        <div class="hf-step"><span class="n">壹</span>填书名作者</div>
+        <span class="hf-arrow">→</span>
+        <div class="hf-step"><span class="n">贰</span>自动生成</div>
+        <span class="hf-arrow">→</span>
+        <div class="hf-step"><span class="n">叁</span>确认投稿</div>
+      </div>
+    </div>
+    <div class="hero-side" aria-hidden="true">
+      <svg viewBox="0 0 240 300" width="240" height="300" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 20px 36px rgba(44,40,37,.16))">
+        <defs>
+          <linearGradient id="sp" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFFDF7"/>
+            <stop offset="100%" stop-color="#F0E4CC"/>
+          </linearGradient>
+        </defs>
+        <rect x="10" y="10" width="220" height="280" rx="10" fill="url(#sp)" stroke="#B89F6B" stroke-opacity=".32" stroke-width="1"/>
+        <rect x="22" y="22" width="196" height="256" rx="6" fill="none" stroke="#B89F6B" stroke-opacity=".2" stroke-width="1"/>
+        <g transform="translate(120 28)">
+          <g transform="translate(0 40)">
+            <rect x="-30" y="-30" width="60" height="60" rx="6" fill="#B84040" stroke="#8A2F2F" stroke-width="1.2" stroke-opacity=".6"/>
+            <image href="assets/logo-bai.png" x="-22" y="-22" width="44" height="44" preserveAspectRatio="xMidYMid meet"/>
+          </g>
+          <text x="0" y="98" text-anchor="middle" font-family="Ma Shan Zheng, cursive" font-size="24" fill="#2C2825" letter-spacing="2">投稿新书</text>
+          <line x1="-56" y1="110" x2="56" y2="110" stroke="#B89F6B" stroke-opacity=".45" stroke-width="1"/>
+          <text x="0" y="128" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#5C544E" letter-spacing="2">壹书一方</text>
+          <text x="0" y="152" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#5C544E" letter-spacing="2">共建同道</text>
+          <text x="0" y="176" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" fill="#5C544E" letter-spacing="2">传诸后学</text>
+          <circle cx="0" cy="198" r="9" fill="none" stroke="#B84040" stroke-opacity=".22" stroke-width="1"/>
+          <circle cx="0" cy="198" r="3" fill="#B84040" opacity=".75"/>
+          <text x="0" y="226" text-anchor="middle" font-family="ZCOOL XiaoWei, serif" font-size="10" fill="#9C948C" letter-spacing="2">BOOKPILL</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="form-section rv">
+  <div class="wrap">
+    <div class="sec-head"><div class="deco">投 · 稿 · 卷</div><h2>三要素投稿</h2><p>填得越少，贡献越大 · 其它内容由系统自动生成</p></div>
+
+    <div class="form-card">
+      <div class="mini-hint">
+        <strong>📖 极简投稿：</strong>必填三项——<strong>书名</strong>（输入时支持 Google Books 自动补全）、<strong>作者</strong>、<strong>你的名字</strong>。<br>
+        系统会自动抓取书籍简介/出版社/页数、识别问题脉、生成核心观点、推荐场景、建议步骤与金句；自动记忆贡献者信息，下次投稿无需重复填写。
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="progress-label"><span>完成度</span><span class="ok" id="progressPct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="steps-dots" id="stepsDots">
+          <div class="step-dot" data-k="1"><span>填必填</span></div>
+          <div class="step-dot" data-k="2"><span>识领域</span></div>
+          <div class="step-dot" data-k="3"><span>抓简介</span></div>
+          <div class="step-dot" data-k="4"><span>生成方</span></div>
+          <div class="step-dot" data-k="5"><span>确认</span></div>
+        </div>
+      </div>
+
+      <form id="bookForm" autocomplete="off" onsubmit="return false">
+
+        <!-- 书名 -->
+        <div class="field" id="field-title">
+          <label for="f-title">书名<span class="req">*必填</span>
+            <span class="autofill-tag">自动补全</span>
+          </label>
+          <div class="ac-wrap">
+            <input type="text" id="f-title" name="title" placeholder="例：《被讨厌的勇气》" oninput="onTitleInput(event)" onfocus="onTitleFocus(event)" onblur="onTitleBlur(event)">
+            <div class="ac-list" id="acList"></div>
+          </div>
+          <div class="field-hint">输入书名时会从 Google Books 实时搜索，点选结果即可自动填入书名、作者、出版信息。</div>
+          <div class="err-msg">请填写书名</div>
+        </div>
+
+        <!-- 作者 -->
+        <div class="field" id="field-author">
+          <label for="f-author">作者<span class="req">*必填</span>
+            <span id="authorTag" class="fetched-tag" style="display:none">已抓取</span>
+          </label>
+          <input type="text" id="f-author" name="author" placeholder="例：岸见一郎 / 古贺史健" oninput="onAuthorInput()">
+          <div class="err-msg">请填写作者</div>
+        </div>
+
+        <!-- 自动生成区 -->
+        <div class="auto-section" id="autoSection" style="display:none">
+          <div class="auto-section-title">
+            <span class="ai-badge">AI · Google Books</span>
+            <span>以下内容自动生成，可根据实际情况调整</span>
+            <span class="meta" id="fetchMeta"></span>
+            <button type="button" class="retry-btn" id="retryBtn" onclick="retryBookLookup()" style="display:none" title="重新搜索 Google Books">🔍 重新匹配</button>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>🎯 问题域识别（点击选中）</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="dom-suggest" id="domSuggest"></div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>📚 出版元信息</span>
+              <span class="autofill-tag">Google Books</span>
+            </div>
+            <div class="auto-content empty" id="autoMeta">等待抓取出版信息…</div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>📖 书籍简介</span>
+              <span class="fetched-tag">抓取</span>
+            </div>
+            <div class="auto-content empty" id="autoDesc">填写书名后自动获取书籍简介…</div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>💡 核心观点（AI 预生成）</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="auto-content empty" id="autoInsight">根据书籍简介自动提炼核心观点…</div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>🎬 推荐场景</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="auto-content empty" id="autoScene">根据问题域自动生成推荐场景…</div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>🪜 三步建议</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="auto-content empty" id="autoSteps">根据问题域自动生成行动三步建议…</div>
+          </div>
+
+          <div class="auto-field quote-field">
+            <div class="auto-field-label">
+              <span>✒️ 核心金句</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="auto-content empty" id="autoQuote">根据书摘自动挑选核心金句…</div>
+          </div>
+
+          <div class="auto-field">
+            <div class="auto-field-label">
+              <span>🏷 相关标签</span>
+              <span class="autofill-tag">自动</span>
+            </div>
+            <div class="tag-row" id="tagRow"></div>
+          </div>
+        </div>
+
+        <!-- 贡献者 -->
+        <div class="field" id="field-contributor" style="margin-top:26px">
+          <div id="contribCard" class="contrib-card" style="display:none">
+            <div class="contrib-head">
+              <span class="contrib-welcome" id="contribWelcome">🎋 欢迎回来，老同道</span>
+              <span class="contrib-switch" onclick="clearContrib()">更换贡献者</span>
+            </div>
+            <div class="contrib-history" id="contribHistory">——</div>
+          </div>
+          <label for="f-contributor">你的名字<span class="req">*必填</span>
+            <span class="autofill-tag" id="contribMemTag" style="display:none">已记忆</span>
+          </label>
+          <input oninput="onContributorInput()" type="text" id="f-contributor" name="contributor" placeholder="例：Josie-design-dhb">
+          <div class="field-hint">系统会在本地记住你的名字，下次投稿自动带出（仅保存于你自己的浏览器）。</div>
+          <div class="err-msg">请填写你的名字</div>
+        </div>
+
+        <!-- 补充 -->
+        <div class="field">
+          <label for="f-note">补充说明<span style="color:var(--ink-faint);font-size:12px;">（选填）</span></label>
+          <textarea id="f-note" name="note" rows="2" placeholder="任何想对审核者说的话，或补充背景 / 你为何推荐这本书"></textarea>
+        </div>
+
+        <!-- 预览 -->
+        <div class="preview-wrap">
+          <button type="button" class="preview-toggle" id="previewToggle" onclick="togglePreview()">
+            <span>预览生成的投稿内容</span>
+            <span class="pt-arrow">▾</span>
+          </button>
+          <div class="preview-box" id="previewBox">
+            <div class="preview-inner" id="previewInner">
+              <div class="preview-empty" style="color:var(--ink-faint);font-style:italic;text-align:center;padding:10px 0">填写书名后，这里会实时显示生成的投稿预览</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 确认 -->
+        <div class="confirm-block">
+          <div class="cb-title">投 · 稿 · 确 · 认</div>
+          <label class="cb-item"><input type="checkbox" id="cb1"><span>AI 自动生成的内容我已审阅，核心观点忠实原书</span></label>
+          <label class="cb-item"><input type="checkbox" id="cb2"><span>书籍信息真实准确，非虚构书籍（或小说类说明为虚构但有启发性）</span></label>
+          <label class="cb-item"><input type="checkbox" id="cb3"><span>已阅读《贡献指南》，了解「收录」「待审核」「未通过」的含义</span></label>
+        </div>
+
+        <div class="submit-bar">
+          <button type="button" class="btn-submit full" id="submitBtn" onclick="submitLocal()" disabled>✓ 提交投稿</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="inner">
+    <div class="f-logo"><span class="s"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方</div>
+    <div class="f-tag">BOOKPILL · SINCE 2026</div>
+    <p>读过的书，终于能用了。</p>
+    <div class="f-links">
+      <a href="index.html">首页</a>
+      <a href="community.html">社区动态</a>
+      <a href="submit.html">投稿新书</a>
+      <a href="stats.html">管理后台</a>
+    </div>
+    <p style="opacity:.4;font-size:11px;">v2.1.0 · 社区共建 · 2026</p>
+  </div>
+</footer>
+
+<script src="data.js?v=2.3.0"></script>
+<script>
+var DOMAIN_MAP = {
+  '拖延':{color:'#8B7EC8',key:'delay',desc:'启动·完美',
+    keywords:['拖延','原子习惯','微习惯','启动','完美主义','执行力','时间管理','自我管理','惰性','动机','专注','效率','番茄','gtd','deadline','截止','懒','推迟','把时间当作朋友','自控力'],
+    scenes:[
+      '当你明明知道该做却迟迟动不起来，深陷启动困难时',
+      '当你总在「准备」却从不「开始」，把学习当成逃避行动的借口时',
+      '当你「要么做到最好，要么干脆不做」，因此一事无成时'
+    ],
+    steps:[
+      '★ 今天：选一件最想做的事，只做 5 分钟。做完就可以停',
+      '★★ 明天：同样的事，做 10 分钟。不追求结果',
+      '★★★ 本周：每天做 15 分钟。连续 7 天就算成功'
+    ],
+    quotes:['你不需要准备好才开始，你需要开始才能准备好。','不是你不够自律，是你的目标太大了。缩小它，直到它变得可笑。','微习惯的本质，就是「小到不可能失败」。']
+  },
+  '焦虑':{color:'#C97B5A',key:'anxiety',desc:'压力·紧绷',
+    keywords:['焦虑','当下的力量','正念','冥想','压力','紧绷','失眠','担心','恐惧','预演','灾难化','呼吸','放松','紧张','身份的焦虑','焦虑的人','睡不好','心慌','失眠'],
+    scenes:[
+      '当你压力紧绷、反复预演未来的危险、无法安住当下时',
+      '当你什么都想做好，结果什么都没做好，大脑停不下来时',
+      '当你过度在意别人怎么看，把自我价值建立在别人的认可上时'
+    ],
+    steps:[
+      '★ 现在：做 4-7-8 呼吸 3 次 — 吸气 4 秒 → 屏息 7 秒 → 呼气 8 秒',
+      '★★ 今天：把焦虑的事全部写下来。写出来就从脑子搬到了纸上',
+      '★★★ 本周：每天只选 3 件事做。做完 3 件就停，不多做'
+    ],
+    quotes:['焦虑不会消除明天的悲伤，它只会榨干今天的力量。','你无法阻止波浪，但你可以学会冲浪。','比较是焦虑的燃料。你的节奏不需要和别人一样。']
+  },
+  '内耗':{color:'#6B8E9E',key:'internal',desc:'纠结·消耗',
+    keywords:['内耗','蛤蟆先生','心理咨询','纠结','自我怀疑','反刍','思维陷阱','认知行为','cbt','自我关怀','创伤','被忽视的孩子','找个人聊聊','内耗','想太多','反复','后悔','自责','我不够好'],
+    scenes:[
+      '当你反复纠结同一件事、自我怀疑、陷入思维反刍时',
+      '当你脑子里总有个批评的声音，反复攻击自己「不够好」时',
+      '当你做了决定又后悔、没做决定又焦虑，左右为难时'
+    ],
+    steps:[
+      '★ 今天：当内耗开始时，把手放在胸口说「这很难，我在这里陪自己」',
+      '★★ 明天：问自己「我会对好朋友说这些话吗？」不会，也别对自己说',
+      '★★★ 本周：每天给自己一个「停」字 — 想够了就停，去做一件具体的事'
+    ],
+    quotes:['你不需要变得完美才值得被爱 — 包括被你自己爱。','自由不是选对，是选了之后对自己好。','反复想不是在解决问题，是在咀嚼情绪。走出来比想清楚更重要。']
+  },
+  '表达':{color:'#D4A04C',key:'express',desc:'沟通·社交',
+    keywords:['非暴力沟通','关键对话','沟通','表达','社交','开口','说服','演讲','关系','冲突','倾听','影响力','不敢说','说不出口','词不达意','沟通','发言'],
+    scenes:[
+      '当你想说的说不出口、词不达意、沟通陷入僵局时',
+      '当你面对会议发言、向上沟通、关键对话时大脑一片空白时',
+      '当你情绪一激动就说重话，发完火又后悔时'
+    ],
+    steps:[
+      '★ 今天：每次说话前问自己「一句话说清楚，我说什么」，就只说这一句',
+      '★★ 明天：用「我观察到…我感到…我需要…」开头，不用「我认为…应该…」',
+      '★★★ 本周：每天主动表达一次真实感受。哪怕只是「今天有点累」'
+    ],
+    quotes:['好的表达不是说自己想说的，是说对方能接住的。','最好的表达不是最精巧的，是最真实的。','当你不再评判，而是真实表达感受和需要时，对方反而更愿意倾听。']
+  },
+  '情商':{color:'#6B8E6F',key:'eq',desc:'关系·情绪',
+    keywords:['情商','情绪','人际关系','共情','社交天性','高效能人士','七个习惯','影响力','领导力','性格','人格','活出生命的意义','亲密关系','发火','脾气','愤怒','易怒'],
+    scenes:[
+      '当你情绪失控、人际关系紧张、需要提升共情能力时',
+      '当你最容易对最亲近的人发火，事后又非常后悔时',
+      '当你想读懂别人的情绪、也想读懂自己的情绪时'
+    ],
+    steps:[
+      '★ 今天：情绪上头时，先在心里给情绪命名 —「这是愤怒 / 委屈 / 恐惧」',
+      '★★ 明天：情绪爆发前默数 6 秒，给理性脑上线的时间',
+      '★★★ 本周：每晚回顾「今天哪次情绪反应处理得不错？哪次可以更好？」'
+    ],
+    quotes:['你不能阻止波浪，但你可以学会冲浪。情绪也是一样。','情绪不会因为你忍了就消失，它会换一种方式出来。','对最亲近的人发的火，其实是对「安全」的消耗。终有一天会用完。']
+  }
+};
+
+var DOMAIN_ORDER = ['拖延','焦虑','内耗','表达','情商'];
+
+var state = {
+  title:'',author:'',contributor:'',note:'',
+  detectedDomains:[],
+  selectedDomain:'',
+  bookDesc:'',
+  metaInfo:null, // {publisher, pageCount, publishedDate, language, isbn}
+  autoInsight:'',
+  autoScene:'',
+  autoSteps:[],
+  autoQuote:'',
+  tags:[],
+  matchedKeywords:[],
+  autoGen:{},
+  fetchTimer:null,
+  acTimer:null,
+  acAbort:null,
+  busySubmit:false
+};
+
+/* ========== Utils ========== */
+var _toastTimer = null;
+function showToast(msg,type){
+  var t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.style.left = '50%';
+  // 锚定【提交投稿】按钮正下方 16px
+  var topPx = 120;
+  var btn = document.getElementById('submitBtn');
+  if(btn){
+    var r = btn.getBoundingClientRect();
+    var placeTop = r.bottom + 16;
+    // 若按钮在视口上方以外（太远），用 viewport 兜底
+    if(r.bottom < -200){ placeTop = 120; }
+    // 若放下方会出视口，改放按钮上方
+    var needsScroll = false;
+    if(placeTop + 60 > window.innerHeight){
+      var above = r.top - 60;
+      if(above >= 20){
+        placeTop = above;
+      } else {
+        // 按钮太靠上且放下方也超出 → 需要滚动让按钮+toast都可见
+        needsScroll = true;
+      }
+    }
+    topPx = placeTop;
+    if(needsScroll && window.scrollTo){
+      window.scrollTo({top: window.pageYOffset + (r.bottom - window.innerHeight) + 160, behavior: 'smooth'});
+    }
+  }
+  t.style.top = topPx + 'px';
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function escapeHtml(s){
+  if(s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function relativeTime(dateStr){
+  if(!dateStr) return '';
+  var d = new Date(dateStr), now = new Date();
+  var diff = now - d; if(diff < 0) diff = 0;
+  var min = Math.floor(diff / 60000);
+  if(min < 1) return '刚刚';
+  if(min < 60) return min + '分钟前';
+  var hr = Math.floor(min / 60);
+  if(hr < 24) return hr + '小时前';
+  var day = Math.floor(hr / 24);
+  if(day < 30) return day + '天前';
+  var mon = Math.floor(day / 30);
+  if(mon < 12) return mon + '个月前';
+  return Math.floor(mon / 12) + '年前';
+}
+
+function pick(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/* ========== Domain Detection ========== */
+function detectDomain(title, author, desc){
+  var text = (title + ' ' + author + ' ' + (desc || '')).toLowerCase();
+  var scores = {};
+  for(var i = 0; i < DOMAIN_ORDER.length; i++){
+    var d = DOMAIN_ORDER[i];
+    var cfg = DOMAIN_MAP[d];
+    var matched = [];
+    for(var j = 0; j < cfg.keywords.length; j++){
+      if(text.indexOf(cfg.keywords[j].toLowerCase()) >= 0){
+        matched.push(cfg.keywords[j]);
+      }
+    }
+    var score = matched.length;
+    // Add context hint from description length and topic words
+    if(score === 0 && desc && desc.length > 80){
+      if(/拖延|习惯|效率|时间|行动|开始/.test(text)) score = 0.3;
+      else if(/焦虑|压力|紧张|失眠|恐惧|担心/.test(text)) score = 0.3;
+      else if(/纠结|后悔|怀疑|自责|内耗/.test(text)) score = 0.3;
+      else if(/沟通|表达|说话|对话|发言/.test(text)) score = 0.3;
+      else if(/情绪|人际|关系|共情|脾气|愤怒/.test(text)) score = 0.3;
+    }
+    scores[d] = { score: score, matched: matched };
+  }
+  // 【修复A-1】新增：自由标签→5个正式域 的映射（本地库catalog用了大量自由标签需归一）
+  var TAG_TO_DOMAIN = {
+    '拖延':'拖延','习惯':'拖延','效率':'拖延','时间管理':'拖延','自律':'拖延','行动':'拖延','学习':'拖延','工作':'拖延','启动':'拖延','懒惰':'拖延','动机':'拖延','番茄':'拖延','deadline':'拖延','截止':'拖延','gtd':'拖延','自控':'拖延','把时间当作朋友':'拖延'
+    ,'焦虑':'焦虑','压力':'焦虑','紧绷':'焦虑','失眠':'焦虑','担心':'焦虑','恐惧':'焦虑','紧张':'焦虑','灾难化':'焦虑','心慌':'焦虑','睡不好':'焦虑','倦怠':'焦虑','抑郁':'焦虑','虚无':'焦虑'
+    ,'内耗':'内耗','纠结':'内耗','怀疑':'内耗','反刍':'内耗','自责':'内耗','后悔':'内耗','想太多':'内耗','纠结':'内耗','cbt':'内耗','认知行为':'内耗','自我关怀':'内耗','创伤':'内耗','被忽视':'内耗','治愈':'内耗','自卑':'内耗','不够好':'内耗','自由':'内耗','倦怠':'内耗'
+    ,'表达':'表达','沟通':'表达','社交':'表达','开口':'表达','演讲':'表达','说服':'表达','冲突':'表达','倾听':'表达','不敢说':'表达','词不达意':'表达','发言':'表达','谈判':'表达','说话':'表达','对话':'表达','写作':'表达','沟通':'表达'
+    ,'情商':'情商','情绪':'情商','人际关系':'情商','共情':'情商','领导力':'情商','性格':'情商','人格':'情商','亲密关系':'情商','愤怒':'情商','易怒':'情商','发火':'情商','脾气':'情商','关系':'情商','情感':'情商','爱情':'情商'
+  };
+  // 【修复A-2】先用title/desc匹配自由标签→转换为5域得分（比关键词法更精准）
+  var tagBoost = {'拖延':0,'焦虑':0,'内耗':0,'表达':0,'情商':0};
+  var tagText = (title + ' ' + (desc || '') + ' ' + (author || '')).toLowerCase();
+  for(var tb in TAG_TO_DOMAIN){
+    if(tagText.indexOf(tb) >= 0){
+      var dom = TAG_TO_DOMAIN[tb];
+      if(typeof tagBoost[dom] === 'number') tagBoost[dom] += 1;
+    }
+  }
+  // 将自由标签加成计入score
+  for(var di = 0; di < DOMAIN_ORDER.length; di++){
+    var dn = DOMAIN_ORDER[di];
+    if(tagBoost[dn] > 0){
+      scores[dn].score = (scores[dn].score || 0) + tagBoost[dn];
+    }
+  }
+
+  var entries = Object.entries(scores).sort(function(a,b){
+    return b[1].score - a[1].score;
+  });
+  var top = entries[0];
+  // 【修复A-3】score<=0时返回空数组！禁止任何兜底预设焦虑，让UI进入"手动选择"分支
+  if(!top || top[1].score <= 0){
+    state.matchedKeywords = [];
+    return [];
+  }
+  state.matchedKeywords = top[1].matched || [];
+  return entries.filter(function(e){ return e[1].score > 0; }).slice(0,3).map(function(e){
+    return { domain: e[0], score: e[1].score, matched: e[1].matched };
+  });
+}
+
+/* ========== Google Books: Autocomplete + fetch ========== */
+function fetchWithTimeout(url, opts, timeoutMs){
+  timeoutMs = timeoutMs || 6000;
+  return Promise.race([
+    fetch(url, opts).then(function(r){ return r.json(); }),
+    new Promise(function(_, rej){ setTimeout(function(){ rej(new Error('timeout')); }, timeoutMs); })
+  ]).catch(function(){ return {items:[]}; });
+}
+function googleBooksSearch(q){
+  if(!q || q.trim().length < 1) return Promise.resolve({items:[]});
+  // 竞态保护：每个搜索分配递增序号，过期的结果不应用
+  state._acSeq = (state._acSeq || 0) + 1;
+  var mySeq = state._acSeq;
+  // 1) 本地匹配（即时返回）
+  var localItems = [];
+  if(typeof searchLocalCatalog === 'function'){
+    var localResults = searchLocalCatalog(q) || [];
+    localItems = localResults.map(function(b, i){
+      return {
+        id: 'local-' + i,
+        volumeInfo: {
+          title: b.title,
+          authors: (b.author || '').split(/\s*[\/,，]\s*/),
+          publishedDate: b.publishedDate || '',
+          pageCount: b.pageCount || 0,
+          publisher: b.publisher || '',
+          language: b.language || 'zh',
+          categories: b.categories || [],
+          description: b.desc || '',
+          imageLinks: {},
+          _local: true,
+          _preDomains: b.domain || []    // 【修复B】传递本地库预设域标签（最精准的标签）
+        }
+      };
+    });
+  }
+  // 2) 有本地结果 → 立即返回，后台静默补充 Google
+  if(localItems.length > 0){
+    if(state.acAbort) state.acAbort.abort();
+    if('AbortController' in window){
+      var ac = new AbortController();
+      state.acAbort = ac;
+      var bgSeq = state._acSeq;
+      googleBooksSearchImpl(q, ac.signal).then(function(googleData){
+        if(state._acSeq !== bgSeq) return; // 用户已改输入，结果作废
+        var googleItems = (googleData && googleData.items) || [];
+        if(googleItems.length > 0){
+          var merged = localItems.slice();
+          var seen = {};
+          for(var x = 0; x < merged.length; x++){ var t = merged[x].volumeInfo.title; if(t) seen[t] = true; }
+          for(var y = 0; y < googleItems.length; y++){
+            var gt = googleItems[y].volumeInfo && googleItems[y].volumeInfo.title;
+            if(gt && !seen[gt] && merged.length < 7){ merged.push(googleItems[y]); seen[gt] = true; }
+          }
+          var listEl = document.getElementById('acList');
+          // 再次验证：当前输入仍匹配，才刷新
+          if(listEl && listEl.classList.contains('open')){
+            var curQ = (document.getElementById('f-title').value || '').trim();
+            if(curQ === q.trim()){ renderAc(merged.slice(0, 7)); }
+          }
+        }
+      }).catch(function(){});
+    }
+    return Promise.resolve({items: localItems.slice(0, 7)});
+  }
+  // 3) 无本地结果 → 等待 Google Books
+  if(state.acAbort) state.acAbort.abort();
+  if('AbortController' in window){
+    var ac2 = new AbortController();
+    state.acAbort = ac2;
+    return googleBooksSearchImpl(q, ac2.signal).then(function(d){ return {items: (d&&d.items)||[]}; }).catch(function(){ return {items:[]}; });
+  }
+  return googleBooksSearchImpl(q, null).then(function(d){ return {items: (d&&d.items)||[]}; }).catch(function(){ return {items:[]}; });
+}
+function googleBooksSearchImpl(q, signal){
+  // Phase 1: search without langRestrict (global) — catches Japanese/English original editions
+  // Phase 2: fallback with langRestrict=zh-CN — catches Chinese translated editions
+  var base = 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(q) + '&maxResults=5';
+  var urls = [base, base + '&langRestrict=zh-CN'];
+  function fetchOne(url){
+    var opts = signal ? {signal: signal} : {};
+    return fetchWithTimeout(url, opts, 3000);
+  }
+  var proms = urls.map(fetchOne);
+  return Promise.all(proms).then(function(results){
+    var best = {items:[]};
+    for(var i = 0; i < results.length; i++){
+      var r = results[i] || {};
+      if((r.items || []).length > (best.items || []).length){
+        best = r;
+      }
+    }
+    // 如果 global 结果比 zh-CN 多，优先展示 global；但去重（同 title 合并）
+    var merged = [];
+    var seen = {};
+    for(var j = 0; j < results.length; j++){
+      var its = (results[j] && results[j].items) || [];
+      for(var k = 0; k < its.length; k++){
+        var key = (its[k].volumeInfo && its[k].volumeInfo.title) || '';
+        if(key && !seen[key]){
+          seen[key] = true;
+          merged.push(its[k]);
+        }
+      }
+    }
+    return {items: merged.slice(0, 7)};
+  });
+}
+
+function extractVolumeMeta(v){
+  if(!v) return null;
+  var isbn = '';
+  if(v.industryIdentifiers){
+    for(var i = 0; i < v.industryIdentifiers.length; i++){
+      if(v.industryIdentifiers[i].type === 'ISBN_13'){ isbn = v.industryIdentifiers[i].identifier; break; }
+      if(!isbn) isbn = v.industryIdentifiers[i].identifier;
+    }
+  }
+  return {
+    title: v.title || '',
+    authors: (v.authors || []).join(' / '),
+    desc: (v.description || '').replace(/<[^>]+>/g, '').substring(0, 500),
+    categories: v.categories || [],
+    pageCount: v.pageCount || 0,
+    publishedDate: v.publishedDate || '',
+    publisher: v.publisher || '',
+    language: v.language || '',
+    isbn: isbn,
+    cover: (v.imageLinks && (v.imageLinks.thumbnail || v.imageLinks.smallThumbnail)) || ''
+  };
+}
+function scoreMatch(info, title, author){
+  if(!info) return 0;
+  var score = 0;
+  if(info.title && title){
+    var tl = info.title.toLowerCase();
+    var ql = title.toLowerCase();
+    if(tl === ql) score += 50;
+    else if(tl.indexOf(ql) >= 0 || ql.indexOf(tl) >= 0) score += 30;
+    else score += 10;
+  }
+  if(info.authors && author){
+    var al = info.authors.toLowerCase();
+    var qal = author.toLowerCase();
+    if(al.indexOf(qal) >= 0 || qal.indexOf(al) >= 0) score += 30;
+    else score += 5;
+  }
+  if(info.publisher) score += 5;
+  if(info.pageCount && info.pageCount > 0) score += 3;
+  return score;
+}
+function googleBooksLookup(title, author){
+  if(!title) return Promise.resolve(null);
+  // 1) 本地精确匹配
+  if(typeof lookupLocalCatalog === 'function'){
+    var local = lookupLocalCatalog(title, author);
+    if(local){ local._source = 'local'; return Promise.resolve(local); }
+  }
+  // 2) 本地无结果 → Google Books 兜底
+  var qs = [];
+  qs.push(title + ' ' + (author || ''));
+  qs.push(title);
+  if(author) qs.push(author + ' ' + title);
+  // 并行多查询：带作者 / 纯书名 / 带作者（作者在前）
+  var urls = qs.map(function(q){
+    return 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(q) + '&maxResults=3';
+  });
+  function fetchOne(url){
+    return fetchWithTimeout(url, {}, 3000);
+  }
+  return Promise.all(urls.map(fetchOne)).then(function(results){
+    var all = [];
+    var seenIds = {};
+    for(var i = 0; i < results.length; i++){
+      var its = (results[i] && results[i].items) || [];
+      for(var j = 0; j < its.length; j++){
+        var id = its[j].id || (its[j].volumeInfo && its[j].volumeInfo.title) || '';
+        if(id && !seenIds[id]){
+          seenIds[id] = true;
+          all.push(its[j]);
+        }
+      }
+    }
+    if(all.length === 0) return null;
+    // 对每个候选项打分
+    var bestInfo = null;
+    var bestScore = -1;
+    for(var k = 0; k < all.length; k++){
+      var info = extractVolumeMeta(all[k].volumeInfo);
+      var sc = scoreMatch(info, title, author);
+      if(sc > bestScore){
+        bestScore = sc;
+        bestInfo = info;
+      }
+    }
+    // 只要有 publisher 或 pageCount 就认为匹配有效
+    if(bestScore >= 10 && (bestInfo.publisher || (bestInfo.pageCount && bestInfo.pageCount > 0))){
+      bestInfo._source = 'google'; return bestInfo;
+    }
+    if(bestScore >= 5){ bestInfo._source = 'google'; return bestInfo; }
+    return null;
+  }).catch(function(){ return null; });
+}
+
+/* ========== Generators ========== */
+function generateInsight(desc, domain, title, author){
+  var out = [];
+  if(desc && desc.length > 40){
+    var sentences = desc.split(/[。.！!?？\n]/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 12; });
+    if(sentences.length >= 3){
+      out.push(sentences[0].substring(0, 80) + (sentences[0].length > 80 ? '…' : ''));
+      out.push(sentences[Math.floor(sentences.length / 2)].substring(0, 80) + (sentences[Math.floor(sentences.length/2)].length > 80 ? '…' : ''));
+      out.push(sentences[sentences.length - 1].substring(0, 80) + (sentences[sentences.length-1].length > 80 ? '…' : ''));
+    }else if(sentences.length >= 1){
+      out.push(sentences[0].substring(0, 120) + (sentences[0].length > 120 ? '…' : ''));
+      if(desc.length > 160) out.push(desc.substring(120, 260) + '…');
+    }
+  }
+  if(out.length === 0){
+    if(title){ out.push('《' + title + '》 这本书从独特的视角切入，提供了一套有体系的方法论与真实案例。'); }
+    out.push('作者 ' + (author || '佚名') + ' 以多年的实践经验，提供了可以立刻上手的操作建议。');
+    out.push('真正的改变不在于读完这本书，而在于读完后的那个行动。');
+  }
+  return out.map(function(s, i){ return '· 核心理念 ' + ['一','二','三','四'][i] + '：' + s; }).join('\n');
+}
+
+function generateScene(domain, title){
+  var cfg = DOMAIN_MAP[domain];
+  if(cfg && cfg.scenes) return pick(cfg.scenes);
+  return '当你在人生某个转角，需要一本书来指引方向时';
+}
+
+function generateSteps(domain, title, desc){
+  var cfg = DOMAIN_MAP[domain];
+  if(cfg && cfg.steps) return cfg.steps.slice();
+  return [
+    '★ 今天：从最小的一步开始，只做 5 分钟',
+    '★★ 明天：同样的事，做 10 分钟',
+    '★★★ 本周：每天做 15 分钟，连续 7 天就是成功'
+  ];
+}
+
+function generateQuote(domain, title, desc){
+  var cfg = DOMAIN_MAP[domain];
+  if(cfg && cfg.quotes) return pick(cfg.quotes);
+  // try to extract from desc
+  if(desc && desc.length > 30){
+    var parts = desc.split(/[。.！!?？]/).filter(function(s){ return s.length > 8 && s.length < 50; });
+    if(parts.length > 0) return parts[Math.floor(parts.length / 2)].trim();
+  }
+  return '一本好书，就是一位阅历丰厚的朋友。';
+}
+
+function generateTags(title, author, desc, domain, categories){
+  var bag = [];
+  if(domain) bag.push(domain + '脉');
+  if(categories){
+    for(var i = 0; i < categories.length; i++){
+      var c = categories[i].replace(/\/.*$/,'').trim();
+      if(c && c.length < 12) bag.push(c);
+    }
+  }
+  var fromDesc = [];
+  var text = (title || '') + ' ' + (desc || '');
+  var kwPool = ['习惯','成长','心理','沟通','情绪','效率','拖延','焦虑','内耗','表达','关系','思维','认知','幸福','自律','专注','行动','自由','勇气','治愈','潜能'];
+  for(var i = 0; i < kwPool.length; i++){
+    if(text.indexOf(kwPool[i]) >= 0) fromDesc.push(kwPool[i]);
+  }
+  bag = bag.concat(fromDesc.slice(0, 3));
+  // dedupe
+  var seen = {}, out = [];
+  for(var i = 0; i < bag.length; i++){
+    if(!seen[bag[i]]){ seen[bag[i]] = true; out.push(bag[i]); }
+  }
+  return out.slice(0, 6);
+}
+
+function describeMeta(meta){
+  if(!meta) return '';
+  var parts = [];
+  if(meta.publisher) parts.push('出版社：' + meta.publisher);
+  if(meta.pageCount) parts.push('页数：' + meta.pageCount + ' 页');
+  if(meta.publishedDate) parts.push('出版时间：' + meta.publishedDate);
+  if(meta.language) parts.push('语言：' + (meta.language === 'zh' || meta.language === 'zh-CN' ? '中文' : meta.language));
+  if(meta.isbn) parts.push('ISBN：' + meta.isbn);
+  if(parts.length === 0) return '';
+  return parts.join('　·　');
+}
+
+/* ========== Book state consistency helpers ========== */
+// 清空上一本书遗留的作者/简介/元数据/标签/生成内容，避免 A 书→B 书时数据串混
+function resetBookContext(){
+  state._lastBookMatch = null;
+  state.autoGen = state.autoGen || {};
+  state.autoGen._fetchKey = null; // 强制重新 lookup
+  state.author = '';
+  state.bookDesc = '';
+  state.metaInfo = null;
+  state.tags = null;
+  state.detectedDomains = [];
+  state.selectedDomain = null;
+  state._domainLocked = false; // 解锁：允许后续异步重算
+  state._pendingPreDomains = [];
+  state.autoInsight = null;
+  state.autoScene = null;
+  state.autoSteps = null;
+  state.autoQuote = null;
+  // DOM 同步 —— 立即清空所有下游渲染元素（不等 fillAutoFields，
+  // 否则在异步匹配的 1~2s 延迟窗口内仍看到旧书内容，体验极度混乱）
+  var fa = document.getElementById('f-author');
+  if(fa){ fa.value = ''; }
+  var at = document.getElementById('authorTag');
+  if(at){ at.style.display = 'none'; }
+  var retryBtn = document.getElementById('retryBtn');
+  if(retryBtn){ retryBtn.style.display = 'none'; }
+  var metaEl = document.getElementById('fetchMeta');
+  if(metaEl){ metaEl.textContent = '· 匹配中…'; metaEl.style.cursor=''; metaEl.onclick=null; }
+  // 下游自动生成区块的 DOM 直接清空（不留在界面上造成混淆）
+  var descEl = document.getElementById('autoDesc');
+  if(descEl){ descEl.textContent = '匹配书籍信息中…'; descEl.classList.add('empty'); }
+  var mEl = document.getElementById('autoMeta');
+  if(mEl){ mEl.textContent = '暂无出版元数据'; mEl.classList.add('empty'); }
+  var insEl = document.getElementById('autoInsight');
+  if(insEl){ insEl.textContent = ''; insEl.classList.add('empty'); insEl.classList.remove('suggested'); }
+  var scEl = document.getElementById('autoScene');
+  if(scEl){ scEl.textContent = ''; scEl.classList.add('empty'); }
+  var stEl = document.getElementById('autoSteps');
+  if(stEl){ stEl.innerHTML = ''; stEl.classList.add('empty'); }
+  var qEl = document.getElementById('autoQuote');
+  if(qEl){ qEl.textContent = ''; qEl.classList.add('empty'); }
+  var tagRow = document.getElementById('tagRow');
+  if(tagRow){ tagRow.innerHTML = '<span style="font-size:11px;color:var(--ink-faint);font-family:var(--display);font-style:italic">匹配中…</span>'; }
+  var domGrid = document.getElementById('domSuggest');
+  if(domGrid){ 
+    domGrid.innerHTML = '<div style="width:100%;font-size:11px;color:var(--ink-faint);font-family:var(--display);margin-bottom:6px">匹配中…</div>';
+  }
+  // 进度条/按钮/预览 立即重算
+  updateProgress();
+  updateSubmitBtn();
+  updatePreview();
+  // 恢复提交按钮文案
+  var sb = document.getElementById('submitBtn');
+  if(sb && sb.innerHTML.indexOf('提交下一本') >= 0){ sb.innerHTML = '✓ 提交投稿'; }
+}
+
+/* ========== Autocomplete UI (rewritten) ========== */
+function onTitleInput(e){
+  state.title = (e.target.value || '').trim();
+  var v = state.title;
+  // 书名变化 → 清空上一本书所有填充内容（避免数据串混）
+  resetBookContext();
+  // 清除旧搜索标记
+  state._acPendingQuery = null;
+  updateProgress();
+  updateSubmitBtn();
+  updatePreview();
+  // 如果已提交过（按钮显示"提交下一本"），修改内容后恢复为"提交投稿"
+  var btnCheck = document.getElementById('submitBtn');
+  if(btnCheck && btnCheck.innerHTML.indexOf('提交下一本') >= 0){
+    btnCheck.innerHTML = '✓ 提交投稿';
+  }
+  // 空输入 → 隐藏
+  if(v.length < 2){
+    hideAc();
+    var retryBtn = document.getElementById('retryBtn');
+    if(retryBtn) retryBtn.style.display = 'none';
+    return;
+  }
+  // 有缓存 → 立即渲染，不触发搜索
+  if(state._acCache && v in state._acCache){
+    renderAc(state._acCache[v]);
+    return;
+  }
+  // 触发搜索
+  if(state.acTimer) clearTimeout(state.acTimer);
+  state.acTimer = setTimeout(function(){
+    performAcSearch(v);
+  }, 350);
+}
+
+function onTitleFocus(){
+  var v = (document.getElementById('f-title').value || '').trim();
+  if(v.length < 2) return;
+  
+  // 1. 如果有匹配记录且匹配当前书名 → 直接显示
+  if(state._lastBookMatch && state._lastBookMatch._queryKey === v){
+    var info = state._lastBookMatch;
+    var src = info._source === 'local' ? '本地书库' : 'Google Books';
+    var el = document.getElementById('acList');
+    el.innerHTML = '<div class="ac-item sel" style="cursor:default">'
+      + '<div class="ac-body"><div class="ac-title">' + escapeHtml(info.title || '') + '</div>'
+      + '<div class="ac-author">' + escapeHtml(info.authors || '') + '</div>'
+      + '<div class="ac-meta">📚 已匹配 · ' + src + '</div>'
+      + '</div></div>';
+    el.classList.add('open');
+    window._acItems = [{volumeInfo: info}];
+    return;
+  }
+  
+  // 2. 有缓存（含空结果）→ 先校验当前输入能匹配到内容，否则跳过缓存重新搜索
+  if(state._acCache && v in state._acCache){
+    var cached = state._acCache[v] || [];
+    // 预过滤：检查缓存结果对当前v是否真正相关（避免缓存串数据）
+    var vLower = v.toLowerCase();
+    var valid = 0;
+    for(var _c=0; _c<cached.length; _c++){
+      var _vi = cached[_c].volumeInfo || cached[_c];
+      var _tt = (_vi.title || '').toLowerCase();
+      var _aa = Array.isArray(_vi.authors)?_vi.authors.join(' '):((_vi.authors||'').toLowerCase());
+      var _qk = (_vi._queryKey || '').toLowerCase();
+      if(_qk === vLower || _tt.indexOf(vLower) >= 0 || (vLower.length >= 2 && _aa.indexOf(vLower) >= 0)){ valid++; }
+    }
+    if(valid > 0 || (cached.length === 0 && v.length >= 2)){
+      // 有有效内容 或 已确认空结果 → 渲染
+      renderAc(cached);
+      return;
+    }
+    // 缓存对当前v无效（历史误匹配/模糊串入）→ 删除缓存，进入分支3重新搜索
+    delete state._acCache[v];
+  }
+  
+  // 3. 没有缓存 → 显示加载中并搜索
+  var el2 = document.getElementById('acList');
+  el2.innerHTML = '<div class="ac-loading">🔎 搜索书籍中…</div>';
+  el2.classList.add('open');
+  performAcSearch(v);
+}
+
+function performAcSearch(q){
+  if(!q) return;
+  state._acPendingQuery = q;
+  googleBooksSearch(q).then(function(data){
+    state._acPendingQuery = null;
+    var items = data.items || [];
+    // 写入 _queryKey，让后续过滤能识别来源查询词（防历史缓存串入）
+    for(var _mki = 0; _mki < items.length; _mki++){
+      var _vi = (items[_mki] && items[_mki].volumeInfo) ? items[_mki].volumeInfo : items[_mki];
+      if(_vi) _vi._queryKey = q;
+      if(items[_mki].volumeInfo) items[_mki].volumeInfo._queryKey = q;
+    }
+    // 缓存结果（含空结果）
+    state._acCache = state._acCache || {};
+    state._acCache[q] = items.slice(0, 7);
+    // 只有当当前输入仍匹配时才渲染
+    var cur = (document.getElementById('f-title').value || '').trim();
+    if(cur === q){
+      renderAc(items);
+    }
+  }).catch(function(){
+    state._acPendingQuery = null;
+    // 出错也缓存空结果
+    state._acCache = state._acCache || {};
+    state._acCache[q] = [];
+    var cur = (document.getElementById('f-title').value || '').trim();
+    if(cur === q){
+      renderAc([]);
+    }
+  });
+}
+
+var acClicking = false;
+function onTitleBlur(){
+  if(acClicking){ return; }
+  setTimeout(function(){ hideAc(); triggerBookFlow(); }, 200);
+}
+function hideAc(){ document.getElementById('acList').classList.remove('open'); }
+function renderAc(items){
+  var el = document.getElementById('acList');
+  // 防串数据：过滤掉与当前输入不相关的结果（避免"百年孤独"匹配显示在"悲惨世界"输入框下）
+  var q = (document.getElementById('f-title').value || '').trim();
+  var filtered = [];
+  if(items && items.length > 0){
+    for(var xi = 0; xi < items.length; xi++){
+      var vi = items[xi].volumeInfo || items[xi];
+      var tt = vi.title || '';
+      var aa = vi.authors || '';
+      if(Array.isArray(aa)) aa = aa.join(' / ');
+      var qk = vi._queryKey || '';
+      if(q && (qk === q || tt.indexOf(q) >= 0 || (aa && q.length >= 2 && aa.indexOf(q) >= 0))){
+        filtered.push(items[xi]);
+      } else if(!q){
+        filtered.push(items[xi]);
+      }
+    }
+  }
+  items = filtered;
+  if(!items || items.length === 0){
+    var t = (state.title || '').trim() || q;
+    el.innerHTML = '<div class="ac-empty">' +
+      '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:6px">未找到"' + escapeHtml(t) + '"的匹配</div>' +
+      '<div style="font-size:12px;color:var(--ink-faint);line-height:1.6">' +
+        '① 直接在下方手动填写作者，系统会再次尝试匹配<br>' +
+        '② 换一个关键词（如书名+作者）试试<br>' +
+        '③ 确认拼写正确后仍找不到，可直接投稿' +
+      '</div>' +
+    '</div>';
+    el.classList.add('open');
+    window._acItems = [];
+    window._acSel = -1;
+    return;
+  }
+  var html = '';
+  items.slice(0, 5).forEach(function(it, idx){
+    var v = it.volumeInfo || {};
+    var cover = (v.imageLinks && (v.imageLinks.smallThumbnail || v.imageLinks.thumbnail)) || '';
+    var meta = [];
+    if(v._local) meta.push("📚 本地匹配");
+    if(v.publishedDate) meta.push(v.publishedDate.substring(0,4));
+    if(v.pageCount) meta.push(v.pageCount + '页');
+    var authors = (v.authors || []).join(' / ') || '佚名';
+    html += '<div class="ac-item' + (idx === 0 ? ' sel' : '') + '" data-idx="' + idx + '" role="button" tabindex="0" onclick="applyItemByIndex(' + idx + ')">'
+      + '<div class="ac-cover"' + (cover ? ' style="background-image:url(\'' + cover + '\')"' : '') + '></div>'
+      + '<div class="ac-body">'
+      +   '<div class="ac-title">' + escapeHtml(v.title || '') + '</div>'
+      +   '<div class="ac-author">' + escapeHtml(authors) + '</div>'
+      +   '<div class="ac-meta">' + meta.join(' · ') + '</div>'
+      + '</div></div>';
+  });
+  el.innerHTML = html;
+  el.classList.add('open');
+  window._acItems = items.slice(0, 5);
+}
+
+function applyItemByIndex(idx){
+  var it = (window._acItems && window._acItems[idx]) || null;
+  if(!it) return;
+  acClicking = true;
+  applyBookItem(it);
+  hideAc();
+  acClicking = false;
+}
+function applyBookItem(it){
+  // 先清空旧书所有内容，避免 applyBookItem 直接写 state 时造成数据串混
+  resetBookContext();
+  var v = it.volumeInfo || {};
+  var title = v.title || '';
+  var authors = (v.authors || []).join(' / ') || '';
+  // 【修复D-1】本地精确域标签暂存供triggerBookFlow同步用（_lastBookMatch此时还没异步写入info）
+  state._pendingPreDomains = (it && it.volumeInfo && it.volumeInfo._preDomains) ? it.volumeInfo._preDomains.slice() : [];
+  if(v){
+    state.bookDesc = v.description || v.desc || '';
+    state.metaInfo = {
+      publisher: v.publisher, pageCount: v.pageCount,
+      publishedDate: v.publishedDate, language: v.language,
+      isbn: (v.industryIdentifiers && v.industryIdentifiers[0] ? v.industryIdentifiers[0].identifier : (v.isbn || ''))
+    };
+  }
+  document.getElementById('f-title').value = title;
+  document.getElementById('f-author').value = authors;
+  state.title = title.trim();
+  state.author = authors.trim();
+  if(authors){ document.getElementById('authorTag').style.display='inline-block'; }
+  showToast('已自动填入《' + title + '》', 'success');
+  triggerBookFlow(true);
+}
+
+function onContributorInput(){
+  state.contributor = document.getElementById('f-contributor').value.trim();
+  updateProgress();
+  updateSubmitBtn();
+  // 如果已提交过（按钮显示"提交下一本"），修改内容后恢复为"提交投稿"
+  var btnCheck3 = document.getElementById('submitBtn');
+  if(btnCheck3 && btnCheck3.innerHTML.indexOf('提交下一本') >= 0){
+    btnCheck3.innerHTML = '✓ 提交投稿';
+  }
+}
+function onAuthorInput(){
+  var btnCheck2 = document.getElementById('submitBtn');
+  if(btnCheck2 && btnCheck2.innerHTML.indexOf('提交下一本') >= 0){
+    btnCheck2.innerHTML = '✓ 提交投稿';
+  }
+  state.author = document.getElementById('f-author').value.trim();
+  document.getElementById('authorTag').style.display = state.author ? 'inline-block' : 'none';
+  if(state.fetchTimer) clearTimeout(state.fetchTimer);
+  if(state.title && state.author){
+    // 如果之前有过未匹配的记录，强制重跑搜索（fetchKey 已包含 author，会自然变化；
+    // 但为了在 UI 上显示"正在搜索"的反馈，手动触发 retryBtn 隐藏逻辑）
+    var metaEl = document.getElementById('fetchMeta');
+    var retryBtn = document.getElementById('retryBtn');
+    if(retryBtn && retryBtn.style.display !== 'none'){
+      retryBtn.style.display = 'none';
+      if(metaEl) metaEl.textContent = '· 作者变更 · 重新匹配中…';
+    }
+    state.fetchTimer = setTimeout(function(){ triggerBookFlow(false); }, 500);
+  }
+  updateProgress();
+  updateSubmitBtn();
+  updatePreview();
+}
+
+/* ========== Main book flow (detect + fetch + generate) ========== */
+function retryBookLookup(){
+  if(!state.title){ showToast('请先填写书名', 'error'); return; }
+  var metaEl = document.getElementById('fetchMeta');
+  var retryBtn = document.getElementById('retryBtn');
+  if(metaEl) metaEl.textContent = '· 重新搜索中…';
+  if(retryBtn){
+    retryBtn.style.display = 'none';
+    retryBtn.textContent = '🔍 搜索中…';
+  }
+  state.autoGen._fetchKey = '';
+  triggerBookFlow(true);
+}
+// 【修复C-1】新函数：优先解析本地库预设的精确域标签 → 转换为5个正式域高分结果
+function resolvePreDomains(preList){
+  if(!preList || preList.length === 0) return [];
+  var TAG_TO_DOMAIN = {
+    '拖延':'拖延','习惯':'拖延','效率':'拖延','时间管理':'拖延','自律':'拖延','行动':'拖延','学习':'拖延','工作':'拖延','启动':'拖延','番茄':'拖延','deadline':'拖延','截止':'拖延','gtd':'拖延','自控':'拖延',
+    '焦虑':'焦虑','压力':'焦虑','紧绷':'焦虑','失眠':'焦虑','担心':'焦虑','恐惧':'焦虑','紧张':'焦虑','灾难化':'焦虑','心慌':'焦虑','睡不好':'焦虑','倦怠':'焦虑','抑郁':'焦虑','虚无':'焦虑',
+    '内耗':'内耗','纠结':'内耗','怀疑':'内耗','反刍':'内耗','自责':'内耗','后悔':'内耗','想太多':'内耗','cbt':'内耗','认知行为':'内耗','自我关怀':'内耗','创伤':'内耗','被忽视':'内耗','治愈':'内耗','自卑':'内耗','不够好':'内耗','自由':'内耗',
+    '表达':'表达','沟通':'表达','社交':'表达','开口':'表达','演讲':'表达','说服':'表达','冲突':'表达','倾听':'表达','不敢说':'表达','词不达意':'表达','发言':'表达','谈判':'表达','说话':'表达','对话':'表达','写作':'表达',
+    '情商':'情商','情绪':'情商','人际关系':'情商','共情':'情商','领导力':'情商','性格':'情商','人格':'情商','亲密关系':'情商','愤怒':'情商','易怒':'情商','发火':'情商','脾气':'情商','关系':'情商','情感':'情商','爱情':'情商'
+  };
+  // 文学/成长/自我/治愈/思维 等通用标签 → 依上下文软映射为最近似的正式域
+  var SOFT_MAP = {
+    '自我':'内耗','成长':'内耗','治愈':'内耗','思维':'内耗','认知':'内耗','专注':'拖延','行动':'拖延','决策':'内耗',
+    '人际关系':'情商','爱情':'情商','情感':'情商','亲密关系':'情商','沟通':'表达','表达':'表达',
+    '幸福':'情商','自由':'内耗','诗意':'情商','写作':'表达','文化':'内耗','教育':'内耗','社会':'情商'
+  };
+  var scored = {};
+  for(var i = 0; i < preList.length; i++){
+    var t = String(preList[i]);
+    if(!t) continue;
+    if(TAG_TO_DOMAIN[t]){ scored[TAG_TO_DOMAIN[t]] = (scored[TAG_TO_DOMAIN[t]] || 0) + 5; } // 强匹配→+5分
+    else if(SOFT_MAP[t]){ scored[SOFT_MAP[t]] = (scored[SOFT_MAP[t]] || 0) + 2; } // 软匹配→+2分
+  }
+  var arr = Object.entries(scored).filter(function(e){ return DOMAIN_ORDER.indexOf(e[0]) >= 0; });
+  arr.sort(function(a,b){ return b[1]-a[1]; });
+  return arr.slice(0,3).map(function(e){ return {domain:e[0], score:e[1], matched:preList.slice(0,3)}; });
+}
+
+function triggerBookFlow(fromAc){
+  if(!state.title){ document.getElementById('autoSection').style.display='none'; return; }
+  document.getElementById('autoSection').style.display = 'block';
+
+  // 【修复C-2】优先用本地库预设域标签（最精准，分数5/2远高于关键词法1~3分）
+  var preList = [];
+  if(state._lastBookMatch && state._lastBookMatch._preDomains) preList = preList.concat(state._lastBookMatch._preDomains);
+  if(state._pendingPreDomains && state._pendingPreDomains.length) preList = preList.concat(state._pendingPreDomains);
+  preList = preList.filter(function(v,i){ return preList.indexOf(v) === i; });
+  var preDet = resolvePreDomains(preList);
+  var det = preDet;
+  var preHits = preDet.length;
+  // 只有本地预设域标签没命中任何一个时，才回退到关键词法（精标优先级>自由文本关键词）
+  if(det.length === 0){
+    det = detectDomain(state.title, state.author, state.bookDesc);
+  }
+  // 【F3】精标命中 → 锁定域，不允许异步detectDomain覆盖
+  state._domainLocked = (preHits > 0);
+  state.detectedDomains = det;
+  if(det.length > 0 && (!state.selectedDomain || !det.some(function(d){ return d.domain === state.selectedDomain; }))){
+    state.selectedDomain = det[0].domain;
+  } else if(det.length === 0){
+    state.selectedDomain = null;
+  }
+  renderDomSuggest();
+
+  // 2) lookup Google Books full entry (once) for title + author combo
+  var fetchKey = (state.title || '') + '||' + (state.author || '');
+  if(state.autoGen._fetchKey !== fetchKey || fromAc){
+    var metaEl = document.getElementById('fetchMeta');
+    if(metaEl) metaEl.textContent = '· 抓取中…';
+    state.autoGen._fetchKey = fetchKey;
+    googleBooksLookup(state.title, state.author).then(function(info){
+      if(info){
+        // 匹配成功 → 强制覆盖所有下游字段（避免旧书内容残留/数据串混）
+        state.bookDesc = info.desc || '';
+        state.metaInfo = {
+          publisher: info.publisher, pageCount: info.pageCount,
+          publishedDate: info.publishedDate, language: info.language, isbn: info.isbn
+        };
+        // 标题/作者同步回填（作者为空也填，覆盖旧作者残留）
+        if(info.title){ state.title = info.title; document.getElementById('f-title').value = info.title; }
+        if(info.authors){ 
+          state.author = info.authors; 
+          document.getElementById('f-author').value = info.authors; 
+          document.getElementById('authorTag').style.display='inline-block'; 
+        } else {
+          // 无作者信息时，清空旧作者残留
+          state.author = '';
+          document.getElementById('f-author').value = '';
+          document.getElementById('authorTag').style.display = 'none';
+        }
+        // 【F3-2】异步再算域：info有_preDomains则先用精标（可补充无锁场景），
+        // 精标已锁定(_domainLocked=true)时跳过关键词覆盖避免自由文本误匹配
+        if(info._preDomains && info._preDomains.length && !state._domainLocked){
+          var pd3 = resolvePreDomains(info._preDomains);
+          if(pd3.length > 0){
+            state.detectedDomains = pd3;
+            state.selectedDomain = pd3[0].domain;
+            state._domainLocked = true;
+            renderDomSuggest();
+          }
+        }
+        if(!state._domainLocked){
+          var d2 = detectDomain(state.title, state.author, state.bookDesc);
+          var cur0 = state.detectedDomains && state.detectedDomains[0] ? state.detectedDomains[0].score : 0;
+          if(d2.length > 0 && d2[0].score > cur0){
+            state.detectedDomains = d2;
+            state.selectedDomain = d2[0].domain;
+            renderDomSuggest();
+          }
+        }
+        state.tags = generateTags(state.title, state.author, state.bookDesc, state.selectedDomain, info.categories || []);
+        renderTags();
+      }
+      fillAutoFields();
+      var retryBtn = document.getElementById('retryBtn');
+      if(metaEl){
+        if(info){
+          var src = info._source === 'local' ? '本地书库' : 'Google Books';
+          var bits = ['已匹配 · ' + src];
+          if(info.publisher) bits.push(info.publisher);
+          if(info.publishedDate) bits.push(info.publishedDate.substring(0,4));
+          if(info.pageCount) bits.push(info.pageCount + '页');
+          metaEl.textContent = '· ' + bits.join(' · ');
+          metaEl.style.cursor = '';
+          metaEl.title = '';
+          metaEl.onclick = null;
+        }else{
+          metaEl.textContent = '· 未匹配 · 已本地 AI 生成';
+          metaEl.style.cursor = '';
+          metaEl.title = '';
+          metaEl.onclick = null;
+        }
+      }
+      if(retryBtn){
+        // 有匹配则隐藏重试按钮，无匹配则显示
+                retryBtn.style.display = info ? 'none' : 'inline-block';
+        if(!info && !state.author){
+          retryBtn.textContent = '🔍 填写作者后自动匹配';
+        }else if(!info){
+          retryBtn.textContent = '🔍 重新匹配 Google Books';
+        }
+      }
+      // 若已通过书籍流程匹配成功，同步更新 autocomplete 下拉列表
+      if(info){
+        var qKey = state.title.trim();
+        info._queryKey = qKey;
+        if(!info._preDomains || info._preDomains.length === 0){ info._preDomains = state._pendingPreDomains || []; }
+        state._lastBookMatch = info;
+        state._pendingPreDomains = [];
+        // 直接写入缓存，使 onTitleFocus 能立即命中
+        state._acCache = state._acCache || {};
+        state._acCache[qKey] = [{volumeInfo: info}];
+        var acListEl = document.getElementById('acList');
+        if(acListEl && acListEl.classList.contains('open')){
+          var src = info._source === 'local' ? '本地书库' : 'Google Books';
+          acListEl.innerHTML = '<div class="ac-item sel" style="cursor:default">'
+            + '<div class="ac-body"><div class="ac-title">' + escapeHtml(info.title || '') + '</div>'
+            + '<div class="ac-author">' + escapeHtml(info.authors || '') + '</div>'
+            + '<div class="ac-meta">📚 已匹配 · ' + src + '</div>'
+            + '</div></div>';
+          window._acItems = [{volumeInfo: info}];
+        }
+      }
+    });
+  }
+  // sync autofill fields optimistically with available data
+  fillAutoFields();
+  updateProgress();
+  updateSubmitBtn();
+  updatePreview();
+}
+
+function fillAutoFields(){
+  // 一致性校验：如果上次匹配的书名（_lastBookMatch.title）和当前 state.title 不一致，
+  // 说明用户已换书但旧生成内容还在 → 先清空旧状态避免混数据
+  var curTitle = state.title ? state.title.trim() : '';
+  if(state._lastBookMatch && curTitle){
+    var mt = state._lastBookMatch.title ? state._lastBookMatch.title.trim() : '';
+    if(mt && mt !== curTitle){
+      // 不同书 → 废弃旧匹配，重新走 triggerBookFlow
+      state._lastBookMatch = null;
+      state.bookDesc = '';
+      state.metaInfo = null;
+      state.autoInsight = null;
+      state.autoScene = null;
+      state.autoSteps = null;
+      state.autoQuote = null;
+    }
+  }
+  // Description
+  var descEl = document.getElementById('autoDesc');
+  descEl.textContent = state.bookDesc || '暂未获取简介 — 可正常投稿，审核时由审方补充';
+  descEl.classList.toggle('empty', !state.bookDesc);
+
+  // Meta
+  var meta = describeMeta(state.metaInfo);
+  var mEl = document.getElementById('autoMeta');
+  mEl.textContent = meta || '暂无出版元数据';
+  mEl.classList.toggle('empty', !meta);
+
+  // Domain dependent
+  var d = state.selectedDomain;
+  var insEl = document.getElementById('autoInsight');
+  state.autoInsight = generateInsight(state.bookDesc, d, state.title, state.author);
+  insEl.textContent = state.autoInsight;
+  insEl.classList.toggle('empty', !state.autoInsight);
+  insEl.classList.add('suggested');
+
+  var scEl = document.getElementById('autoScene');
+  state.autoScene = generateScene(d, state.title);
+  scEl.textContent = state.autoScene;
+  scEl.classList.remove('empty');
+
+  var stEl = document.getElementById('autoSteps');
+  state.autoSteps = generateSteps(d, state.title, state.bookDesc);
+  stEl.innerHTML = state.autoSteps.map(function(s){ return '<div style="padding:3px 0">' + escapeHtml(s) + '</div>'; }).join('');
+  stEl.classList.toggle('empty', !state.autoSteps || state.autoSteps.length === 0);
+
+  var qEl = document.getElementById('autoQuote');
+  state.autoQuote = generateQuote(d, state.title, state.bookDesc);
+  qEl.textContent = '「' + state.autoQuote + '」';
+  qEl.classList.toggle('empty', !state.autoQuote);
+}
+
+/* ========== Domain chips UI ========== */
+function renderDomSuggest(){
+  var grid = document.getElementById('domSuggest');
+  if(!state.detectedDomains || state.detectedDomains.length === 0 || state.detectedDomains.every(function(x){ return x.score <= 0; })){
+    // Show all manual
+    var html = '<div style="width:100%;font-size:11px;color:var(--ink-faint);font-family:var(--display);margin-bottom:6px">未能自动识别，请手动选择问题域：</div>';
+    DOMAIN_ORDER.forEach(function(d){
+      var sel = d === state.selectedDomain;
+      html += '<span class="dom-chip ' + (sel ? 'selected':'suggested') + '" data-domain="' + d + '" style="--dc:' + DOMAIN_MAP[d].color + '">' + d + '</span>';
+    });
+    grid.innerHTML = html;
+  }else{
+    var html = '';
+    var shown = {};
+    state.detectedDomains.forEach(function(d, i){
+      shown[d.domain] = true;
+      var sel = d.domain === state.selectedDomain;
+      html += '<span class="dom-chip ' + (sel ? 'selected':'suggested') + '" data-domain="' + d.domain + '" style="--dc:' + DOMAIN_MAP[d.domain].color + '">' + d.domain + (i === 0 ? ' ⭐' : '') + '<span class="score">+' + (d.score || 0) + '</span></span>';
+    });
+    DOMAIN_ORDER.forEach(function(d){
+      if(!shown[d]){
+        html += '<span class="dom-chip suggested" data-domain="' + d + '" style="--dc:' + DOMAIN_MAP[d].color + ';opacity:.7">' + d + '</span>';
+      }
+    });
+    grid.innerHTML = html;
+  }
+  grid.querySelectorAll('.dom-chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      state.selectedDomain = chip.getAttribute('data-domain');
+      renderDomSuggest();
+      // Regenerate domain-sensitive parts
+      fillAutoFields();
+      state.tags = generateTags(state.title, state.author, state.bookDesc, state.selectedDomain, state.metaInfo ? [] : []);
+      renderTags();
+      updateProgress();
+      updateSubmitBtn();
+      updatePreview();
+    });
+  });
+}
+
+function renderTags(){
+  var row = document.getElementById('tagRow');
+  if(!state.tags || state.tags.length === 0){ row.innerHTML = '<span style="font-size:11px;color:var(--ink-faint);font-family:var(--display);font-style:italic">暂未生成标签</span>'; return; }
+  row.innerHTML = state.tags.map(function(t){ return '<span class="tag-chip">' + escapeHtml(t) + '</span>'; }).join('');
+}
+
+/* ========== Progress ========== */
+function updateProgress(){
+  var s = state;
+  var pct = 0;
+  var steps = [false,false,false,false,false];
+  // step 1 required inputs
+  if(s.title && s.author && s.contributor){ pct += 20; steps[0] = true; }
+  else if((s.title?1:0) + (s.author?1:0) + (s.contributor?1:0) === 2) pct += 13;
+  else if((s.title?1:0) + (s.author?1:0) + (s.contributor?1:0) === 1) pct += 7;
+  // step 2 domain
+  if(s.selectedDomain){ pct += 18; steps[1] = true; }
+  else if(s.detectedDomains.length > 0 && s.detectedDomains[0].score > 0) pct += 10;
+  // step 3 description fetched
+  if(s.bookDesc && s.bookDesc.length > 60){ pct += 18; steps[2] = true; }
+  else if(s.bookDesc && s.bookDesc.length > 10) pct += 10;
+  else if(s.metaInfo && s.metaInfo.publisher) pct += 8;
+  // step 4 generated content
+  if(s.autoInsight && s.autoScene && s.autoSteps.length >= 3 && s.autoQuote){ pct += 24; steps[3] = true; }
+  else if(s.autoInsight || s.autoScene) pct += 10;
+  // step 5 confirm boxes
+  var c1 = document.getElementById('cb1').checked;
+  var c2 = document.getElementById('cb2').checked;
+  var c3 = document.getElementById('cb3').checked;
+  if(c1 && c2 && c3){ pct += 20; steps[4] = true; }
+  else pct += 7 * ([c1,c2,c3].filter(Boolean).length);
+
+  pct = Math.min(100, Math.round(pct));
+  var fill = document.getElementById('progressFill');
+  var pctEl = document.getElementById('progressPct');
+  fill.style.width = pct + '%';
+  pctEl.textContent = pct + '%';
+  pctEl.classList.toggle('ok', pct >= 80);
+
+  var dots = document.querySelectorAll('#stepsDots .step-dot');
+  steps.forEach(function(done, i){
+    dots[i].classList.toggle('done', !!done);
+    dots[i].classList.toggle('doing', !done && (i === 0 ? (s.title || s.author || s.contributor) : steps[i-1]));
+  });
+}
+
+/* ========== Contributor memory ========== */
+function hydrateContributor(){
+  var p = BookPillData.getContributorProfile();
+  if(p && p.name){
+    document.getElementById('f-contributor').value = p.name;
+    state.contributor = p.name;
+    document.getElementById('contribMemTag').style.display = 'inline-block';
+    var card = document.getElementById('contribCard');
+    if(card) card.style.display = 'block';
+    var rank = BookPillData.getContributorRanking(20);
+    var mine = rank.find(function(r){ return r.name === p.name; });
+    var all = BookPillData.getAll().filter(function(s){ return s.contributor === p.name; });
+    var txt = '共投稿 ' + (mine ? mine.count : 0) + ' 本';
+    if(mine) txt += '，收录 ' + mine.accepted + ' 本，待审 ' + mine.pending + ' 本';
+    if(all.length > 0){
+      var last = all[0];
+      if(last) txt += ' · 最近《' + (last.title || '') + '》于 ' + relativeTime(last.createdAt);
+    }else{
+      txt += ' · 这是你在本设备上的第一次投稿 🎉';
+    }
+    document.getElementById('contribHistory').textContent = txt;
+  }
+  // bind input
+  var ci = document.getElementById('f-contributor');
+  ci.addEventListener('input', function(){
+    state.contributor = ci.value.trim();
+    updateProgress();
+    updateSubmitBtn();
+    updatePreview();
+  });
+}
+
+function clearContrib(){
+  BookPillData.clearContributorProfile();
+  document.getElementById('f-contributor').value = '';
+  state.contributor = '';
+  document.getElementById('contribMemTag').style.display = 'none';
+  document.getElementById('contribCard').style.display = 'none';
+  showToast('已清除本地贡献者记忆', 'info');
+}
+
+/* ========== Preview ========== */
+function buildIssueBody(){
+  var f = collectForm();
+  var lines = [];
+  lines.push('## 书籍信息');
+  lines.push('- **书名**：《' + f.title + '》');
+  lines.push('- **作者**：' + f.author);
+  lines.push('- **主要问题域**：' + (f.domain || '（AI 未识别）'));
+  if(f.scene){ lines.push('- **推荐场景**：' + f.scene); }
+  if(f.meta){
+    var parts = [];
+    if(f.meta.publisher) parts.push('**出版社**：' + f.meta.publisher);
+    if(f.meta.pageCount) parts.push('**页数**：' + f.meta.pageCount);
+    if(f.meta.publishedDate) parts.push('**出版时间**：' + f.meta.publishedDate);
+    if(f.meta.isbn) parts.push('**ISBN**：' + f.meta.isbn);
+    if(parts.length) lines.push('- ' + parts.join(' · '));
+  }
+  if(f.tags && f.tags.length) lines.push('- **标签**：' + f.tags.join('、'));
+  lines.push('');
+  if(f.bookDesc){
+    lines.push('## 书籍简介');
+    lines.push('> ' + f.bookDesc.replace(/\n/g, '\n> '));
+    lines.push('');
+  }
+  if(f.insight){
+    lines.push('## 核心观点（AI 预生成）');
+    lines.push(f.insight);
+    lines.push('');
+  }
+  if(f.steps && f.steps.length){
+    lines.push('## 三步建议（AI 预生成）');
+    f.steps.forEach(function(s){ lines.push(s); });
+    lines.push('');
+  }
+  lines.push('## 良方处方');
+  lines.push('> ⚠️ 以下内容由 AI 辅助生成，投稿者或审核者可补充完善');
+  lines.push('');
+  lines.push('1. ★ 起步：' + (f.steps && f.steps[0] ? f.steps[0].replace(/^★\s*/,'') : '今天就做 5 分钟'));
+  lines.push('2. ★★ 习惯：' + (f.steps && f.steps[1] ? f.steps[1].replace(/^★★\s*/,'') : '明天坚持 10 分钟'));
+  lines.push('3. ★★★ 闭环：' + (f.steps && f.steps[2] ? f.steps[2].replace(/^★★★\s*/,'') : '本周累计 75 分钟'));
+  lines.push('');
+  lines.push('## 金句');
+  lines.push('> ' + (f.quote || '[请补充书中金句]'));
+  lines.push('');
+  lines.push('## 适用人群');
+  lines.push(f.audience || (f.domain ? '深受「' + f.domain + '」困扰的读者' : '希望自我成长与改变的读者'));
+  lines.push('');
+  lines.push('## 贡献者');
+  lines.push('- **投稿人**：' + f.contributor);
+  if(f.note){ lines.push('- **补充说明**：' + f.note); }
+  lines.push('');
+  lines.push('---');
+  lines.push('_本投稿由 submit.html v2.1 AI 辅助生成 · 社区共建_');
+  return lines.join('\n');
+}
+
+function buildIssueTitle(){
+  var f = collectForm();
+  return '[书籍投稿] 《' + (f.title || '未命名') + '》— ' + (f.domain || '通用');
+}
+
+function getVal(id){ var el = document.getElementById(id); return el ? (el.value || '') : ''; }
+
+function collectForm(){
+  return {
+    title: state.title,
+    author: state.author,
+    domain: state.selectedDomain,
+    scene: state.autoScene,
+    insight: state.autoInsight,
+    steps: state.autoSteps || [],
+    quote: state.autoQuote,
+    bookDesc: state.bookDesc,
+    prescription: state.autoSteps ? ('第一步：' + (state.autoSteps[0] || '') + '\n第二步：' + (state.autoSteps[1] || '') + '\n第三步：' + (state.autoSteps[2] || '')) : '',
+    audience: state.selectedDomain ? '在「' + state.selectedDomain + '」领域，需要一本书作为行动指引的读者' : '',
+    contributor: getVal('f-contributor'),
+    note: getVal('f-note'),
+    tags: state.tags || [],
+    publisher: (state.metaInfo || {}).publisher || '',
+    pageCount: (state.metaInfo || {}).pageCount || 0,
+    publishedDate: (state.metaInfo || {}).publishedDate || '',
+    language: (state.metaInfo || {}).language || '',
+    isbn: (state.metaInfo || {}).isbn || '',
+    meta: state.metaInfo || null,
+    keywordsMatched: state.matchedKeywords || [],
+    autoGenerated: {
+      insight: !!state.autoInsight,
+      scene: !!state.autoScene,
+      steps: (state.autoSteps || []).length,
+      quote: !!state.autoQuote,
+      desc: !!state.bookDesc,
+      meta: !!(state.metaInfo && (state.metaInfo.publisher || state.metaInfo.pageCount))
+    },
+    cb1: document.getElementById('cb1').checked,
+    cb2: document.getElementById('cb2').checked,
+    cb3: document.getElementById('cb3').checked
+  };
+}
+
+function renderMD(md){
+  if(!md || !md.trim()) return '<div style="color:var(--ink-faint);font-style:italic;text-align:center;padding:10px 0">填写书名后，这里会实时显示生成的投稿预览</div>';
+  var f = collectForm();
+  var metaChips = '';
+  if(f.domain){ metaChips += '<span class="m-chip" style="background:rgba(107,142,111,.14);color:var(--bamboo)">' + escapeHtml(f.domain) + '脉</span>'; }
+  if(f.tags && f.tags.length){
+    f.tags.slice(0, 4).forEach(function(t){ metaChips += '<span class="m-chip">' + escapeHtml(t) + '</span>'; });
+  }
+  var raw = escapeHtml(md);
+  var src = raw.split('\n');
+  var out = [];
+  if(metaChips) out.push('<div class="preview-meta">' + metaChips + '</div>');
+  var inList = false, inQuote = false;
+  function closeList(){ if(inList){ out.push('</ul>'); inList = false; } }
+  function closeQuote(){ if(inQuote){ out.push('</blockquote>'); inQuote = false; } }
+  for(var i = 0; i < src.length; i++){
+    var line = src[i];
+    if(/^## /.test(line)){ closeList(); closeQuote(); out.push('<h4>' + line.replace(/^## /,'') + '</h4>'); }
+    else if(/^---\s*$/.test(line)){ closeList(); closeQuote(); out.push('<hr>'); }
+    else if(/^&gt; /.test(line)){
+      closeList();
+      if(!inQuote){ out.push('<blockquote>'); inQuote = true; }
+      out.push(line.replace(/^&gt; /,'') + '<br>');
+    }else if(/^- /.test(line)){
+      closeQuote();
+      if(!inList){ out.push('<ul>'); inList = true; }
+      out.push('<li>' + line.replace(/^- /,'') + '</li>');
+    }else if(/^\d+\.\s/.test(line)){
+      closeQuote();
+      if(!inList){ out.push('<ul>'); inList = true; }
+      out.push('<li>' + line.replace(/^\d+\.\s/,'') + '</li>');
+    }else if(/^★/.test(line)){
+      closeQuote();
+      if(!inList){ out.push('<ul>'); inList = true; }
+      out.push('<li>' + line + '</li>');
+    }else if(line.trim() === ''){ closeList(); closeQuote(); }
+    else{ closeList(); closeQuote(); out.push('<p>' + line + '</p>'); }
+  }
+  closeList(); closeQuote();
+  var html = out.join('').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  html = html.replace(/(⚠️[^<]+)/g,'<div class="auto-note">$1</div>');
+  return html;
+}
+
+function updatePreview(){
+  var inner = document.getElementById('previewInner');
+  if(!inner) return;
+  inner.innerHTML = renderMD(buildIssueBody());
+}
+
+function togglePreview(){
+  var btn = document.getElementById('previewToggle');
+  var box = document.getElementById('previewBox');
+  var open = btn.classList.toggle('open');
+  box.classList.toggle('open', open);
+  if(open) updatePreview();
+}
+
+/* ========== Submit ========== */
+function updateSubmitBtn(){
+  var f = collectForm();
+  var ready = f.title && f.author && f.contributor && state.selectedDomain;
+  document.getElementById('submitBtn').disabled = !ready;
+  // field error state sync
+  var fields = [
+    ['field-title', !!f.title],
+    ['field-author', !!f.author],
+    ['field-contributor', !!f.contributor]
+  ];
+  fields.forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if(el) el.classList.toggle('errored', !pair[1] && !!document.activeElement);
+  });
+}
+
+function validate(){
+  var f = collectForm();
+  if(!f.title) return { id:'field-title', msg:'请填写书名' };
+  if(!f.author) return { id:'field-author', msg:'请填写作者' };
+  if(!f.contributor) return { id:'field-contributor', msg:'请填写你的名字' };
+  if(!state.selectedDomain) return { id:null, msg:'请确认问题域（AI 已自动识别，可手动调整）' };
+  if(!f.cb1) return { id:null, msg:'请确认「AI 生成内容已审阅」' };
+  if(!f.cb2) return { id:null, msg:'请确认「书籍信息真实」' };
+  if(!f.cb3) return { id:null, msg:'请确认已阅读贡献指南' };
+  return null;
+}
+
+
+
+function submitLocal(){
+  var err = validate();
+  if(err){
+    showToast(err.msg, 'error');
+    if(err.id){
+      var fel = document.getElementById(err.id);
+      if(fel){
+        fel.classList.add('errored');
+        fel.scrollIntoView({ behavior:'smooth', block:'center' });
+      }
+    }
+    return;
+  }
+  if(state.busySubmit) return;
+  state.busySubmit = true;
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span><span>正在提交…</span>';
+
+  // save contributor profile for next time
+  BookPillData.setContributorProfile({
+    name: state.contributor,
+    lastAt: new Date().toISOString()
+  });
+
+  setTimeout(function(){
+    var f = collectForm();
+    BookPillData.add(f);
+
+    // 构建投稿内容，跳转 GitHub Issue 创建页
+    var domain = state.selectedDomain || (state.detectedDomains.length ? state.detectedDomains[0].domain : '内耗');
+    var title = '[书籍投稿] 《' + (state.title||'') + '》— ' + domain;
+    var body = '### 书名\n' + (state.title||'') + '\n\n'
+      + '### 作者\n' + (state.author||'') + '\n\n'
+      + '### 问题域\n' + domain + '\n\n'
+      + '### 推荐场景\n' + (state.autoScene||'') + '\n\n'
+      + '### 核心观点\n' + (state.autoInsight||'') + '\n\n'
+      + '### 良方\n' + (state.autoSteps||[]).map(function(s,i){ return (i+1)+'. '+s; }).join('\n') + '\n\n'
+      + '### 金句\n' + (state.autoQuote||'') + '\n\n'
+      + '### 适用人群\n' + (state.audience||'希望自我成长与改变的读者') + '\n\n'
+      + '### 投稿人\n' + (state.contributor||'') + '\n\n'
+      + '### 补充说明\n' + (state.note||'') + '\n\n'
+      + '### 书籍简介\n' + (state.bookDesc||'') + '\n\n'
+      + (state.metaInfo ? '### 出版信息\n' + state.metaInfo + '\n\n' : '');
+
+    var issueUrl = 'https://github.com/Josie-design-dhb/BookPill/issues/new'
+      + '?title=' + encodeURIComponent(title)
+      + '&body=' + encodeURIComponent(body)
+      + '&labels=book-submission,needs-review';
+
+    showToast('投稿数据已生成，正在跳转到 GitHub 确认提交…', 'success');
+    window.open(issueUrl, '_blank');
+
+    state.busySubmit = false;
+    btn.innerHTML = '✓ 提交下一本';
+
+    // reset state and form, but keep contributor memory
+    var keepContrib = state.contributor;
+    setTimeout(function(){
+      document.getElementById('bookForm').reset();
+      state = {
+        title:'',author:keepContrib?'':'',contributor:keepContrib,note:'',
+        detectedDomains:[],selectedDomain:'',bookDesc:'',metaInfo:null,
+        autoInsight:'',autoScene:'',autoSteps:[],autoQuote:'',tags:[],matchedKeywords:[],
+        autoGen:{},fetchTimer:null,acTimer:null,acAbort:null,busySubmit:false
+      };
+      if(keepContrib){
+        document.getElementById('f-contributor').value = keepContrib;
+      }
+      document.getElementById('autoSection').style.display = 'none';
+      document.getElementById('authorTag').style.display = 'none';
+      document.getElementById('cb1').checked = false;
+      document.getElementById('cb2').checked = false;
+      document.getElementById('cb3').checked = false;
+      updateProgress();
+      updateSubmitBtn();
+      updatePreview();
+          hydrateContributor(); // refresh history line
+    }, 1500);
+  }, 700);
+}
+
+/* ========== Recent submissions ========== */
+var STATUS_LABEL = { pending:'待审核', accepted:'已收录', rejected:'未通过' };
+
+
+function initReveal(){
+  var els = document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('vis'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('vis'); io.unobserve(en.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
+  els.forEach(function(e){ io.observe(e); });
+}
+
+function bindCheckboxes(){
+  ['cb1','cb2','cb3'].forEach(function(id){
+    document.getElementById(id).addEventListener('change', function(){ updateProgress(); updateSubmitBtn(); });
+  });
+}
+
+function bindNote(){
+  var ne = document.getElementById('f-note');
+  ne.addEventListener('input', function(){ state.note = ne.value.trim(); updateSubmitBtn(); updatePreview(); });
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  bindCheckboxes();
+  bindNote();
+  hydrateContributor();
+  initReveal();
+  updateProgress();
+  updateSubmitBtn();
+  updatePreview();
+  // On Enter in password-ish, don't inadvertently submit. But here we have no real form submit.
+  document.getElementById('f-title').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('f-author').focus(); }
+  });
+  document.getElementById('f-author').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('f-contributor').focus(); }
+  });
+});
+</script>
+  <div class="toast" id="toast"></div>
+</body>
+</html>

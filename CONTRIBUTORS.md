@@ -86,6 +86,7 @@
 | 社区书籍占比 | 0% |
 
 > 统计数据每月更新一次，下次更新：2026-09-01
+> 实时数据可在 [社区动态页](https://josie-design-dhb.github.io/BookPill/community.html) 查看
 
 ---
 
@@ -93,7 +94,11 @@
 
 想成为贡献者？请阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md) 了解投稿方式。
 
-有疑问？欢迎在 [Discussions](https://github.com/Josie3218/BookPill/discussions) 中交流。
+- **在线投稿**：[填写表单](https://josie-design-dhb.github.io/BookPill/submit.html)，自动创建 GitHub Issue
+- **社区动态**：[查看实时动态](https://josie-design-dhb.github.io/BookPill/community.html)，看看大家最近投了什么书
+- **Issue 投稿**：[直接在 GitHub 投稿](https://github.com/Josie-design-dhb/BookPill/issues/new/choose)
+
+有疑问？欢迎在 [Discussions](https://github.com/Josie-design-dhb/BookPill/discussions) 中交流。
 
 ---
 

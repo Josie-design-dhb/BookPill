@@ -20,70 +20,122 @@
   --shadow:0 1px 12px rgba(44,40,37,.06);
   --shadow-lift:0 6px 28px rgba(44,40,37,.12);
   --t:.35s cubic-bezier(.4,0,.2,1);
-  --serif:'Noto Serif SC',serif;--cal:'Ma Shan Zheng',cursive;--display:'ZCOOL XiaoWei',serif;
+  --serif:'Noto Serif SC',serif;--cal:'Ma Shan Zheng',cursive;--display:'ZCOOL XiaoWei','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:var(--serif);background:var(--rice);color:var(--ink);line-height:1.8;overflow-x:hidden}
+body{font-family:var(--serif);background:var(--rice);color:var(--ink);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+::selection{background:rgba(184,64,64,.2);color:var(--ink)}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 .paper-tex::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,237,224,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(184,159,107,.15)}
-nav .inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
-.logo{display:flex;align-items:center;gap:10px;font-family:var(--cal);font-size:22px;color:var(--vermillion)}
-.logo-seal{width:30px;height:30px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--cal);font-size:14px;line-height:1;box-shadow:0 2px 8px rgba(184,64,64,.3)}
-.nav-links{display:flex;gap:36px;align-items:center}
-.nav-links a{font-size:14px;color:var(--ink-soft);font-family:var(--display);transition:color var(--t)}
-.nav-links a:hover{color:var(--vermillion)}
-.nav-cta{background:var(--vermillion);color:#fff!important;padding:7px 18px;border-radius:4px;font-size:13px;font-family:var(--display);transition:var(--t)}
-.nav-cta:hover{background:var(--vermillion-dark)}
-@media(max-width:640px){.nav-links{display:none}}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,237,224,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(184,159,107,.1);backdrop-saturate:140%}
+nav .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:70px}
+nav .inner .logo{justify-self:start}
+nav .inner .nav-links{justify-self:center}
+nav .inner .nav-cta{justify-self:end}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--cal);font-size:23px;color:var(--vermillion);letter-spacing:.02em}
+.logo-seal{width:32px;height:32px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 10px rgba(184,64,64,.28)}.logo-seal img{width:72%;height:72%;object-fit:contain;display:block}
+.logo-sub{font-family:var(--display);font-size:11px;color:var(--ink-faint);letter-spacing:.35em;margin-left:4px;border-left:1px solid rgba(44,40,37,.18);padding-left:12px}
+.nav-links{display:flex;gap:48px;align-items:center}
+.nav-links a{font-size:13px;color:var(--ink-soft);font-family:var(--display);transition:color var(--t);letter-spacing:.15em;padding-bottom:2px;border-bottom:1px solid transparent}
+.nav-links a:hover{color:var(--vermillion);border-bottom-color:rgba(184,64,64,.4)}
+.nav-cta{background:var(--vermillion);color:#fff!important;padding:8px 22px;border-radius:4px;font-size:13px;font-family:var(--display);transition:var(--t);letter-spacing:.15em;box-shadow:0 2px 10px rgba(184,64,64,.24)}
+.nav-cta:hover{background:var(--vermillion-dark);transform:translateY(-1px)}
+@media(max-width:640px){.nav-links,.logo-sub{display:none}nav .inner{padding:0 18px;grid-template-columns:1fr auto;grid-template-areas:"logo cta"}nav .inner .logo{grid-area:logo}nav .inner .nav-cta{grid-area:cta}}
 
-.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:80px 24px 60px}
-.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 30% 20%,rgba(184,159,107,.12) 0%,transparent 55%),radial-gradient(ellipse at 70% 60%,rgba(184,64,64,.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 90%,rgba(107,142,111,.08) 0%,transparent 55%)}
-.hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.5}
-.hero-content{position:relative;z-index:1;max-width:600px}
-.hero-seal{display:inline-flex;align-items:center;gap:8px;background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.2);color:var(--vermillion);padding:5px 14px;border-radius:4px;font-size:12px;font-family:var(--display);margin-bottom:28px;animation:fu .6s ease both}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:140px 0 100px}
+.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 22% 18%,rgba(184,159,107,.14) 0%,transparent 48%),radial-gradient(ellipse at 82% 40%,rgba(184,64,64,.07) 0%,transparent 42%),radial-gradient(ellipse at 55% 95%,rgba(107,142,111,.09) 0%,transparent 55%)}
+.hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .16 0 0 0 0 .15 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.45}
+.hero-content{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 36px;width:100%;display:grid;grid-template-columns:1fr;gap:0;align-items:center}
+.hero-main{max-width:780px;margin:0 auto}
+.hero-seal{display:inline-flex;align-items:center;gap:10px;background:rgba(184,64,64,.07);border:1px solid rgba(184,64,64,.22);color:var(--vermillion);padding:6px 16px;border-radius:100px;font-size:12px;font-family:var(--display);margin-bottom:36px;animation:fu .6s ease both;letter-spacing:.25em}
 .hero-seal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--vermillion);animation:pp 2s infinite}
 @keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{font-family:var(--cal);font-size:clamp(32px,6vw,56px);color:var(--ink);line-height:1.15;margin-bottom:16px;animation:fu .6s .1s ease both;white-space:nowrap}
-.hero h1 .red{color:var(--vermillion)}
-.hero-desc{font-size:14px;color:var(--ink-faint);margin-bottom:40px;animation:fu .6s .2s ease both}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fu .6s .3s ease both}
-.btn-consult{background:var(--vermillion);color:#fff;padding:13px 36px;border-radius:4px;font-size:16px;font-family:var(--display);letter-spacing:1px;box-shadow:0 3px 14px rgba(184,64,64,.3);transition:var(--t)}
-.btn-consult:hover{background:var(--vermillion-dark);transform:translateY(-2px);box-shadow:0 5px 20px rgba(184,64,64,.4)}
-.btn-ghost{border:1.5px solid var(--aged-dark);color:var(--gold-dark);padding:13px 36px;border-radius:4px;font-size:16px;font-family:var(--display);letter-spacing:1px;transition:var(--t)}
-.btn-ghost:hover{border-color:var(--gold);background:rgba(184,159,107,.06)}
-.hero-stats{display:flex;gap:48px;justify-content:center;margin-top:52px;animation:fu .6s .4s ease both;flex-wrap:wrap;max-width:480px;margin-left:auto;margin-right:auto}
-.stat{text-align:center;flex:1;min-width:80px}
-.stat-n{font-family:var(--cal);font-size:48px;color:var(--vermillion);line-height:1}
-.stat-l{font-size:12px;color:var(--ink-faint);margin-top:6px}
+.hero h1{font-family:var(--cal);font-size:clamp(44px,6.4vw,76px);color:var(--ink);line-height:1.08;margin-bottom:28px;animation:fu .6s .1s ease both;letter-spacing:.02em}
+.hero h1 .red{color:var(--vermillion);position:relative}
+.hero h1 .red::after{content:'';position:absolute;left:-1%;right:-1%;bottom:-0.02em;height:.28em;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 28" preserveAspectRatio="none"> <path fill="rgba(184,64,64,0.26)" d="M 4 15      C 35 10, 75 7, 120 6      S 220 8, 278 13      L 283 16      C 265 20, 220 23, 170 22      C 118 21, 68 22, 36 20      C 22 19.5, 10 18.5, 4 16 Z" /></svg>');background-repeat:no-repeat;background-size:100% 100%;z-index:-1;opacity:1}
+.hero-lead{font-family:var(--display);font-size:18px;color:var(--ink-soft);line-height:1.9;margin-bottom:14px;letter-spacing:.04em;animation:fu .6s .15s ease both}
+.hero-desc{font-size:14.5px;color:var(--ink-faint);margin-bottom:44px;animation:fu .6s .2s ease both;line-height:2}
+.hero-desc .sep{display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--gold);margin:0 14px;vertical-align:middle;opacity:.6}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fu .6s .3s ease both}
+.btn-consult{background:var(--vermillion);color:#fff;padding:15px 40px;border-radius:4px;font-size:15px;font-family:var(--display);letter-spacing:.2em;box-shadow:0 4px 18px rgba(184,64,64,.28);transition:var(--t)}
+.btn-consult:hover{background:var(--vermillion-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba(184,64,64,.36)}
+.btn-ghost{border:1.5px solid var(--aged-dark);color:var(--gold-dark);padding:15px 40px;border-radius:4px;font-size:15px;font-family:var(--display);letter-spacing:.2em;transition:var(--t);background:rgba(255,253,247,.3)}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(184,159,107,.08);color:var(--ink)}
+.hero-stats{display:flex;gap:0;margin-top:64px;animation:fu .6s .4s ease both;flex-wrap:wrap;justify-content:center;align-items:center}
+.stat{text-align:center;position:relative;padding:0 28px;min-width:140px}
+.stat:not(:last-child){border-right:1px solid rgba(184,159,107,.38)}
+.stat-n{font-family:var(--cal);font-size:48px;color:var(--vermillion);line-height:1;letter-spacing:.04em;font-weight:700;text-shadow:0 1px 0 rgba(184,64,64,.18)}
+.stat-l{font-size:12px;color:var(--ink-soft);margin-top:10px;letter-spacing:.32em;font-family:var(--display);font-weight:600}
 @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-section{padding:72px 0;position:relative}
-.wrap{max-width:920px;margin:0 auto;padding:0 24px}
-@media(max-width:768px){.wrap{padding:0 18px}section{padding:56px 0}}
-.sec-head{text-align:center;margin-bottom:44px}
-.sec-head .deco{font-family:var(--cal);color:var(--gold);font-size:14px;letter-spacing:4px;margin-bottom:8px}
-.sec-head h2{font-family:var(--cal);font-size:clamp(28px,5vw,40px);color:var(--ink)}
-.sec-head p{color:var(--ink-faint);font-size:14px;margin-top:8px}
+section{padding:96px 0;position:relative}
+.wrap{max-width:1160px;margin:0 auto;padding:0 36px}
+@media(max-width:768px){.wrap{padding:0 20px}section{padding:64px 0}}
+.sec-head{text-align:center;margin-bottom:72px;position:relative}
+.sec-head .deco{font-family:var(--display);color:var(--gold-dark);font-size:11px;letter-spacing:.6em;margin-bottom:20px;display:inline-flex;align-items:center;gap:18px;opacity:.85}
+.sec-head .deco::before,.sec-head .deco::after{content:'';display:inline-block;width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--aged-dark),transparent);opacity:.7}
+.sec-head h2{font-family:var(--cal);font-size:clamp(28px,3.6vw,38px);color:var(--ink);letter-spacing:.06em;margin-bottom:16px;font-weight:400;line-height:1.3}
+.sec-head p{color:var(--ink-faint);font-size:14px;margin-top:0;letter-spacing:.05em;font-family:var(--display);line-height:1.9}
 
-.domain-section{background:var(--rice-light)}
-.domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.d-card{background:var(--paper);border-radius:8px;padding:28px 24px;padding-bottom:48px;box-shadow:var(--shadow);border:1px solid rgba(184,159,107,.12);transition:var(--t);cursor:pointer;position:relative;overflow:hidden}
-.d-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dc,var(--vermillion));transform:scaleY(.3);transform-origin:top;transition:transform var(--t)}
-.d-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--dc,var(--vermillion))}
-.d-card:hover::before{transform:scaleY(1)}
-.d-icon{width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:var(--t)}
-.d-card:hover .d-icon{transform:scale(1.08)}
-.d-icon svg{width:24px;height:24px}
-.d-card h3{font-family:var(--cal);font-size:24px;margin-bottom:6px;color:var(--ink)}
-.d-card .d-desc{font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6}
-.d-tags{display:flex;flex-wrap:wrap;gap:6px}
-.d-tag{background:var(--aged);color:var(--ink-soft);padding:3px 10px;border-radius:100px;font-size:11px;font-family:var(--display)}
-.d-cta{position:absolute;bottom:16px;left:24px;right:24px;font-size:13px;color:var(--ink-faint);font-family:var(--display);display:flex;align-items:center;justify-content:space-between;transition:var(--t)}
-.d-card:hover .d-cta{color:var(--dc,var(--vermillion))}
+.domain-section{background:var(--rice);padding-top:120px}
+.domain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid rgba(44,40,37,.08)}
+.d-card{background:transparent;padding:44px 48px!important;margin:0;box-shadow:none;border:0;transition:var(--t);cursor:pointer;position:relative;display:grid;grid-template-columns:64px 1fr;gap:24px;align-items:stretch;border-bottom:1px solid rgba(44,40,37,.08)}
+.domain-grid > .d-card:nth-child(odd){border-right:1px solid rgba(44,40,37,.08)}
+.domain-grid > .d-card:nth-child(even){}
+/* 情商卡片 - 桌面端背景素材 */
+@media(min-width:480px){
+  .domain-grid > .d-card:nth-child(5){grid-column:1/-1;border-right:0;grid-template-columns:64px 1fr;position:relative;overflow:hidden;background:#f4ede2}
+  .domain-grid > .d-card:nth-child(5)::after{
+    content:'';
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:50%;
+    background-image:url('assets/eq-default.jpg');
+    background-size:cover;
+    background-position:right center;
+    background-repeat:no-repeat;
+    opacity:1;
+    transition:background-image .5s ease, opacity .5s ease;
+    pointer-events:none;
+    z-index:0;
+  }
+  .domain-grid > .d-card:nth-child(5):hover{
+    background:#faf5ed!important;
+  }
+  .domain-grid > .d-card:nth-child(5):hover::after{
+    background-image:url('assets/eq-hover.jpg');
+  }
+}
+.d-card::before{display:none}
+.d-card:hover{transform:none;box-shadow:none;border-color:rgba(44,40,37,.08);background:rgba(255,253,247,.5)}
+.d-card .d-card-body{display:flex;flex-direction:column;gap:0;align-items:flex-start;padding-left:0!important;margin-left:0!important;box-sizing:border-box;min-height:100%}
+.domain-grid > .d-card:nth-child(5) .d-card-body{position:relative;z-index:1}
+.domain-grid > .d-card:nth-child(5) .d-icon{position:relative;z-index:1}
+.d-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0;background:rgba(44,40,37,.03)!important;transition:var(--t);flex-shrink:0;align-self:start}
+.d-card:hover .d-icon{transform:scale(1.08);background:rgba(184,64,64,.06)!important}
+.d-icon svg{width:24px;height:24px;stroke:var(--ink-soft)!important;transition:var(--t)}
+.d-card:hover .d-icon svg{stroke:var(--vermillion)!important}
+.d-card .d-head{display:flex;align-items:baseline;gap:0;margin-bottom:6px;margin-left:0!important;padding-left:0!important;align-self:flex-start}
+.d-card h3{font-family:var(--cal);font-size:26px;color:var(--ink);letter-spacing:.04em;margin:0;font-weight:400}
+/* d-num removed */
+.d-card .d-desc{font-size:14px;color:var(--ink-soft);margin:0;margin-left:0!important;padding-left:0!important;line-height:1.6;font-family:var(--display);align-self:flex-start}
+.d-tags{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:12px;margin-bottom:28px;margin-left:0!important;padding-left:0!important;align-self:flex-start}
+.d-tag{display:inline-block;padding:5px 14px;border-radius:100px;font-size:12px;font-family:var(--serif);letter-spacing:.06em;color:var(--ink-soft);background:rgba(44,40,37,.035);border:1px solid rgba(44,40,37,.06);transition:var(--t);cursor:default}
+.domain-grid > .d-card:nth-child(1) .d-tag{background:rgba(96,130,105,.10);border-color:rgba(96,130,105,.22);color:#4a6b54}
+.domain-grid > .d-card:nth-child(2) .d-tag{background:rgba(160,98,72,.10);border-color:rgba(160,98,72,.22);color:#8a5238}
+.domain-grid > .d-card:nth-child(3) .d-tag{background:rgba(116,110,102,.10);border-color:rgba(116,110,102,.22);color:#6b655c}
+.domain-grid > .d-card:nth-child(4) .d-tag{background:rgba(54,120,140,.10);border-color:rgba(54,120,140,.22);color:#2f6778}
+.domain-grid > .d-card:nth-child(5) .d-tag{background:rgba(190,106,115,.10);border-color:rgba(190,106,115,.22);color:#a34a55}
+.d-tag:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(44,40,37,.06)}
+.d-cta{margin-top:auto;display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-faint);font-family:var(--display);letter-spacing:.18em;transition:var(--t);margin-left:0;margin-right:0;font-weight:600;padding:12px 20px 12px 0;box-sizing:border-box;align-self:flex-start}
+.d-cta span:last-child{transition:transform var(--t);display:inline-block}
+.d-card:hover .d-cta{color:var(--vermillion)}
+.d-card:hover .d-cta span:last-child{transform:translateX(4px)}
 
 .chat-panel{position:fixed;top:0;right:-100%;width:100%;max-width:440px;height:100svh;background:var(--rice-light);z-index:300;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(44,40,37,.15)}
 .chat-panel.open{right:0}
@@ -125,47 +177,87 @@ section{padding:72px 0;position:relative}
 .chat-send svg{width:18px;height:18px}
 .chat-send:disabled{opacity:.4}
 .chat-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.skill-promo{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;background:linear-gradient(135deg,rgba(184,64,64,.04) 0%,rgba(184,159,107,.06) 100%);border:1px solid rgba(184,64,64,.12);border-radius:10px;cursor:pointer;transition:all .3s ease}
+.skill-promo:hover{border-color:rgba(184,64,64,.3);background:linear-gradient(135deg,rgba(184,64,64,.06) 0%,rgba(184,159,107,.08) 100%)}
+.skill-promo .sp-icon{flex-shrink:0;width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#B84040,#D4764E);display:flex;align-items:center;justify-content:center}
+.skill-promo .sp-icon svg{width:16px;height:16px;color:#fff}
+.skill-promo .sp-content{flex:1;min-width:0}
+.skill-promo .sp-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;line-height:1.4}
+.skill-promo .sp-desc{font-size:11px;color:var(--ink-soft);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skill-promo .sp-arrow{flex-shrink:0;width:18px;height:18px;color:var(--aged);transition:transform .3s ease}
+.skill-promo:hover .sp-arrow{transform:translateX(3px);color:var(--vermillion)}
 .quick-btn{background:var(--aged);color:var(--ink-soft);padding:5px 12px;border-radius:100px;font-size:12px;transition:var(--t);font-family:var(--display)}
 .quick-btn:hover{background:var(--gold);color:#fff}
+.quick-btn.recommended{background:rgba(184,64,64,.15);border-color:var(--vermillion);color:var(--vermillion);font-weight:600}
 .chat-overlay{position:fixed;inset:0;background:rgba(44,40,37,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:250;opacity:0;pointer-events:none;transition:opacity .3s}
 .chat-overlay.show{opacity:1;pointer-events:auto}
 @media(max-width:520px){.chat-panel{max-width:100%;border-radius:0}}
 
-.wf-section{background:var(--paper)}
+.wf-section{background:var(--paper);border-top:1px solid rgba(184,159,107,.1);border-bottom:1px solid rgba(184,159,107,.1);display:block}/* 保持原 block */
+.wf-section .wrap{display:flex;flex-direction:column;align-items:center}
+.wf-section .wrap > .sec-head{width:100%}
+.wf-section .wrap > .wf-steps{width:auto}
 .wf-steps{max-width:620px;margin:0 auto}
-.wf-step{display:flex;gap:18px;position:relative;padding-bottom:28px}
-.wf-step:not(:last-child)::after{content:'';position:absolute;left:23px;top:50px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold) 0%,transparent 100%)}
-.wf-num{width:48px;height:48px;border-radius:50%;background:var(--paper);border:2px solid var(--gold);color:var(--gold-dark);font-family:var(--cal);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;transition:var(--t);position:relative}
-.wf-step:hover .wf-num{background:var(--gold);color:#fff}
-.wf-step.v2 .wf-num{background:var(--vermillion);color:#fff;border-color:var(--vermillion)}
-.wf-step.v2 .wf-num::after{content:'新';position:absolute;top:-6px;right:-8px;font-size:9px;background:var(--vermillion);color:#fff;padding:1px 5px;border-radius:100px;font-family:var(--display)}
-.wf-body h4{font-family:var(--cal);font-size:18px;margin-bottom:4px}
-.wf-body p{font-size:13px;color:var(--ink-soft)}
+.wf-step{display:flex;gap:22px;position:relative;padding-bottom:36px;justify-content:flex-start;text-align:left}
+.wf-step:not(:last-child)::after{content:'';position:absolute;left:24px;top:56px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold) 0%,rgba(184,159,107,.15) 100%)}
+.wf-num{width:50px;height:50px;border-radius:50%;background:var(--paper);border:2px solid var(--gold);color:var(--gold-dark);font-family:var(--cal);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;transition:var(--t);position:relative}
+.wf-step:hover .wf-num{background:var(--gold);color:#fff;box-shadow:0 4px 14px rgba(184,159,107,.22)}
+.wf-step.v2 .wf-num{background:var(--vermillion);color:#fff;border-color:var(--vermillion);box-shadow:0 4px 14px rgba(184,64,64,.26)}
+.wf-step.v2 .wf-num::after{content:'NEW';position:absolute;top:-8px;right:-12px;font-size:9px;background:var(--vermillion);color:#fff;padding:2px 6px;border-radius:100px;font-family:var(--display);letter-spacing:.05em;border:1px solid #fff}
+.wf-body{padding-top:4px;text-align:left}
+.wf-body h4{font-family:var(--cal);font-size:20px;margin-bottom:6px;color:var(--ink);letter-spacing:.04em}
+.wf-body p{font-size:13.5px;color:var(--ink-soft);line-height:1.8}
 
+/* ========== 辞典区域 - 极简编辑风格 ========== */
 .book-section{background:var(--rice)}
-.book-grid{display:grid;gap:20px}
-.book-group h4{font-family:var(--display);font-size:15px;color:var(--vermillion);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.book-grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.book-group{background:#FFFDF7;border:1px solid rgba(184,159,107,.14);border-radius:12px;padding:22px 24px}
+.book-group h4{font-family:var(--display);font-size:14px;color:var(--vermillion);margin-bottom:14px;display:flex;align-items:center;gap:12px;letter-spacing:.2em}
 .book-group h4::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--aged-dark),transparent)}
-.book-chips{display:flex;flex-wrap:wrap;gap:7px}
-.b-chip{background:var(--paper);border:1px solid var(--aged-dark);border-radius:4px;padding:5px 12px;font-size:13px;color:var(--ink);transition:var(--t);font-family:var(--serif)}
-.b-chip:hover{border-color:var(--gold);color:var(--vermillion);transform:translateY(-1px);background:rgba(184,159,107,.04)}
-.b-chip.community{background:rgba(184,64,64,.06);border-color:rgba(184,64,64,.2);color:var(--vermillion);cursor:pointer}
+.b-chip{background:rgba(184,159,107,.08);border:1px solid rgba(184,159,107,.22);border-radius:100px;padding:9px 18px;font-size:13px;color:var(--ink-soft);transition:var(--t);font-family:var(--serif);letter-spacing:.03em}
+.b-chip:hover{border-color:var(--vermillion);color:var(--vermillion);transform:translateY(-1px);background:rgba(184,64,64,.05);box-shadow:0 2px 10px rgba(184,64,64,.08)}
+.b-chip.community{background:rgba(184,64,64,.08);border-color:rgba(184,64,64,.26);color:var(--vermillion);cursor:pointer;font-family:var(--display);font-weight:600;letter-spacing:.12em}
+.book-chips{display:flex;flex-wrap:wrap;gap:12px 10px}
+.book-grid > .book-group:nth-child(1) .b-chip{background:rgba(107,142,111,.10);border-color:rgba(107,142,111,.22);color:#4a6b54}
+.book-grid > .book-group:nth-child(1) .b-chip:hover{border-color:#4a6b54;background:rgba(107,142,111,.18);color:#4a6b54;box-shadow:0 2px 10px rgba(107,142,111,.15)}
+.book-grid > .book-group:nth-child(2) .b-chip{background:rgba(201,123,90,.10);border-color:rgba(201,123,90,.22);color:#9a5536}
+.book-grid > .book-group:nth-child(2) .b-chip:hover{border-color:#9a5536;background:rgba(201,123,90,.18);color:#9a5536;box-shadow:0 2px 10px rgba(201,123,90,.15)}
+.book-grid > .book-group:nth-child(3) .b-chip{background:rgba(107,101,92,.10);border-color:rgba(107,101,92,.22);color:#6b655c}
+.book-grid > .book-group:nth-child(3) .b-chip:hover{border-color:#6b655c;background:rgba(107,101,92,.18);color:#6b655c;box-shadow:0 2px 10px rgba(107,101,92,.15)}
+.book-grid > .book-group:nth-child(4) .b-chip{background:rgba(58,95,122,.10);border-color:rgba(58,95,122,.22);color:#3A5F7A}
+.book-grid > .book-group:nth-child(4) .b-chip:hover{border-color:#3A5F7A;background:rgba(58,95,122,.18);color:#3A5F7A;box-shadow:0 2px 10px rgba(58,95,122,.15)}
+.book-grid > .book-group:nth-child(5) .b-chip{background:rgba(226,168,181,.18);border-color:rgba(226,168,181,.35);color:#A36472}
+.book-grid > .book-group:nth-child(5) .b-chip:hover{border-color:#A36472;background:rgba(226,168,181,.28);color:#A36472;box-shadow:0 2px 10px rgba(226,168,181,.2)}
+.book-grid > .book-group:nth-child(6) .b-chip{background:rgba(184,159,107,.10);border-color:rgba(184,159,107,.22);color:#8a7743}
+.book-grid > .book-group:nth-child(6) .b-chip:hover{border-color:#8a7743;background:rgba(184,159,107,.18);color:#8a7743;box-shadow:0 2px 10px rgba(184,159,107,.15)}
+.community-entry{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:48px;padding:32px 40px;background:var(--paper);border:1px solid rgba(184,64,64,.18);border-radius:12px}
+.community-entry h4{font-family:var(--display);font-size:15px;color:var(--vermillion);letter-spacing:.24em;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.community-entry h4::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--aged-dark),transparent)}
+.community-entry .ce-left{flex:1 1 auto;min-width:0}
+.community-entry .ce-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0}
+.community-entry .ce-desc{color:var(--ink-soft);font-size:14px;margin:0;line-height:1.8;font-family:var(--serif);letter-spacing:.03em}
+.submit-cta{display:inline-flex;align-items:center;gap:10px;background:rgba(184,64,64,.06);border:1px solid rgba(184,64,64,.32);padding:12px 32px;border-radius:100px;color:var(--vermillion);font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.16em;transition:var(--t);box-shadow:0 2px 10px rgba(184,64,64,.08)}
+.submit-cta:hover{background:rgba(184,64,64,.12);border-color:var(--vermillion);transform:translateY(-1px);box-shadow:0 4px 16px rgba(184,64,64,.16)}
+.submit-cta .arrow{font-size:15px;font-weight:700;transition:transform var(--t)}
+.submit-cta:hover .arrow{transform:translateX(3px)}
 
-.com-card{background:var(--paper);border:1px solid rgba(184,159,107,.15);border-radius:8px;padding:40px 32px;text-align:center;box-shadow:var(--shadow);max-width:560px;margin:0 auto;position:relative}
-.com-card::before{content:'卷';position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--vermillion);color:#fff;font-family:var(--cal);font-size:14px;display:flex;align-items:center;justify-content:center}
-.com-card h3{font-family:var(--cal);font-size:24px;margin-bottom:10px}
-.com-card p{color:var(--ink-soft);font-size:14px;margin-bottom:24px;line-height:1.8}
-.com-methods{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.com-m{background:var(--aged);border:1px solid var(--aged-dark);border-radius:6px;padding:10px 22px;font-size:14px;color:var(--ink);transition:var(--t);font-family:var(--display)}
-.com-m:hover{background:var(--vermillion);color:#fff;border-color:var(--vermillion)}
+/* .com-card removed */
 
-footer{background:var(--ink);color:rgba(255,253,247,.7);padding:44px 0 28px;text-align:center}
-footer .inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
-footer .f-logo{font-family:var(--cal);font-size:22px;color:#fff;display:flex;align-items:center;gap:8px}
-footer .f-logo .s{width:28px;height:28px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+
+
+
+
+
+
+footer{background:var(--ink);color:rgba(255,253,247,.7);padding:56px 0 32px;text-align:center;margin-top:40px}
+footer .inner{max-width:1160px;margin:0 auto;padding:0 36px;display:flex;flex-direction:column;align-items:center;gap:18px}
+footer .f-logo{font-family:var(--cal);font-size:22px;color:#fff;display:flex;align-items:center;gap:10px;letter-spacing:.04em}
+footer .f-logo .s{width:30px;height:30px;border-radius:6px;background:var(--vermillion);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+footer .f-logo .s img{width:70%;height:70%;object-fit:contain;display:block}
+footer .f-tag{font-family:var(--display);font-size:11px;color:rgba(255,253,247,.45);letter-spacing:.4em;margin-top:-6px}
 footer p{font-size:12px}
-footer .f-links{display:flex;gap:18px}
-footer .f-links a{color:rgba(255,253,247,.6);font-size:12px;font-family:var(--display);transition:color var(--t)}
+footer .f-links{display:flex;gap:28px;margin-top:4px}
+footer .f-links a{color:rgba(255,253,247,.6);font-size:12px;font-family:var(--display);transition:color var(--t);letter-spacing:.15em}
 footer .f-links a:hover{color:#fff}
 
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:#fff;padding:11px 26px;border-radius:4px;font-size:14px;z-index:400;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;font-family:var(--display)}
@@ -173,49 +265,89 @@ footer .f-links a:hover{color:#fff}
 .rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
 @media(max-width:640px){
-  .hero{min-height:auto;padding:100px 18px 48px}
-  .hero-stats{gap:24px}
-  .stat-n{font-size:36px}
-  .d-card{padding:22px 18px;padding-bottom:48px}
-  .com-card{padding:32px 20px}
+  .hero{min-height:auto;padding:110px 0 64px}
+  .hero-content{grid-template-columns:1fr;gap:40px;padding:0 20px}
+  .hero-main{max-width:100%}
+  .hero h1{letter-spacing:.01em}
+  .hero-stats{gap:14px 24px;margin-top:44px}
+  .stat{padding:0 14px;min-width:auto}
+  .stat:not(:last-child){border-right:none}
+  .stat-n{font-size:36px;font-weight:700}
+  .sec-head{margin-bottom:48px}
+  .sec-head h2{font-size:26px;letter-spacing:.05em}
+  .sec-head .deco{letter-spacing:.4em;font-size:10px;margin-bottom:16px}
+  .sec-head .deco::before,.sec-head .deco::after{width:28px}
+  .domain-section{padding-top:64px}
+  .domain-grid{grid-template-columns:1fr}
+  .d-card{grid-template-columns:52px 1fr;gap:20px;padding:32px 20px!important;border-right:0!important;border-left:0;align-items:stretch}
+  .d-card .d-card-body{padding-right:0}
+  .d-icon{width:48px;height:48px}
+  .d-card h3{font-size:22px;letter-spacing:.03em}
+  .d-card .d-desc{font-size:13px;line-height:1.5}
+  .d-cta{font-size:13px;padding:10px 18px}
+  .d-card .d-card-body{gap:0;align-items:flex-start!important;padding-left:0!important;margin-left:0!important}
+
+  .domain-grid > .d-card:nth-child(5){grid-column:1/-1}
+  .d-tag{padding:4px 12px;font-size:11px}
+  .d-tags{margin-top:8px;margin-bottom:20px}
+  .d-cta{margin-top:auto;padding:10px 18px 10px 0;margin-top:0}
+  .book-section{padding:40px 0}
+  .book-group{padding:28px 24px 24px}
+  .book-group h4{font-size:12px;margin-bottom:18px}
+  .b-chip{font-size:13px;padding:8px 0}
+  .community-entry{grid-template-columns:1fr;gap:24px;padding:36px 28px}
+  .community-entry .ce-meta{flex-wrap:wrap;gap:12px 24px}
+  .community-entry .ce-desc{font-size:13px;line-height:1.8}
+  .submit-cta{padding:16px 28px;font-size:13px}
+  
+
   .wf-step{gap:12px}
   .wf-num{width:40px;height:40px;font-size:16px}
   .wf-step:not(:last-child)::after{left:19px;top:42px}
 }
+@media(min-width:641px) and (max-width:1024px){
+  .hero-content{grid-template-columns:1fr;gap:48px}
+  .hero-main{max-width:100%}
+}
 @media(max-width:380px){.hero-btns{flex-direction:column;align-items:stretch}.btn-consult,.btn-ghost{width:100%;text-align:center}}
+
 </style>
 </head>
 <body class="paper-tex">
 
 <nav>
   <div class="inner">
-    <a href="#" class="logo"><span class="logo-seal">方</span>纸上良方</a>
+    <a href="#" class="logo"><span class="logo-seal"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方<span class="logo-sub">BOOKPILL</span></a>
     <div class="nav-links">
       <a href="#domains">问诊</a>
       <a href="#workflow">成方</a>
       <a href="#books">典籍</a>
-      <a href="#community">同道</a>
+      <a href="community.html">同道</a>
     </div>
-    <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="nav-cta">查看仓库</a>
+    <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" rel="noopener" class="nav-cta">查看仓库</a>
   </div>
 </nav>
 
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <div class="hero-seal">v2.0 社区共建 · 良方上线</div>
-    <h1>读过的书·<span class="red">终于能用了</span></h1>
-    <p class="hero-desc">基于二十一本经典书籍的个人问题诊断与建议引擎<br>拖延 · 焦虑 · 内耗 · 表达 · 情商 — 五脉七步，对症下书</p>
-    <div class="hero-btns">
-      <button class="btn-consult" onclick="scrollToDomains()">开始问诊</button>
-      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank" class="btn-ghost">查看仓库</a>
+    <div class="hero-main">
+      <div class="hero-seal">v2.0 · 社区共建版上线</div>
+      <h1>读过的书<br>终于<span class="red">能用了</span></h1>
+      <p class="hero-lead">一本好书，就是一位阅历丰厚的朋友</p>
+      <p class="hero-desc">基于二十一本经典书籍的个人问题诊断与建议引擎<span class="sep"></span>拖延 · 焦虑 · 内耗 · 表达 · 情商<span class="sep"></span>五脉七步，对症下书</p>
+      <div class="hero-btns">
+        <button class="btn-consult" onclick="scrollToDomains()">开始问诊</button>
+        <a href="community.html" class="btn-ghost">社区动态</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-n">21+</div><div class="stat-l">经 典 书 籍</div></div>
+        <div class="stat"><div class="stat-n">5</div><div class="stat-l">问 题 脉</div></div>
+        <div class="stat"><div class="stat-n">7</div><div class="stat-l">步 成 方</div></div>
+        <div class="stat"><div class="stat-n">∞</div><div class="stat-l">社 区 共 建</div></div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-n">21+</div><div class="stat-l">经典书籍</div></div>
-      <div class="stat"><div class="stat-n">5</div><div class="stat-l">问题脉</div></div>
-      <div class="stat"><div class="stat-n">7</div><div class="stat-l">步成方</div></div>
-      <div class="stat"><div class="stat-n">4</div><div class="stat-l">平台可用</div></div>
-    </div>
+
   </div>
 </header>
 
@@ -223,35 +355,50 @@ footer .f-links a:hover{color:#fff}
   <div class="wrap">
     <div class="sec-head"><div class="deco">问 · 诊 · 台</div><h2>你遇到了什么困扰？</h2><p>点一个最贴切的，直接跟良方聊</p></div>
     <div class="domain-grid">
-      <div class="d-card" style="--dc:#8B7EC8" onclick="startChat('delay')">
-        <div class="d-icon" style="background:#EDE8F8"><svg viewBox="0 0 24 24" fill="none" stroke="#8B7EC8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <h3>拖延</h3><p class="d-desc">明明知道该做，就是动不起来</p>
-        <div class="d-tags"><span class="d-tag">启动困难</span><span class="d-tag">完美主义</span><span class="d-tag">行动力</span></div>
-        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+      <div class="d-card" onclick="startChat('delay')">
+        <div class="d-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="d-card-body">
+          <div class="d-head"><h3>拖延</h3></div>
+          <p class="d-desc">明明知道该做，就是动不起来</p>
+          <div class="d-tags"><span class="d-tag">启动困难</span><span class="d-tag">完美主义</span><span class="d-tag">行动力</span></div>
+          <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+        </div>
       </div>
-      <div class="d-card" style="--dc:#C97B5A" onclick="startChat('anxiety')">
-        <div class="d-icon" style="background:#F8E8E0"><svg viewBox="0 0 24 24" fill="none" stroke="#C97B5A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
-        <h3>焦虑</h3><p class="d-desc">什么都想做好，结果什么都没做好</p>
-        <div class="d-tags"><span class="d-tag">压力</span><span class="d-tag">紧绷</span><span class="d-tag">失眠</span></div>
-        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+      <div class="d-card" onclick="startChat('anxiety')">
+        <div class="d-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div class="d-card-body">
+          <div class="d-head"><h3>焦虑</h3></div>
+          <p class="d-desc">什么都想做好，结果什么都没做好</p>
+          <div class="d-tags"><span class="d-tag">压力</span><span class="d-tag">紧绷</span><span class="d-tag">失眠</span></div>
+          <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+        </div>
       </div>
-      <div class="d-card" style="--dc:#6B8E9E" onclick="startChat('internal')">
-        <div class="d-icon" style="background:#E0EBF0"><svg viewBox="0 0 24 24" fill="none" stroke="#6B8E9E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></div>
-        <h3>内耗</h3><p class="d-desc">反复纠结同一件事，停不下来</p>
-        <div class="d-tags"><span class="d-tag">自我怀疑</span><span class="d-tag">纠结</span><span class="d-tag">情绪消耗</span></div>
-        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+      <div class="d-card" onclick="startChat('internal')">
+        <div class="d-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="d-card-body">
+          <div class="d-head"><h3>内耗</h3></div>
+          <p class="d-desc">反复纠结同一件事，停不下来</p>
+          <div class="d-tags"><span class="d-tag">自我怀疑</span><span class="d-tag">纠结</span><span class="d-tag">情绪消耗</span></div>
+          <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+        </div>
       </div>
-      <div class="d-card" style="--dc:#D4A04C" onclick="startChat('express')">
-        <div class="d-icon" style="background:#F8F0E0"><svg viewBox="0 0 24 24" fill="none" stroke="#D4A04C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <h3>表达</h3><p class="d-desc">想说的说不出口，词不达意</p>
-        <div class="d-tags"><span class="d-tag">沟通</span><span class="d-tag">社交</span><span class="d-tag">开口</span></div>
-        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+      <div class="d-card" onclick="startChat('express')">
+        <div class="d-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="d-card-body">
+          <div class="d-head"><h3>表达</h3></div>
+          <p class="d-desc">想说的说不出口，词不达意</p>
+          <div class="d-tags"><span class="d-tag">沟通</span><span class="d-tag">社交</span><span class="d-tag">开口</span></div>
+          <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+        </div>
       </div>
-      <div class="d-card" style="--dc:#6B8E6F" onclick="startChat('eq')">
-        <div class="d-icon" style="background:#E0EBE0"><svg viewBox="0 0 24 24" fill="none" stroke="#6B8E6F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <h3>情商</h3><p class="d-desc">控制不住情绪，人际关系紧张</p>
-        <div class="d-tags"><span class="d-tag">情绪管理</span><span class="d-tag">人际</span><span class="d-tag">共情</span></div>
-        <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+      <div class="d-card" onclick="startChat('eq')">
+        <div class="d-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="d-card-body">
+          <div class="d-head"><h3>情商</h3></div>
+          <p class="d-desc">控制不住情绪，人际关系紧张</p>
+          <div class="d-tags"><span class="d-tag">情绪管理</span><span class="d-tag">人际</span><span class="d-tag">共情</span></div>
+          <div class="d-cta"><span>点击问诊</span><span>→</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -282,34 +429,36 @@ footer .f-links a:hover{color:#fff}
       <div class="book-group"><h4>表达脉</h4><div class="book-chips"><span class="b-chip">非暴力沟通</span><span class="b-chip">关键对话</span><span class="b-chip">影响力</span></div></div>
       <div class="book-group"><h4>情商脉</h4><div class="book-chips"><span class="b-chip">情商</span><span class="b-chip">社交天性</span><span class="b-chip">高效能人士的七个习惯</span></div></div>
       <div class="book-group"><h4>通脉</h4><div class="book-chips"><span class="b-chip">心流</span><span class="b-chip">活出生命的意义</span><span class="b-chip">牧羊少年奇幻之旅</span></div></div>
-      <div class="book-group"><h4>社区共建</h4><div class="book-chips"><span class="b-chip community" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'})">等待你的投稿 →</span></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="community" class="rv">
-  <div class="wrap">
-    <div class="com-card">
-      <h3>把你读过的书变成别人的良方</h3>
-      <p>每一本被收录的书，都可能成为某个人人生转折点的那一剂良方<br>三种投稿方式，任选其一</p>
-      <div class="com-methods">
-        <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank" class="com-m">GitHub PR</a>
-        <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank" class="com-m">Issue 投稿</a>
-        <button class="com-m" onclick="showToast('在线表单即将上线')">在线表单</button>
+      <div class="book-group community-entry">
+        <div class="ce-left">
+          <h4>社区共建</h4>
+          <p class="ce-desc">把你读过的书变成别人的良方</p>
+        </div>
+        <div class="ce-right">
+          <a href="submit.html" class="submit-cta">
+            <span>等待你的投稿</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+
+
+
+
 <footer>
   <div class="inner">
-    <div class="f-logo"><span class="s">方</span>纸上良方</div>
+    <div class="f-logo"><span class="s"><img src="assets/logo-bai.png" alt="品牌logo"></span>纸上良方</div>
+    <div class="f-tag">BOOKPILL · SINCE 2026</div>
     <p>读过的书，终于能用了。</p>
     <div class="f-links">
-      <a href="https://github.com/Josie-design-dhb/BookPill" target="_blank">GitHub</a>
-      <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/CONTRIBUTING.md" target="_blank">贡献指南</a>
-      <a href="https://github.com/Josie-design-dhb/BookPill/issues/new/choose" target="_blank">投稿</a>
-      <a href="https://github.com/Josie-design-dhb/BookPill/blob/v2/LICENSE" target="_blank">MIT License</a>
+      <a href="index.html">首页</a>
+      <a href="community.html">社区动态</a>
+      <a href="submit.html">投稿新书</a>
+      <a href="stats.html">管理后台</a>
     </div>
     <p style="opacity:.4;font-size:11px;">v2.0.0 · 社区共建 · 2026</p>
   </div>
@@ -331,6 +480,20 @@ footer .f-links a:hover{color:#fff}
       </button>
     </div>
     <div class="chat-quick" id="chatQuick"></div>
+    <div class="skill-promo" id="skillPromo" onclick="openSkillGuide()">
+      <div class="sp-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="sp-content">
+        <div class="sp-title">想要更深度的诊断？</div>
+        <div class="sp-desc">安装BookPill Skill · AI精准读懂你的每一本书</div>
+      </div>
+      <svg class="sp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </div>
   </div>
 </div>
 
@@ -576,17 +739,35 @@ eq:{
 
 let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='';
 
-function startChat(domain){
-  curDomain=engines[domain];chatStep=0;savedPatterns={};savedUserText1='';
+function startChat(domain,keepHistory){
+  curDomain=engines[domain];
   document.getElementById('chatTitle').textContent=curDomain.name;
   document.getElementById('chatSub').textContent=curDomain.sub;
-  document.getElementById('chatBody').innerHTML='';
-  document.getElementById('chatQuick').innerHTML='';
-  const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
-  qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+  if(keepHistory){
+    // 保留对话历史，只更新问题域信息
+    chatStep=1;savedPatterns={};savedUserText1='';
+    document.getElementById('chatQuick').innerHTML='';
+    const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    // 添加切换问题域的提示
+    const d=document.createElement('div');d.className='msg bot domain-switch';
+    d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域，请重新描述你的情况：';
+    document.getElementById('chatBody').appendChild(d);scrollChat();
+  }else{
+    chatStep=0;savedPatterns={};savedUserText1='';
+    document.getElementById('chatBody').innerHTML='';
+    document.getElementById('chatQuick').innerHTML='';
+    const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+  }
   document.getElementById('chatPanel').classList.add('open');
+  showSkillPromo();
   document.getElementById('chatOverlay').classList.add('show');
-  setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;waitingForUser=true;document.getElementById('chatInput').focus();},600);},400);
+  if(!keepHistory){
+    setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;waitingForUser=true;document.getElementById('chatInput').focus();},600);},400);
+  }else{
+    waitingForUser=true;document.getElementById('chatInput').focus();
+  }
 }
 
 function sendMessage(){
@@ -599,7 +780,252 @@ function sendMessage(){
   setTimeout(()=>handleUserInput(text),400);
 }
 
+
+// Health & crisis detection before routing to domain engine
+function detectHealthOrCrisis(text){
+  const crisisKeywords=['自杀','不想活','活不下去','伤害自己','想结束','轻生'];
+  const physicalKeywords=[
+    '疱疹','湿疹','发烧','发热','咳嗽','头疼','头痛','胃疼','腹痛','腹泻',
+    '过敏','感染','发炎','出血','吐血','便血','肿块','肿瘤','结石',
+    '骨折','扭伤','烧伤','烫伤','剧痛','持续痛',
+    '视力模糊','听不见','大小便失禁',
+    '心跳过速','心律不齐','胸痛','胸闷','呼吸困难','喘不上气',
+    '中风','癫痫','抽搐','昏迷','晕厥',
+    '口腔溃疡','牙痛','牙肿',
+    '吃药','用药','药物','副作用','戒断',
+    '怀孕','流产','不孕',
+    '癌','瘤','晚期','化疗','放疗',
+    '血压高','血压低','糖尿病','血糖','甲状腺',
+    '痔疮','肛裂','带状疱疹','单纯疱疹'
+  ];
+  const hasCrisis=crisisKeywords.some(k=>text.includes(k));
+  const hasPhysical=physicalKeywords.some(k=>text.includes(k));
+  
+  if(hasCrisis){
+    return {
+      type:'crisis',
+      response:'我听到了你的话，这让我很担心。你现在的感受很真实，请一定要记住：你不是一个人。\n\n如果你有伤害自己的想法，请立即拨打：\n• 北京心理危机研究与干预中心：010-82951332\n• 全国心理援助热线：400-161-9995\n• 紧急情况请拨打 120\n\n你的生命很重要，请一定寻求专业帮助。我在这里陪着你。'
+    };
+  }
+  if(hasPhysical){
+    return {
+      type:'physical',
+      response:'你提到了身体健康方面的问题。这类情况我没办法替代专业医生的诊断——这不是我不想帮你，而是身体健康需要真正的医学专业判断。\n\n**强烈建议你：**\n1. 如果是急性或严重症状，请立即就医或拨打 120\n2. 如果是慢性或轻微症状，尽快预约医生检查\n3. 不要自行用药，尤其是处方药\n\n如果你愿意告诉我，这种身体不适是否和你最近的心理状态有关——比如压力大、焦虑时身体出现反应——我可以在心理层面帮你梳理。但身体本身，请一定交给专业医生。',
+      quick:['去看医生了','已经在治疗','医生说没什么大事','身体不舒服心情不好']
+    };
+  }
+  return null;
+}
+
+// Detect if user input doesn't match selected domain
+// 问题域语义匹配引擎：多层关键词+模式匹配
+const DOMAIN_PATTERNS={
+  delay:{
+    name:'拖延',
+    keywords:['拖延','不想','动不起来','启动','deadline','截止','效率','懒得','没动力','动不了','启动困难','迟迟','拖了','拖着','拖延症','迟迟不','一直没','没去','没做','没动手','没开始','迟迟未','一拖再拖','推到','推迟','延后','迟迟不动','拖拖拉拉','惰性','不想动','懒得动','迈不开','开始困难','第一步','迟迟不做','拖着不','拖延','迟迟不开始','一直拖着','迟迟不动'],
+    patterns:[
+      {regex:/拖.{0,4}(年|月|天|周|久|很久|好久)/,score:3},
+      {regex:/一直.{0,3}(没|不|未)/,score:2.5},
+      {regex:/迟迟.{0,3}(没|不|未|不动|不做)/,score:3},
+      {regex:/.{0,4}没(去|做|开始|动手|行动|提交|投)/,score:2},
+      {regex:/.{0,3}不想.{0,3}(做|动|去|开始|搞|弄)/,score:2},
+      {regex:/.{0,3}懒得.{0,3}(动|做|搞|弄|去)/,score:2},
+      {regex:/.{0,3}动不.{0,3}(起来|了)/,score:2.5},
+      {regex:/.{0,3}启动.{0,3}(困难|不了|不起来)/,score:2.5},
+      {regex:/.{0,4}deadline.{0,4}(快|近|到|过)/i,score:2},
+      {regex:/.{0,4}截止.{0,4}(快|到|日期|时间)/,score:2},
+      {regex:/.{0,3}效率.{0,3}(低|差|慢|不高)/,score:2}
+    ]
+  },
+  anxiety:{
+    name:'焦虑',
+    keywords:['焦虑','紧张','压力','担心','不安','慌','失眠','睡不着','忐忑','惶恐','忧虑','烦躁','焦虑症','心慌','心烦','压力大','压力山大','紧张不安','坐立不安','吃不好','睡不好','睡不着觉','失眠症','心烦意乱','惶恐不安','提心吊胆','忧心','焦虑的','焦虑感','过度担心','总是担心','莫名紧张','莫名焦虑','考试焦虑','社交焦虑','分离焦虑'],
+    patterns:[
+      {regex:/.{0,3}焦虑.{0,4}(症|感|不安|情绪|紧张)/,score:3},
+      {regex:/.{0,3}紧张.{0,4}(不安|慌|手心|冒汗|心跳)/,score:2.5},
+      {regex:/.{0,3}压力.{0,4}(大|很大|山大|爆|爆表|承受)/,score:2.5},
+      {regex:/.{0,3}担心.{0,4}(过度|一直|总是|莫名)/,score:2},
+      {regex:/.{0,3}不安.{0,4}(忐忑|惶恐|焦虑|紧张)/,score:2},
+      {regex:/.{0,3}失眠.{0,4}(症|了|严重|长期|经常)/,score:2.5},
+      {regex:/.{0,3}睡.{0,2}不.{0,2}(着|好|安稳)/,score:2},
+      {regex:/.{0,3}心慌.{0,4}(意乱|意乱|紧张|焦虑)/,score:2},
+      {regex:/.{0,3}心烦.{0,4}(意乱|气躁|焦虑|紧张)/,score:2}
+    ]
+  },
+  internal:{
+    name:'内耗',
+    keywords:['内耗','纠结','想太多','反复','犹豫','矛盾','后悔','自我怀疑','想来想去','放不下','折磨','内耗严重','精神内耗','心理内耗','自我消耗','胡思乱想','钻牛角尖','绕不出来','卡住','想不通','过不去','想不开','自我否定','自我攻击','反复想','反复纠结','来回想','想来想去','左思右想','前思后想','辗转反侧','食不知味','夜不能寐'],
+    patterns:[
+      {regex:/.{0,3}内耗.{0,4}(严重|厉害|难受|痛苦|折磨)/,score:3},
+      {regex:/.{0,3}纠结.{0,4}(死|不已|半天|很久|半天|想|反复)/,score:2.5},
+      {regex:/.{0,3}想.{0,3}太.{0,3}多/,score:2.5},
+      {regex:/.{0,3}反复.{0,3}(想|纠结|思考|琢磨|折磨)/,score:2.5},
+      {regex:/.{0,3}犹豫.{0,4}(不决|不定|很久|半天)/,score:2},
+      {regex:/.{0,3}矛盾.{0,4}(心理|纠结|挣扎|冲突)/,score:2},
+      {regex:/.{0,3}后悔.{0,4}(了|不已|死|莫及)/,score:2},
+      {regex:/.{0,3}自我.{0,3}(怀疑|否定|攻击|内耗|消耗)/,score:2.5},
+      {regex:/.{0,3}想来.{0,2}想.{0,2}去/,score:2},
+      {regex:/.{0,3}放不下.{0,4}(来|了|心|事)/,score:2}
+    ]
+  },
+  express:{
+    name:'表达',
+    keywords:['表达','说','沟通','不敢开口','不会说','社恐','发言','说不出口','词不达意','不知道怎么说','口吃','沟通障碍','表达困难','不敢说话','不会表达','不善言辞','沉默寡言','难以启齿','开不了口','说不清楚','讲不清楚','表达障碍','社交恐惧','害怕说话','害怕表达','不敢发言','不敢讲话','不会讲话','不善表达','词不达意','言不达意','心里有话说不出'],
+    patterns:[
+      {regex:/.{0,3}不敢.{0,3}(开口|说|说话|表达|发言|讲话)/,score:3},
+      {regex:/.{0,3}不会.{0,3}(说|表达|讲话|沟通)/,score:2.5},
+      {regex:/.{0,3}社恐.{0,4}(症|了|严重|害怕)/,score:2.5},
+      {regex:/.{0,3}说.{0,2}不.{0,2}出口/,score:2.5},
+      {regex:/.{0,3}词不达.{0,2}意/,score:2.5},
+      {regex:/.{0,3}不知道.{0,3}(怎么|如何)说/,score:2.5},
+      {regex:/.{0,3}沟通.{0,4}(障碍|困难|不了|有问题)/,score:2},
+      {regex:/.{0,3}表达.{0,4}(困难|障碍|不了|不好)/,score:2},
+      {regex:/.{0,3}不善.{0,3}(言辞|表达|沟通)/,score:2},
+      {regex:/.{0,3}难以.{0,3}(启齿|开口|表达)/,score:2}
+    ]
+  },
+  eq:{
+    name:'情商',
+    keywords:['情绪','发火','愤怒','脾气','人际','关系','控制不住','共情','生气','愤怒','烦躁','发脾气','情绪管理','相处','沟通障碍','情绪化','脾气差','控制情绪','管理情绪','情绪失控','情商低','不会做人','不会处事','人际关系','人际问题','相处困难','沟通困难','性格问题','脾气暴躁','易怒','爱生气','容易生气','情绪化','感性','情商','低情商','情绪调节','情绪表达','情绪智力','社交能力','人际能力','处理关系','处理人际','处事'],
+    patterns:[
+      {regex:/.{0,3}情绪.{0,4}(失控|管理|问题|不好|差|低)/,score:3},
+      {regex:/.{0,3}发.{0,1}火.{0,3}(了|脾气|怒|飙)/,score:2.5},
+      {regex:/.{0,3}愤怒.{0,4}(了|不已|暴怒|爆发)/,score:2.5},
+      {regex:/.{0,3}脾气.{0,4}(差|不好|暴躁|大|改)/,score:2.5},
+      {regex:/.{0,3}控制.{0,3}(不住|不了|不住.{0,3}(情绪|自己))/,score:2.5},
+      {regex:/.{0,3}情商.{0,4}(低|差|不高|不够|需要)/,score:2.5},
+      {regex:/.{0,3}人际.{0,4}(关系|交往|相处|问题|困难|障碍)/,score:2},
+      {regex:/.{0,3}关系.{0,4}(处理|相处|维护|改善|修复)/,score:2},
+      {regex:/.{0,3}共情.{0,4}(力|能力|差|低|不够)/,score:2},
+      {regex:/.{0,3}容易.{0,3}(生气|发火|愤怒|情绪化)/,score:2}
+    ]
+  }
+};
+
+// 计算单个问题域的匹配分数
+function calcDomainScore(text,domainKey){
+  const pattern=DOMAIN_PATTERNS[domainKey];
+  if(!pattern)return{score:0,matched:[]};
+  let score=0;
+  const matched=[];
+  // 1. 关键词精确匹配
+  pattern.keywords.forEach(kw=>{
+    if(text.includes(kw)){
+      score+=1;
+      matched.push({type:'keyword',word:kw,weight:kw.length>=3?1.5:1});
+    }
+  });
+  // 2. 语义模式匹配
+  pattern.patterns.forEach(p=>{
+    if(p.regex.test(text)){
+      score+=p.score;
+      matched.push({type:'pattern',pattern:p.regex.toString(),weight:p.score});
+    }
+  });
+  return{score:score,matched:matched};
+}
+
+// 检测问题域不匹配：只有当当前域匹配分数<1 且其他域有更高分数时才判定为不匹配
+function detectDomainMismatch(text,domainKey){
+  const currentScore=calcDomainScore(text,domainKey).score;
+  if(currentScore>=2){
+    return false;  // 当前域匹配度足够高
+  }
+  // 计算所有域的分数
+  const allScores={};
+  Object.keys(DOMAIN_PATTERNS).forEach(key=>{
+    allScores[key]=calcDomainScore(text,key).score;
+  });
+  // 找出最高分
+  let maxScore=0,maxDomain=null;
+  Object.entries(allScores).forEach(([k,v])=>{
+    if(v>maxScore){maxScore=v;maxDomain=k;}
+  });
+  // 如果当前域分数很低，且有其他域分数更高，则判定为不匹配
+  if(currentScore<1 && maxScore>=2 && maxDomain!==domainKey){
+    return true;
+  }
+  // 如果文本太短，不判定
+  if(text.length<=10)return false;
+  // 如果没有任何域匹配到，也不判定（可能是新的问题）
+  if(maxScore===0)return false;
+  return false;
+}
+
+// 智能推荐问题域
+function recommendDomain(text){
+  const scores={};
+  Object.keys(DOMAIN_PATTERNS).forEach(key=>{
+    scores[key]=calcDomainScore(text,key).score;
+  });
+  const domainNames={delay:'拖延',anxiety:'焦虑',internal:'内耗',express:'表达',eq:'情商'};
+  let bestDomain=null,bestScore=0;
+  const sorted=[];
+  Object.entries(scores).forEach(([k,v])=>{
+    sorted.push({key:k,score:v,name:domainNames[k]});
+    if(v>bestScore){bestScore=v;bestDomain=k;}
+  });
+  sorted.sort((a,b)=>b.score-a.score);
+  if(bestScore>0){
+    return{
+      key:bestDomain,
+      name:domainNames[bestDomain],
+      score:bestScore,
+      sorted:sorted,
+      scores:scores
+    };
+  }
+  return null;
+}
+
 function handleUserInput(text){
+  // Step 0: Check for physical health or crisis first
+  const healthCheck=detectHealthOrCrisis(text);
+  if(healthCheck){
+    addBot(healthCheck.response);
+    if(healthCheck.quick){
+      const qd=document.createElement('div');qd.className='chat-quick';
+      healthCheck.quick.forEach(q=>{
+        const b=document.createElement('button');b.className='quick-btn';b.textContent=q;
+        b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+    }
+    return;
+  }
+  
+  // Step 0.5: Check for domain mismatch
+  if(chatStep===1){
+    const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+    const dk=domainMap[curDomain.name]||'anxiety';
+    if(detectDomainMismatch(text,dk)){
+      // 智能推荐问题域
+      const recommendation=recommendDomain(text);
+      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
+      if(recommendation && recommendation.key!==dk){
+        msg+='根据你描述的情况，我更推荐试试「'+recommendation.name+'」：';
+      }else{
+        msg+='如果你觉得选的问题域不太对，可以重新选择：';
+      }
+      addBot(msg);
+      const qd=document.createElement('div');qd.className='chat-quick';
+      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+      domainList.forEach(d=>{
+        const b=document.createElement('button');
+        b.className='quick-btn'+(recommendation&&recommendation.key===d.key?' recommended':'');
+        let label=d.name;
+        if(recommendation&&recommendation.key===d.key)label=''+d.name+' ⭐';
+        b.textContent=label;
+        b.onclick=()=>startChat(d.key,true);
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+      addBot('你也可以继续说下去，我会根据你说的来判断。');
+      return;
+    }
+  }
+  
   if(chatStep===1){
     savedUserText1=text;
     const result=curDomain.respond1(text);
@@ -620,7 +1046,7 @@ function handleUserInput(text){
             ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
               const dk=['delay','anxiety','internal','express','eq'][i];
               const b=document.createElement('button');b.className='quick-btn';b.textContent=n;
-              b.onclick=()=>startChat(dk);qd.appendChild(b);
+              b.onclick=()=>startChat(dk,true);qd.appendChild(b);
             });
             document.getElementById('chatBody').appendChild(qd);scrollChat();
           },400);
@@ -641,6 +1067,24 @@ function showTyping(){const d=document.createElement('div');d.className='chat-ty
 function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
 function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
 function closeChat(){document.getElementById('chatPanel').classList.remove('open');document.getElementById('chatOverlay').classList.remove('show');}
+
+function openSkillGuide(){
+  window.open('https://github.com/Josie-design-dhb/BookPill/tree/main', '_blank');
+}
+
+// 初始化：当问诊面板打开时显示提示
+function showSkillPromo(){
+  const promo = document.getElementById('skillPromo');
+  if(promo){
+    promo.style.display = 'flex';
+  }
+}
+function hideSkillPromo(){
+  const promo = document.getElementById('skillPromo');
+  if(promo){
+    promo.style.display = 'none';
+  }
+}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 function scrollToDomains(){document.getElementById('domains').scrollIntoView({behavior:'smooth'})}
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});

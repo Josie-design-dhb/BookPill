@@ -2,7 +2,8 @@
 
 > 从个人 Skill 升级为社区共建 Agent — 不只是回答问题，而是记住你、理解你、持续陪伴你。
 
-**GitHub**: https://github.com/Josie3218/BookPill  
+**GitHub**: https://github.com/Josie-design-dhb/BookPill  
+**在线体验**: https://josie-design-dhb.github.io/BookPill/
 **许可证**: MIT  
 **版本**: v2.0.0  
 **状态**: 社区共建中
@@ -52,6 +53,9 @@ BookPill-v2/
 ├── README.md                              # 本文件
 ├── CONTRIBUTING.md                        # 社区贡献指南
 ├── CONTRIBUTORS.md                        # 贡献者名录
+├── index.html                             # 项目落地页（国风复古风格）
+├── submit.html                            # 在线投稿表单
+├── community.html                         # 社区动态页（实时投稿/新增/贡献者）
 ├── skills/
 │   └── bookpill/
 │       ├── SKILL.md                       # v2 核心技能定义
@@ -94,8 +98,15 @@ BookPill-v2/
 | 方式 | 适合 | 链接 |
 |------|------|------|
 | GitHub PR | 熟悉 Git 的开发者 | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Issue 模板 | 有 GitHub 账号 | [投稿入口](https://github.com/Josie3218/BookPill/issues/new/choose) |
-| 在线表单 | 所有人 | 链接待激活 |
+| Issue 模板 | 有 GitHub 账号 | [投稿入口](https://github.com/Josie-design-dhb/BookPill/issues/new/choose) |
+| 在线表单 | 所有人 | [立即投稿](https://josie-design-dhb.github.io/BookPill/submit.html) |
+
+### 社区动态
+
+查看社区成员最近投了什么书、哪些书被收录了、谁在贡献：
+
+- **社区动态页**：[https://josie-design-dhb.github.io/BookPill/community.html](https://josie-design-dhb.github.io/BookPill/community.html)
+- **GitHub Issues**：[查看所有投稿](https://github.com/Josie-design-dhb/BookPill/issues?q=label:book-submission)
 
 ### 贡献者等级
 
@@ -126,6 +137,7 @@ BookPill-v2/
 |------|------|------|
 | v1.0 | 2026-01 | 初始版本，21本书，六步工作流 |
 | v2.0 | 2026-08 | 升级为 Agent：记忆系统、跟进闭环、多轮深聊、个性化、社区共建 |
+| v2.0+ | 2026-08 | 新增社区前端：在线投稿表单、社区动态页、实时投稿流 |
 
 ---
 
