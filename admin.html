@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>审核台 · BookPill</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{
+  --paper:#FAF6ED;--rice:#F5EFE3;--ink:#2C2825;--ink-soft:#6B6256;
+  --gold:#B89F6B;--gold-dark:#8B7B5E;--vermillion:#C5532E;
+  --vermillion-dark:#A04325;--aged:#D4C9B5;--aged-dark:#B8A88E;
+  --green:#7A9B6E;--display:'ZCOOL XiaoWei','PingFang SC',serif;
+  --cal:'Ma Shan Zheng','STKaiti',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);min-height:100vh;padding:24px}
+.container{max-width:960px;margin:0 auto}
+h1{font-family:var(--cal);font-size:28px;color:var(--vermillion);margin-bottom:6px}
+.subtitle{color:var(--ink-soft);font-size:14px;margin-bottom:24px}
+
+/* 登录 */
+.login-box{background:var(--rice);border:1.5px solid var(--aged);border-radius:16px;padding:32px;max-width:380px;margin:60px auto;text-align:center}
+.login-box h2{font-family:var(--cal);font-size:20px;margin-bottom:16px}
+.login-box input{width:100%;padding:10px 14px;border:1.5px solid var(--aged);border-radius:8px;font-size:14px;margin-bottom:12px;background:#fff}
+.login-box button{width:100%;padding:12px;background:var(--vermillion);color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:var(--display)}
+.login-box button:hover{background:var(--vermillion-dark)}
+.login-box .hint{font-size:12px;color:var(--ink-soft);margin-top:10px}
+
+/* 审核列表 */
+.admin-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.admin-bar .stats{font-size:13px;color:var(--ink-soft)}
+.admin-bar button.logout{padding:6px 16px;background:transparent;border:1px solid var(--aged);border-radius:6px;color:var(--ink-soft);cursor:pointer;font-size:13px}
+
+.book-list{display:flex;flex-direction:column;gap:16px}
+.book-card{background:var(--rice);border:1.5px solid var(--aged);border-radius:14px;padding:20px 24px}
+.book-card.pending{border-left:4px solid var(--gold)}
+.book-card.approved{border-left:4px solid var(--green)}
+.book-card.rejected{border-left:4px solid #ccc;opacity:.6}
+
+.book-title{font-family:var(--cal);font-size:18px;color:var(--ink)}
+.book-author{font-size:13px;color:var(--gold-dark);margin-top:2px}
+.book-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.book-meta .tag{font-size:11px;padding:2px 10px;border-radius:4px;background:rgba(184,159,107,.15);color:var(--gold-dark)}
+.book-meta .status{font-size:11px;padding:2px 10px;border-radius:4px}
+.book-meta .status.pending{background:rgba(184,159,107,.2);color:var(--gold-dark)}
+.book-meta .status.approved{background:rgba(122,155,110,.2);color:var(--green)}
+.book-meta .status.rejected{background:rgba(200,200,200,.2);color:#999}
+.book-info{margin-top:12px;font-size:13px;line-height:1.8;color:var(--ink-soft)}
+.book-info .label{color:var(--gold-dark);font-weight:bold;margin-right:4px}
+.book-info .content{margin-bottom:8px}
+.book-contributor{font-size:12px;color:var(--ink-soft);margin-top:8px;font-style:italic}
+.book-actions{display:flex;gap:10px;margin-top:14px}
+.book-actions button{padding:8px 20px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:var(--display)}
+.btn-approve{background:var(--green);color:#fff}
+.btn-approve:hover{background:#688A5E}
+.btn-reject{background:transparent;border:1.5px solid #ccc !important;color:#999}
+.btn-reject:hover{background:#f5f5f5}
+
+.empty{text-align:center;padding:60px 20px;color:var(--ink-soft);font-size:14px}
+.loading{text-align:center;padding:40px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>审核台</h1>
+  <p class="subtitle">社区投稿书籍审核 · BookPill</p>
+
+  <div id="loginView" class="login-box">
+    <h2>管理员登录</h2>
+    <input type="password" id="adminPwd" placeholder="输入审核密码" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">进入审核台</button>
+    <p class="hint">密码在 Supabase SQL schema 中设置</p>
+  </div>
+
+  <div id="adminView" style="display:none">
+    <div class="admin-bar">
+      <div class="stats" id="stats">加载中…</div>
+      <button class="logout" onclick="logout()">退出</button>
+    </div>
+    <div id="bookList" class="book-list">
+      <div class="loading">加载中…</div>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="supabase.js"></script>
+<script>
+var adminPwd = '';
+
+function doLogin(){
+  var pwd = document.getElementById('adminPwd').value.trim();
+  if(!pwd){ alert('请输入密码'); return; }
+  adminPwd = pwd;
+  // 测试密码是否正确
+  BookPillSupabase.adminGetAll(adminPwd).then(function(data){
+    if(!data || data.length === 0){
+      // 可能是密码错误，也可能是没有数据
+      // 尝试获取 pending 来验证密码
+      BookPillSupabase.adminGetPending(adminPwd).then(function(pending){
+        if(pending && pending.length === 0){
+          // 密码正确但没有待审核数据
+        }
+        showAdminView([]);
+      }).catch(function(){
+        // 密码错误或RPC未配置
+        alert('密码错误或审核功能未配置，请先在 Supabase 中运行 schema.sql');
+        adminPwd = '';
+      });
+    } else {
+      showAdminView(data);
+    }
+  }).catch(function(e){
+    alert('登录失败：' + (e.message || '未知错误') + '\n请确认已在 Supabase 中运行 schema.sql');
+    adminPwd = '';
+  });
+}
+
+function showAdminView(books){
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('adminView').style.display = 'block';
+  renderBooks(books);
+  // 持久化密码到 sessionStorage
+  sessionStorage.setItem('bp_admin', adminPwd);
+}
+
+function renderBooks(books){
+  var list = document.getElementById('bookList');
+  var stats = document.getElementById('stats');
+  
+  if(!books || books.length === 0){
+    list.innerHTML = '<div class="empty">暂无投稿记录</div>';
+    stats.textContent = '共 0 条记录';
+    return;
+  }
+
+  var pending = books.filter(function(b){return b.status==='pending';});
+  var approved = books.filter(function(b){return b.status==='approved';});
+  stats.textContent = '待审核 ' + pending.length + ' · 已收录 ' + approved.length + ' · 共 ' + books.length + ' 条';
+
+  list.innerHTML = books.map(function(b){
+    var domains = [];
+    try{ domains = typeof b.domain === 'string' ? JSON.parse(b.domain) : (b.domain||[]); }catch(e){}
+    return '<div class="book-card ' + b.status + '">'
+      + '<div class="book-title">' + esc(b.title) + '</div>'
+      + '<div class="book-author">' + esc(b.author) + '</div>'
+      + '<div class="book-meta">'
+        + '<span class="status ' + b.status + '">' + statusText(b.status) + '</span>'
+        + domains.map(function(d){return '<span class="tag">'+esc(d)+'</span>';}).join('')
+      + '</div>'
+      + '<div class="book-info">'
+        + (b.scene ? '<div class="content"><span class="label">推荐场景：</span>' + esc(b.scene) + '</div>' : '')
+        + (b.core_view ? '<div class="content"><span class="label">核心观点：</span>' + esc(b.core_view) + '</div>' : '')
+        + (b.steps ? '<div class="content"><span class="label">良方：</span>' + esc(b.steps) + '</div>' : '')
+        + (b.quotes ? '<div class="content"><span class="label">金句：</span>' + esc(b.quotes) + '</div>' : '')
+        + (b.audience ? '<div class="content"><span class="label">适用人群：</span>' + esc(b.audience) + '</div>' : '')
+        + (b.book_desc ? '<div class="content"><span class="label">简介：</span>' + esc(b.book_desc) + '</div>' : '')
+      + '</div>'
+      + '<div class="book-contributor">投稿人：' + esc(b.contributor||'匿名') + ' · ' + fmtTime(b.created_at) + '</div>'
+      + (b.status === 'pending' ? '<div class="book-actions">'
+        + '<button class="btn-approve" onclick="approveBook(' + b.id + ')">通过收录</button>'
+        + '<button class="btn-reject" onclick="rejectBook(' + b.id + ')">拒绝</button>'
+      + '</div>' : '')
+    + '</div>';
+  }).join('');
+}
+
+function approveBook(id){
+  BookPillSupabase.adminApprove(adminPwd, id).then(function(){
+    reloadList();
+  }).catch(function(e){ alert('操作失败：' + e.message); });
+}
+
+function rejectBook(id){
+  if(!confirm('确认拒绝这本书的投稿？')) return;
+  BookPillSupabase.adminReject(adminPwd, id).then(function(){
+    reloadList();
+  }).catch(function(e){ alert('操作失败：' + e.message); });
+}
+
+function reloadList(){
+  BookPillSupabase.adminGetAll(adminPwd).then(function(data){
+    renderBooks(data);
+  }).catch(function(e){
+    document.getElementById('bookList').innerHTML = '<div class="empty">加载失败，请刷新重试</div>';
+  });
+}
+
+function logout(){
+  adminPwd = '';
+  sessionStorage.removeItem('bp_admin');
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('adminView').style.display = 'none';
+  document.getElementById('adminPwd').value = '';
+}
+
+function statusText(s){
+  return {pending:'待审核', approved:'已收录', rejected:'未通过'}[s] || s;
+}
+function fmtTime(t){
+  if(!t) return '';
+  var d = new Date(t);
+  return (d.getMonth()+1) + '月' + d.getDate() + '日 ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function esc(s){ return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// 自动登录
+var saved = sessionStorage.getItem('bp_admin');
+if(saved){ adminPwd = saved; doLogin(); }
+</script>
+</body>
+</html>

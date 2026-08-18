@@ -14,3 +14,9 @@ desktop.ini
 *.bak
 *.log
 __pycache__/
+
+# Supabase config (contains project-specific keys)
+supabase-config.js
+
+# Deploy scripts
+deploy_to_supabase.py

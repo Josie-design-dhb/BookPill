@@ -167,6 +167,46 @@ section{padding:96px 0;position:relative}
 .prescription .p-steps{list-style:none;margin-bottom:12px}
 .prescription .p-steps li{font-size:13px;color:var(--ink);padding:5px 0;padding-left:0;line-height:1.7}
 .prescription .p-quote{font-family:var(--cal);font-size:15px;color:var(--vermillion-dark);text-align:center;padding:10px 0;border-top:1px dashed var(--aged-dark);margin-top:8px;line-height:1.6}
+.p-confidence{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:100px;font-size:11px;font-family:var(--display);letter-spacing:.12em;margin-left:auto}
+.p-confidence.high{background:rgba(107,142,111,.14);color:#4a6b54}
+.p-confidence.medium{background:rgba(184,159,107,.16);color:#8a7743}
+.p-confidence.low{background:rgba(184,64,64,.12);color:var(--vermillion-dark)}
+.p-conf-badge{display:inline-flex;align-items:center;gap:4px}
+.p-feedback{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(184,159,107,.3)}
+.p-feedback button{flex:1;padding:7px 10px;border-radius:8px;font-size:12px;font-family:var(--display);letter-spacing:.06em;transition:var(--t);cursor:pointer}
+.p-feedback .fb-fit{background:rgba(107,142,111,.1);color:#4a6b54;border:1px solid rgba(107,142,111,.22)}
+.p-feedback .fb-fit:hover{background:rgba(107,142,111,.2);border-color:#4a6b54}
+.p-feedback .fb-misfit{background:rgba(184,64,64,.06);color:var(--vermillion-dark);border:1px solid rgba(184,64,64,.2)}
+.p-feedback .fb-misfit:hover{background:rgba(184,64,64,.14);border-color:var(--vermillion)}
+.p-feedback .fb-done{opacity:.5;cursor:default;background:var(--aged);color:var(--ink-soft);border:1px solid var(--aged-dark)}
+.correction-panel{background:var(--paper);border:1.5px solid var(--vermillion);border-radius:12px;padding:16px;margin:4px 0;max-width:88%;align-self:flex-start;animation:msgIn .3s ease both}
+.correction-panel h4{font-family:var(--cal);font-size:15px;color:var(--vermillion);margin-bottom:8px}
+.correction-panel p{font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px}
+.correction-panel .cp-options{display:flex;gap:8px;flex-wrap:wrap}
+.correction-panel .cp-opt{padding:6px 14px;border-radius:100px;font-size:12px;background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.22);color:var(--vermillion-dark);cursor:pointer;transition:var(--t)}
+.correction-panel .cp-opt:hover{background:rgba(184,64,64,.18)}
+.correction-panel .cp-text{display:flex;gap:8px;margin-top:10px}
+.correction-panel .cp-text textarea{flex:1;background:var(--rice);border:1px solid var(--aged-dark);border-radius:8px;padding:8px 12px;font-size:13px;font-family:var(--serif);color:var(--ink);resize:none;min-height:60px}
+.correction-panel .cp-text button{padding:8px 16px;border-radius:8px;background:var(--vermillion);color:#fff;font-size:12px;font-family:var(--display)}
+.human-fallback{background:linear-gradient(135deg,rgba(184,64,64,.06),rgba(58,95,122,.06));border:1.5px solid var(--vermillion);border-radius:12px;padding:20px;margin:4px 0;max-width:88%;align-self:flex-start}
+.human-fallback h4{font-family:var(--cal);font-size:16px;color:var(--vermillion);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.human-fallback p{font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:12px}
+.human-fallback .hf-resources{list-style:none;padding:0}
+.human-fallback .hf-resources li{font-size:13px;color:var(--ink);padding:6px 0;display:flex;align-items:center;gap:8px}
+.human-fallback .hf-resources li::before{content:'→';color:var(--vermillion);font-weight:700}
+.human-fallback .hf-continue{display:inline-block;margin-top:12px;padding:8px 18px;border-radius:8px;background:rgba(184,159,107,.1);border:1px solid rgba(184,159,107,.28);color:var(--gold-dark);font-size:12px;font-family:var(--display);letter-spacing:.12em;cursor:pointer;transition:var(--t)}
+.human-fallback .hf-continue:hover{background:rgba(184,159,107,.2)}
+.clarify-panel{background:var(--paper);border:1.5px solid var(--gold);border-radius:12px;padding:16px;margin:4px 0;max-width:88%;align-self:flex-start}
+.clarify-panel h4{font-family:var(--cal);font-size:15px;color:var(--gold-dark);margin-bottom:8px}
+.clarify-panel p{font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px}
+.clarify-panel .cl-input{display:flex;gap:8px}
+.clarify-panel .cl-input textarea{flex:1;background:var(--rice);border:1px solid var(--aged-dark);border-radius:8px;padding:8px 12px;font-size:13px;font-family:var(--serif);color:var(--ink);resize:none;min-height:50px}
+.clarify-panel .cl-input button{padding:8px 16px;border-radius:8px;background:var(--gold);color:#fff;font-size:12px;font-family:var(--display)}
+.boundary-panel{background:rgba(184,64,64,.04);border:1.5px solid rgba(184,64,64,.25);border-radius:12px;padding:18px;margin:4px 0;max-width:88%;align-self:flex-start}
+.boundary-panel h4{font-family:var(--cal);font-size:15px;color:var(--vermillion);margin-bottom:8px}
+.boundary-panel p{font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:10px}
+.boundary-panel .bp-resource{display:inline-block;margin:4px 8px 4px 0;padding:6px 14px;border-radius:8px;background:rgba(58,95,122,.08);border:1px solid rgba(58,95,122,.22);color:#3A5F7A;font-size:12px;font-family:var(--display);text-decoration:none}
+.boundary-panel .bp-resource:hover{background:rgba(58,95,122,.15)}
 
 .chat-foot{padding:14px 16px;background:var(--paper);border-top:1px solid rgba(184,159,107,.12);flex-shrink:0}
 .chat-input-wrap{display:flex;gap:8px;align-items:flex-end}
@@ -310,6 +350,47 @@ footer .f-links a:hover{color:#fff}
   .hero-main{max-width:100%}
 }
 @media(max-width:380px){.hero-btns{flex-direction:column;align-items:stretch}.btn-consult,.btn-ghost{width:100%;text-align:center}}
+
+
+/* 对话历史面板 */
+.history-overlay{position:fixed;inset:0;background:rgba(44,40,37,.45);backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .25s ease}
+.history-panel{background:var(--paper);border-radius:18px;max-width:520px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(44,40,37,.25);animation:slideUp .3s ease}
+.hp-header{padding:18px 22px;border-bottom:1px solid rgba(184,159,107,.18);display:flex;align-items:center;justify-content:space-between}
+.hp-header h3{font-family:var(--cal);font-size:20px;color:var(--ink)}
+.hp-close,.hp-back{background:none;border:none;cursor:pointer;font-size:16px;color:var(--ink-soft);padding:6px 10px;border-radius:8px;transition:var(--t)}
+.hp-close:hover,.hp-back:hover{background:rgba(184,64,64,.08);color:var(--vermillion)}
+.hp-list{flex:1;overflow-y:auto;padding:12px}
+.hp-footer{padding:14px 22px;border-top:1px solid rgba(184,159,107,.12);text-align:center}
+.hp-clear{background:none;border:1px solid rgba(184,64,64,.3);color:var(--vermillion);padding:8px 20px;border-radius:100px;font-size:13px;font-family:var(--display);cursor:pointer;transition:var(--t)}
+.hp-clear:hover{background:rgba(184,64,64,.08)}
+.history-item{padding:14px 16px;border-radius:12px;cursor:pointer;transition:var(--t);border:1px solid transparent}
+.history-item:hover{background:rgba(184,159,107,.06);border-color:rgba(184,159,107,.2)}
+.hi-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.hi-domain{font-size:14px;font-family:var(--cal);color:var(--ink)}
+.hi-time{font-size:12px;color:var(--ink-faint);margin-left:auto}
+.hi-badge{font-size:11px;background:rgba(184,64,64,.08);color:var(--vermillion-dark);padding:2px 8px;border-radius:100px}
+.hi-preview{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:4px 0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hi-meta{font-size:11px;color:var(--ink-faint)}
+
+/* 历史详情 */
+.detail-panel{max-width:600px}
+.hp-detail-body{flex:1;overflow-y:auto;padding:18px 22px}
+.detail-msg{margin-bottom:12px;line-height:1.7}
+.detail-msg.user-msg{background:rgba(184,159,107,.08);padding:10px 14px;border-radius:12px;font-size:14px}
+.detail-msg.bot-msg{background:rgba(107,142,111,.06);padding:10px 14px;border-radius:12px;font-size:13.5px;color:var(--ink-soft)}
+.detail-prescription{background:var(--rice);border:1px solid rgba(184,159,107,.2);border-radius:14px;padding:16px;margin:10px 0}
+.dp-title{font-family:var(--cal);font-size:16px;color:var(--vermillion);margin-bottom:8px}
+.dp-book{font-size:12px;color:var(--ink-faint);margin-bottom:6px}
+.dp-insight{font-size:13.5px;color:var(--ink);margin-bottom:8px;font-style:italic}
+.dp-steps{margin:8px 0;padding-left:20px;font-size:13.5px;color:var(--ink-soft);line-height:1.8}
+.dp-quote{font-size:12.5px;color:var(--gold-dark);font-style:italic;margin-top:8px;padding-left:10px;border-left:2px solid var(--aged-dark)}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+
+.chat-history-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:var(--t)}
+.chat-history-btn:hover{background:rgba(184,159,107,.1)}
 
 </style>
 </head>
@@ -469,7 +550,10 @@ footer .f-links a:hover{color:#fff}
   <div class="chat-head">
     <div class="h-seal">方</div>
     <div class="h-info"><h4 id="chatTitle">纸上良方</h4><span id="chatSub">正在问诊...</span></div>
-    <button class="chat-close" onclick="closeChat()">✕</button>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <button class="chat-history-btn" onclick="openHistoryPanel()" title="问诊历史">📚</button>
+      <button class="chat-close" onclick="closeChat()">✕</button>
+    </div>
   </div>
   <div class="chat-body" id="chatBody"></div>
   <div class="chat-foot" id="chatFoot">
@@ -738,11 +822,252 @@ eq:{
 };
 
 let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='';
+let _currentConfidence='high';  // high | medium | low
+let _correctionCount=0;
+let _lastPrescription=null;
+let _lastPrescriptionId=null;
+
+// ============ 对话历史保存 ============
+const HISTORY_KEY = 'bookpill_sessions_v1';
+let _sessionMessages = [];  // 当前会话消息
+let _sessionStartTime = null;
+let _sessionDomain = null;
+
+function initSessionTracking(){
+  _sessionMessages = [];
+  _sessionStartTime = Date.now();
+  _sessionDomain = curDomain ? curDomain.name : null;
+}
+
+function trackMessage(role, text, extra={}){
+  try {
+    _sessionMessages.push({ role, text, time: Date.now(), ...extra });
+  } catch(e) {
+    console.warn('trackMessage failed:', e);
+  }
+}
+
+function saveSession(){
+  try {
+    if(!_sessionMessages.length) return;
+    let sessions = [];
+    try {
+      sessions = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      if(!Array.isArray(sessions)) sessions = [];
+    } catch(e) {
+      // 历史数据损坏，重置
+      sessions = [];
+      localStorage.setItem(HISTORY_KEY, '[]');
+    }
+    const session = {
+      id: 'sess_' + Date.now(),
+      domain: _sessionDomain || '未分类',
+      startTime: _sessionStartTime,
+      endTime: Date.now(),
+      messages: _sessionMessages,
+      messageCount: _sessionMessages.length
+    };
+    sessions.unshift(session);
+    // 最多保留 50 条
+    const trimmed = sessions.slice(0, 50);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+    showToast('问诊已保存至历史');
+  } catch(e) {
+    console.warn('saveSession failed:', e);
+    // 即使保存失败也不让主流程崩溃
+  }
+}
+
+function getSessions(){
+  try {
+    const data = localStorage.getItem(HISTORY_KEY);
+    if(!data) return [];
+    const sessions = JSON.parse(data);
+    if(!Array.isArray(sessions)) {
+      // 数据格式异常，重置
+      localStorage.setItem(HISTORY_KEY, '[]');
+      return [];
+    }
+    return sessions;
+  } catch(e) {
+    // 历史数据损坏，重置
+    try { localStorage.setItem(HISTORY_KEY, '[]'); } catch(e2) {}
+    return [];
+  }
+}
+
+function deleteSession(id){
+  try {
+    const sessions = getSessions().filter(s => s.id !== id);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(sessions));
+  } catch(e) {
+    console.warn('deleteSession failed:', e);
+  }
+}
+
+function clearAllSessions(){
+  try {
+    localStorage.removeItem(HISTORY_KEY);
+  } catch(e) {
+    console.warn('clearAllSessions failed:', e);
+  }
+}
+
+function formatTime(ts){
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMs = now - d;
+  const diffDays = Math.floor(diffMs / 86400000);
+  if(diffDays === 0){
+    const h = d.getHours().toString().padStart(2,'0');
+    const m = d.getMinutes().toString().padStart(2,'0');
+    return `今天 ${h}:${m}`;
+  } else if(diffDays === 1){
+    return '昨天';
+  } else if(diffDays < 7){
+    return `${diffDays}天前`;
+  } else {
+    return `${d.getMonth()+1}/${d.getDate()}`;
+  }
+}
+
+function openHistoryPanel(){
+  const sessions = getSessions();
+  const panel = document.createElement('div');
+  panel.className = 'history-overlay';
+  panel.id = 'historyOverlay';
+  
+  let sessionsHtml = '';
+  if(!sessions.length){
+    sessionsHtml = '<div style="text-align:center;padding:40px;color:var(--ink-faint);font-size:14px">暂无历史记录<br><span style="font-size:12px">完成一次问诊后会自动保存</span></div>';
+  } else {
+    sessionsHtml = sessions.map(s => {
+      const domainIcon = {'拖延':'⏰','焦虑':'🌊','内耗':'🌀','表达':'💬','情商':'🌱'}[s.domain] || '📖';
+      const userMsgs = s.messages.filter(m => m.role === 'user').map(m => m.text).slice(0,2);
+      const preview = userMsgs.length ? userMsgs.join(' · ') : '(未记录)';
+      const hasPrescription = s.messages.some(m => m.role === 'prescription');
+      return `
+        <div class="history-item" data-id="${s.id}">
+          <div class="hi-header">
+            <span class="hi-domain">${domainIcon} ${s.domain}</span>
+            <span class="hi-time">${formatTime(s.startTime)}</span>
+            ${hasPrescription ? '<span class="hi-badge">📋 有处方</span>' : ''}
+          </div>
+          <div class="hi-preview">${preview}</div>
+          <div class="hi-meta">${s.messageCount} 条对话</div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  panel.innerHTML = `
+    <div class="history-panel">
+      <div class="hp-header">
+        <h3>📚 问诊历史</h3>
+        <button class="hp-close" onclick="document.getElementById('historyOverlay').remove()">✕</button>
+      </div>
+      <div class="hp-list">${sessionsHtml}</div>
+      ${sessions.length ? '<div class="hp-footer"><button class="hp-clear" id="hpClear">清空历史</button></div>' : ''}
+    </div>
+  `;
+  
+  document.body.appendChild(panel);
+  
+  // 绑定事件
+  panel.querySelectorAll('.history-item').forEach(item => {
+    item.onclick = () => {
+      const id = item.getAttribute('data-id');
+      showSessionDetail(id);
+    };
+  });
+  
+  const clearBtn = document.getElementById('hpClear');
+  if(clearBtn){
+    clearBtn.onclick = () => {
+      if(confirm('确定要清空所有问诊历史吗？')){
+        clearAllSessions();
+        panel.remove();
+        openHistoryPanel();  // 刷新
+      }
+    };
+  }
+}
+
+function showSessionDetail(id){
+  const sessions = getSessions();
+  const session = sessions.find(s => s.id === id);
+  if(!session) return;
+  
+  const domainIcon = {'拖延':'⏰','焦虑':'🌊','内耗':'🌀','表达':'💬','情商':'🌱'}[session.domain] || '📖';
+  
+  let html = `
+    <div class="history-overlay" id="historyDetail">
+      <div class="history-panel detail-panel">
+        <div class="hp-header">
+          <h3>${domainIcon} ${session.domain} · ${formatTime(session.startTime)}</h3>
+          <div>
+            <button class="hp-back" onclick="document.getElementById('historyDetail').remove();openHistoryPanel()">← 返回</button>
+            <button class="hp-close" onclick="document.getElementById('historyDetail').remove()">✕</button>
+          </div>
+        </div>
+        <div class="hp-detail-body">
+  `;
+  
+  session.messages.forEach(m => {
+    if(m.role === 'user'){
+      html += `<div class="detail-msg user-msg">${m.text}</div>`;
+    } else if(m.role === 'bot'){
+      html += `<div class="detail-msg bot-msg">${m.text.replace(/\n/g,'<br>')}</div>`;
+    } else if(m.role === 'prescription'){
+      const p = m.prescription || {};
+      const stepsHtml = (p.steps || []).map(s => `<li>${s}</li>`).join('');
+      html += `
+        <div class="detail-prescription">
+          <div class="dp-title">📖 处方笺</div>
+          <div class="dp-book">来自：${p.book || ''}</div>
+          <div class="dp-insight">${p.insight || ''}</div>
+          <ul class="dp-steps">${stepsHtml}</ul>
+          <div class="dp-quote">"${p.quote || ''}"</div>
+        </div>
+      `;
+    }
+  });
+  
+  html += '</div></div></div>';
+  
+  // 移除之前的历史面板
+  const old = document.getElementById('historyOverlay');
+  if(old) old.remove();
+  const detail = document.createElement('div');
+  detail.innerHTML = html;
+  document.body.appendChild(detail.firstElementChild);
+}
+
 
 function startChat(domain,keepHistory){
+  // Reset correction tracking
+  _correctionCount = 0;
+  _currentConfidence = 'high';
+  _lastPrescription = null;
+  _lastPrescriptionId = null;
+  
   curDomain=engines[domain];
+  _sessionDomain = curDomain.name;
+  _sessionStartTime = Date.now();
+  _sessionMessages = [];
   document.getElementById('chatTitle').textContent=curDomain.name;
   document.getElementById('chatSub').textContent=curDomain.sub;
+  // Update confidence indicator in header
+  const confInd = document.createElement('span');
+  confInd.id = 'chatConfBadge';
+  confInd.style.cssText = 'margin-left:8px;padding:2px 8px;border-radius:100px;font-size:10px;background:rgba(107,142,111,.14);color:#4a6b54;font-family:var(--display);letter-spacing:.08em';
+  confInd.textContent = '● 高置信度';
+  const chatHead = document.querySelector('.chat-head');
+  if(chatHead){
+    const hInfo = chatHead.querySelector('.h-info');
+    if(hInfo){ hInfo.appendChild(confInd); }
+    else { chatHead.appendChild(confInd); }
+  }
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
     chatStep=1;savedPatterns={};savedUserText1='';
@@ -819,6 +1144,7 @@ function detectHealthOrCrisis(text){
 
 // Detect if user input doesn't match selected domain
 // 问题域语义匹配引擎：多层关键词+模式匹配
+const DOMAIN_NAMES={delay:'拖延',anxiety:'焦虑',internal:'内耗',express:'表达',eq:'情商'};
 const DOMAIN_PATTERNS={
   delay:{
     name:'拖延',
@@ -952,6 +1278,168 @@ function detectDomainMismatch(text,domainKey){
   return false;
 }
 
+// ============ 诊断偏差识别 ============
+function detectDiagnosticDeviation(text, domainKey){
+  const currentScore = calcDomainScore(text, domainKey);
+  const allScores = {};
+  Object.keys(DOMAIN_PATTERNS).forEach(key => {
+    allScores[key] = calcDomainScore(text, key).score;
+  });
+  
+  let sorted = Object.entries(allScores)
+    .map(([k, v]) => ({ key: k, score: v }))
+    .sort((a, b) => b.score - a.score);
+  
+  const top = sorted[0];
+  const second = sorted[1];
+  const currentRank = sorted.findIndex(s => s.key === domainKey);
+  const currentInfo = DOMAIN_NAMES[domainKey] || domainKey;
+  const topInfo = DOMAIN_NAMES[top.key] || top.key;
+  
+  // 场景1：当前域不是最高分，但输入文本中有一些关键词匹配
+  // 例：用户选了"拖延"，但输入"总是焦虑紧张睡不好"，当前域匹配3分，焦虑域匹配5分
+  if(top.key !== domainKey && top.score >= currentScore.score + 2 && top.score >= 3){
+    return {
+      level: 'warning',
+      type: 'wrong_domain',
+      message: `我注意到你说的情况中，「${topInfo}」相关的信号比「${currentInfo}」更明显。`,
+      suggestion: `是否更想聊聊${topInfo}方面的困扰？`,
+      currentDomain: domainKey,
+      suggestedDomain: top.key,
+      scoreDiff: top.score - currentScore.score,
+      topScore: top.score,
+      currentScore: currentScore.score
+    };
+  }
+  
+  // 场景2：多个域都有较高匹配，问题可能跨界
+  // 例：用户同时有拖延和焦虑，两者分数接近
+  if(top.score >= 3 && second && second.score >= 3 && Math.abs(top.score - second.score) <= 1){
+    const domains = [top.key, second.key].map(k => DOMAIN_NAMES[k] || k);
+    return {
+      level: 'info',
+      type: 'cross_domain',
+      message: `你描述的情况可能同时涉及${domains.join('、')}几个方面。`,
+      suggestion: `我们可以从「${currentInfo}」的角度切入，同时留意其他相关的问题。`,
+      currentDomain: domainKey,
+      involvedDomains: domains
+    };
+  }
+  
+  // 场景3：当前域分数中等，且与最高分差距不大 → 提示可能不是最佳切入
+  if(currentScore.score >= 1.5 && currentScore.score < 3 && top.key !== domainKey && top.score > currentScore.score){
+    return {
+      level: 'hint',
+      type: 'suboptimal_entry',
+      message: `这个问题既可以从「${currentInfo}」的角度看，也可以从「${topInfo}」的角度理解。`,
+      suggestion: `如果你觉得当前方向的帮助不大，随时可以切换到${topInfo}试试。`,
+      currentDomain: domainKey,
+      alternativeDomain: top.key
+    };
+  }
+  
+  return null;
+}
+
+// 引用准确性检测：验证建议与问题域的相关性
+function validateCitationRelevance(book, insight, steps, domainKey){
+  const issues = [];
+  const domainName = DOMAIN_NAMES[domainKey] || domainKey;
+  
+  // 检查书籍是否属于当前问题域
+  const bookDomainMap = {
+    'delay': ['拖延','行动力','执行','自律','习惯'],
+    'anxiety': ['焦虑','紧张','压力','恐惧','担心','心理'],
+    'internal': ['内耗','纠结','自我怀疑','完美主义','反刍'],
+    'express': ['表达','沟通','社交','语言','关系','说'],
+    'eq': ['情绪','情商','共情','人际','愤怒','控制']
+  };
+  
+  const relevantKeywords = bookDomainMap[domainKey] || [];
+  
+  // 检查书名是否与问题域相关
+  let bookRelevant = true;
+  if(book && relevantKeywords.length > 0){
+    bookRelevant = relevantKeywords.some(kw => book.includes(kw));
+    if(!bookRelevant && steps){
+      const stepText = steps.join(' ');
+      const stepsRelevant = relevantKeywords.some(kw => stepText.includes(kw));
+      if(!stepsRelevant){
+        issues.push({
+          type: 'citation_mismatch',
+          severity: 'medium',
+          message: `推荐的书籍《${book}》可能与「${domainName}」关联不够紧密`,
+          suggestion: `建议用户确认这本书的方向是否合适`
+        });
+      }
+    }
+  }
+  
+  // 检查建议步骤是否存在明显矛盾
+  if(steps && steps.length >= 2){
+    const contradictions = [];
+    const contradictionPairs = [
+      ['delay', ['立刻行动', '等待合适时机']],
+      ['anxiety', ['直面恐惧', '避免刺激']],
+      ['express', ['主动沟通', '保持沉默']],
+      ['eq', ['表达情绪', '压抑情绪']]
+    ];
+    for(const pair of contradictionPairs){
+      if(pair[0] === domainKey){
+        const hasA = steps.some(s => s.includes(pair[1][0]));
+        const hasB = steps.some(s => s.includes(pair[1][1]));
+        if(hasA && hasB){
+          contradictions.push('同时建议"' + pair[1][0] + '"和"' + pair[1][1] + '"可能造成困惑');
+        }
+      }
+    }
+    contradictions.forEach(msg => {
+      issues.push({
+        type: 'contradictory_advice',
+        severity: 'high',
+        message: msg
+      });
+    });
+  }
+  
+  return issues.length > 0 ? { valid: false, issues: issues } : { valid: true, issues: [] };
+}
+
+// 建议不适配检测：识别明显不合适的建议
+function detectAdviceMismatch(userText, steps, domainKey){
+  const warnings = [];
+  const text = userText.toLowerCase();
+  
+  // 检测：建议的行动是否与用户描述的困难矛盾
+  if(domainKey === 'delay'){
+    // 用户说"动不起来"却建议"立刻做10件事"
+    const hasManyActions = steps && steps.filter(s => /\d+件|所有|全部|每次都/.test(s)).length > 0;
+    const userHasInitiationIssue = /动不起来|不想开始|启动不了|起不来/.test(userText);
+    if(hasManyActions && userHasInitiationIssue){
+      warnings.push({
+        type: 'too_many_actions',
+        message: '对于启动困难的用户，过多的行动建议可能反而增加压力',
+        suggestion: '建议将行动减少为1-2个最小步骤'
+      });
+    }
+  }
+  
+  if(domainKey === 'anxiety'){
+    // 用户有生理症状却建议"忽略它"
+    const hasPhysiological = /心慌|手抖|失眠|头疼|胃痛|呼吸/.test(userText);
+    const hasIgnoreSuggestion = steps && steps.some(s => /忽略|不管|别想|忘记/.test(s));
+    if(hasPhysiological && hasIgnoreSuggestion){
+      warnings.push({
+        type: 'dismissive_advice',
+        message: '对于有生理症状的焦虑，建议"忽略"可能让用户感到不被理解',
+        suggestion: '建议先接纳症状，再逐步调整'
+      });
+    }
+  }
+  
+  return warnings;
+}
+
 // 智能推荐问题域
 function recommendDomain(text){
   const scores={};
@@ -978,7 +1466,227 @@ function recommendDomain(text){
   return null;
 }
 
-function handleUserInput(text){
+// ============ 置信度分级计算 ============
+function calcConfidence(text, domainKey){
+  const scoreInfo = calcDomainScore(text, domainKey);
+  const score = scoreInfo.score;
+  const inputLen = text.length;
+  const hasSpecificDetail = text.length >= 8;
+  const highValueMarkers = [
+    '因为','所以','但是','一直','总是','每次','经常',
+    '已经','还是','就是','真的','确实',
+    '应该','必须','不得不','控制不住','忍不住',
+    '不敢','害怕','担心','怕','焦虑','紧张'
+  ];
+  let specificityScore = 0;
+  highValueMarkers.forEach(m => {
+    if(text.includes(m)) specificityScore += 0.5;
+  });
+  if(hasSpecificDetail) specificityScore += 1;
+  
+  const totalScore = score + specificityScore;
+  
+  if(totalScore >= 4){
+    return { level:'high', score:totalScore, label:'高置信度 · 精准匹配' };
+  } else if(totalScore >= 1.5){
+    return { level:'medium', score:totalScore, label:'中置信度 · 部分匹配' };
+  } else {
+    return { level:'low', score:totalScore, label:'低置信度 · 需澄清' };
+  }
+}
+
+// ============ 纠错反馈系统 ============
+function attachFeedback(px, prescId){
+  const fb = document.createElement('div');
+  fb.className = 'p-feedback';
+  fb.innerHTML = `
+    <button class="fb-fit" data-presc="${prescId}" data-action="fit">✓ 挺适合我</button>
+    <button class="fb-misfit" data-presc="${prescId}" data-action="misfit">✗ 不太适合</button>
+  `;
+  const buttons = fb.querySelectorAll('button');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function(){
+      const action = btn.getAttribute('data-action');
+      const pid = btn.getAttribute('data-presc');
+      handleFeedback(action, pid, px, buttons);
+    });
+  });
+  return fb;
+}
+
+function handleFeedback(action, prescId, px, buttons){
+  if(action === 'fit'){
+    buttons.forEach(b => { b.classList.add('fb-done'); b.disabled = true; });
+    buttons.forEach(b => { if(b.getAttribute('data-action') === 'misfit') b.remove(); });
+    const msg = document.createElement('div');
+    msg.className = 'msg bot';
+    msg.innerHTML = '<span class="b-name">良方</span>很高兴这剂良方对你有帮助。下次来聊的时候，告诉我你执行得怎么样——哪怕只做了一天也好。';
+    document.getElementById('chatBody').appendChild(msg);
+    scrollChat();
+    return;
+  }
+  
+  // misfit: 纠错流程
+  _correctionCount++;
+  
+  // 禁用当前处方的按钮
+  buttons.forEach(b => { b.classList.add('fb-done'); b.disabled = true; });
+  
+  if(_correctionCount >= 2){
+    // 连续2次纠错 → 人工兜底
+    showHumanFallback();
+    return;
+  }
+  
+  // Step 2: 弹出纠错面板，收集反馈
+  showCorrectionPanel(prescId, px);
+}
+
+function showCorrectionPanel(prescId, px){
+  const panel = document.createElement('div');
+  panel.className = 'correction-panel';
+  panel.innerHTML = `
+    <h4>🔄 重新诊断</h4>
+    <p>这个建议没帮到你，让我再想想。能告诉我具体是什么情况吗？</p>
+    <div class="cp-options">
+      <span class="cp-opt" data-reason="wrong_domain">问题方向不对</span>
+      <span class="cp-opt" data-reason="too_vague">建议太笼统</span>
+      <span class="cp-opt" data-reason="not_applicable">不适用我的情况</span>
+      <span class="cp-opt" data-reason="other">其他原因</span>
+    </div>
+    <div class="cp-text">
+      <textarea placeholder="简单描述一下，什么情况不一样？（可选）"></textarea>
+      <button>重新诊断</button>
+    </div>
+  `;
+  document.getElementById('chatBody').appendChild(panel);
+  scrollChat();
+  
+  let selectedReason = '';
+  const reasonBtns = panel.querySelectorAll('.cp-opt');
+  reasonBtns.forEach(btn => {
+    btn.addEventListener('click', function(){
+      reasonBtns.forEach(b => b.style.background = '');
+      btn.style.background = 'rgba(184,64,64,.2)';
+      selectedReason = btn.getAttribute('data-reason');
+    });
+  });
+  
+  const submitBtn = panel.querySelector('.cp-text button');
+  const textarea = panel.querySelector('.cp-text textarea');
+  submitBtn.addEventListener('click', function(){
+    const userFeedback = (textarea.value || '').trim();
+    if(!selectedReason && !userFeedback){
+      showToast('请选择一个原因或简要描述');
+      return;
+    }
+    panel.remove();
+    reDiagnose(selectedReason, userFeedback, px);
+  });
+}
+
+function reDiagnose(reason, feedback, originalPx){
+  // 根据反馈类型调整诊断策略
+  let domainKey = Object.entries({delay:'拖延',anxiety:'焦虑',internal:'内耗',express:'表达',eq:'情商'})
+    .find(([k,v]) => v === curDomain.name);
+  domainKey = domainKey ? domainKey[0] : 'anxiety';
+  
+  let adjustment = '';
+  if(reason === 'wrong_domain'){
+    adjustment = '我理解了，可能问题方向确实不对。让我重新看看你最初描述的情况，换个角度来分析。';
+  } else if(reason === 'too_vague'){
+    adjustment = '明白了，建议太笼统没有针对性。让我结合你的具体情况，给出更贴合的建议。';
+  } else if(reason === 'not_applicable'){
+    adjustment = '感谢你的反馈。之前的建议确实没有考虑到你的特殊情况。让我重新审视。';
+  } else {
+    adjustment = '谢谢你的坦诚反馈。让我重新理解你的情况。';
+  }
+  
+  addBot(adjustment);
+  showTyping();
+  
+  // 基于原处方的insight生成替代建议
+  let altSteps = [];
+  if(reason === 'wrong_domain'){
+    altSteps = ['★ 放下之前的思路，换一个问题域试试', '★★ 重新描述你遇到的情况', '★★★ 让AI从另一个角度帮你分析'];
+  } else if(reason === 'too_vague'){
+    altSteps = ['★ 把你的具体情况写下来', '★★ 针对一个最具体的场景', '★★★ 现在就做一件最小的事'];
+  } else {
+    altSteps = ['★ 回忆一下，什么情况下这个建议不适用', '★★ 写出你认为更合适的做法', '★★★ 从最安全的一步开始尝试'];
+  }
+  
+  setTimeout(() => {
+    hideTyping();
+    const altPx = {
+      book: originalPx ? originalPx.book : '《也许你该找个人聊聊》— 洛莉·戈特利布',
+      insight: originalPx ? originalPx.insight + '（已根据反馈调整）' : '根据你的反馈，我重新调整了建议方向',
+      steps: altSteps,
+      quote: '没有一种方法适用于所有人。找到适合你的，才是最好的。'
+    };
+    addPrescription(altPx);
+    // 这是重新诊断的处方，也加反馈
+    const lastPresc = document.querySelector('.prescription:last-child');
+    if(lastPresc){
+      const fb = attachFeedback(altPx, 'rediag_' + Date.now());
+      lastPresc.appendChild(fb);
+    }
+  }, 1200);
+}
+
+function showHumanFallback(){
+  const fallback = document.createElement('div');
+  fallback.className = 'human-fallback';
+  fallback.innerHTML = `
+    <h4>🤝 建议寻求专业帮助</h4>
+    <p>我可能没帮到你。两次尝试后，你的情况超出了我作为书籍建议引擎的能力范围。这不是你的问题，也不是你的错——有些问题确实需要更专业的支持。</p>
+    <ul class="hf-resources">
+      <li>北京心理危机研究与干预中心：010-82951332</li>
+      <li>全国心理援助热线：400-161-9995</li>
+      <li>紧急情况请拨打 120</li>
+      <li>如需持续心理支持，建议预约心理咨询师</li>
+    </ul>
+    <button class="hf-continue" onclick="this.parentElement.remove();_correctionCount=0;">我想继续试试</button>
+  `;
+  document.getElementById('chatBody').appendChild(fallback);
+  scrollChat();
+  showToast('已为你推荐专业资源');
+}
+
+// ============ 置信度分级响应 ============
+function respondByConfidence(domainKey, text, confLevel){
+  if(confLevel === 'high'){
+    return null;
+  }
+  if(confLevel === 'medium'){
+    const scoreInfo = calcDomainScore(text, domainKey);
+    const matchedKws = scoreInfo.matched.map(m => m.word).slice(0, 3).join('、');
+    let response = '我注意到你提到了「' + (matchedKws || '一些相关的情况') + '」。这让我大概摸到了方向，不过我想确认一下——\n\n能不能具体说说：';
+    if(domainKey === 'delay'){
+      response += '是什么事让你动不起来？是不知道怎么开始，还是怕做不好？';
+    } else if(domainKey === 'anxiety'){
+      response += '焦虑的时候，你身体有什么反应？是失眠、心慌，还是脑子里停不下来？';
+    } else if(domainKey === 'internal'){
+      response += '你在纠结什么？是做了决定后悔，还是想太多停不下来？';
+    } else if(domainKey === 'express'){
+      response += '在什么场景下最说不出口？是开会发言、跟同事沟通，还是跟亲密的人？';
+    } else if(domainKey === 'eq'){
+      response += '通常是什么情境让你控制不住情绪？是跟家人、同事，还是自己一个人的时候？';
+    }
+    return response;
+  }
+  if(confLevel === 'low'){
+    let response = '说实话，我不太确定你现在的情况最适合从哪个角度切入。你说的内容可能涉及的问题类型，不完全在我已建立的5个问题域（拖延/焦虑/内耗/表达/情商）里。';
+    response += '\n\n我有两个建议：';
+    response += '\n1. 你可以试试选择其他问题域看看（首页有5个选项）';
+    response += '\n2. 如果你的问题更偏向医学、法律、财务等专业领域，建议咨询对应专业人士';
+    response += '\n\n不过，你也可以更具体地描述一下你遇到的情况——比如最近发生了什么、你有什么感受、为什么困扰——我会尽力帮你找到最贴切的方向。';
+    return response;
+  }
+  return null;
+}
+let _lastUserText = '';
+function handleUserInput(text){ trackMessage("user", text); 
+  _lastUserText = text;
   // Step 0: Check for physical health or crisis first
   const healthCheck=detectHealthOrCrisis(text);
   if(healthCheck){
@@ -994,6 +1702,51 @@ function handleUserInput(text){
     }
     return;
   }
+  
+  // Step 0.3: Confidence level calculation and branching
+  const domainKey = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
+  const conf = calcConfidence(text, domainKey);
+  _currentConfidence = conf.level;
+  
+  // Update confidence badge in header
+  const confBadge = document.getElementById('chatConfBadge');
+  if(confBadge){
+    confBadge.textContent = '● ' + conf.label;
+    confBadge.style.background = conf.level === 'high' ? 'rgba(107,142,111,.14)' : (conf.level === 'medium' ? 'rgba(184,159,107,.16)' : 'rgba(184,64,64,.12)');
+    confBadge.style.color = conf.level === 'high' ? '#4a6b54' : (conf.level === 'medium' ? '#8a7743' : '#9A3434');
+  }
+  
+  // Step 0.4: Diagnostic deviation check (runs before confidence branching)
+  let deviationWarning = null;
+  if(chatStep===1){
+    const deviation = detectDiagnosticDeviation(text, domainKey);
+    if(deviation && deviation.level === 'warning'){
+      deviationWarning = '<div style="background:rgba(184,159,107,.08);border:1px solid rgba(184,159,107,.3);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-family:var(--cal);color:var(--gold-dark);font-size:13px;margin-bottom:6px">⚠ 诊断提醒</div><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">' + deviation.message + '</div><div style="font-size:12px;color:var(--gold);margin-top:8px;font-style:italic">' + deviation.suggestion + '</div></div>';
+    } else if(deviation && deviation.level === 'info'){
+      deviationWarning = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">💡 ' + deviation.message + '</div><div style="font-size:12px;color:#6B8E6F;margin-top:6px">' + deviation.suggestion + '</div></div>';
+    }
+  }
+  
+  if(conf.level === 'low' && chatStep === 1){
+    // 低置信度：坦诚边界
+    addBot(respondByConfidence(domainKey, text, 'low'));
+    waitingForUser = true;
+    document.getElementById('chatInput').focus();
+    return;
+  }
+  
+  if(conf.level === 'medium' && chatStep === 1){
+    // 中置信度：追问澄清 + 偏差提醒
+    if(deviationWarning){ addBot(deviationWarning); }
+    const mediumResponse = respondByConfidence(domainKey, text, 'medium');
+    addBot(mediumResponse);
+    waitingForUser = true;
+    document.getElementById('chatInput').focus();
+    return;
+  }
+  
+  // 高置信度 → 走正常流程 (chatStep >= 1 时)
+  if(deviationWarning){ addBot(deviationWarning); }
   
   // Step 0.5: Check for domain mismatch
   if(chatStep===1){
@@ -1039,7 +1792,7 @@ function handleUserInput(text){
       setTimeout(()=>{addPrescription(result.prescription);
         setTimeout(()=>{showTyping();
           setTimeout(()=>{hideTyping();addBot(curDomain.wrapUp());chatStep=3;
-            const div=document.createElement('div');div.style.cssText='text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
+            saveSession();const div=document.createElement('div');div.style.cssText='text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
             div.innerHTML='良方已开 · 可关闭面板，或再选一个问题域继续问诊';
             document.getElementById('chatBody').appendChild(div);scrollChat();
             const qd=document.createElement('div');qd.className='chat-quick';
@@ -1057,11 +1810,76 @@ function handleUserInput(text){
 }
 
 function addUser(text){const d=document.createElement('div');d.className='msg user';d.textContent=text;document.getElementById('chatBody').appendChild(d);scrollChat();}
-function addBot(text){const d=document.createElement('div');d.className='msg bot';d.innerHTML='<span class="b-name">良方</span>'+text.replace(/\n/g,'<br>');document.getElementById('chatBody').appendChild(d);scrollChat();}
-function addPrescription(px){
+function addBot(text){trackMessage("bot",text);const d=document.createElement('div');d.className='msg bot';d.innerHTML='<span class="b-name">良方</span>'+text.replace(/\n/g,'<br>');document.getElementById('chatBody').appendChild(d);scrollChat();}
+// 根据置信度动态调整建议步骤数量
+function adaptiveSteps(steps, confidence){
+  if(!steps || !steps.length) return {steps: [], note: ''};
+  const conf = confidence || 'high';
+  if(conf === 'low'){
+    // 低置信度：只返回1个最小行动建议，并添加澄清提示
+    return {
+      steps: steps.slice(0, 1),
+      note: '根据目前信息，我先给出一个最小行动建议。补充更多情况后，建议会更精准。'
+    };
+  }
+  if(conf === 'medium'){
+    // 中置信度：返回2个步骤
+    return {
+      steps: steps.slice(0, 2),
+      note: '根据目前信息，我先给出两个方向。补充更多情况后，建议会更具体。'
+    };
+  }
+  // 高置信度：返回全部3个步骤
+  return {steps: steps, note: ''};
+}
+
+function addPrescription(px){ trackMessage("prescription", "", {prescription: px}); 
   const d=document.createElement('div');d.className='prescription';
-  d.innerHTML=`<div class="p-title">📖 处方笺</div><div class="p-book">来自：${px.book}</div><div class="p-insight">${px.insight}</div><ul class="p-steps">${px.steps.map(s=>`<li>${s}</li>`).join('')}</ul><div class="p-quote">"${px.quote}"</div>`;
-  document.getElementById('chatBody').appendChild(d);scrollChat();
+  const confLabel = {high:'高置信度',medium:'中置信度',low:'低置信度'}[_currentConfidence] || '高置信度';
+  const confText = {high:'精准匹配',medium:'部分匹配',low:'待验证'}[_currentConfidence] || '';
+  const prescId = 'presc_' + Date.now();
+  
+  // Run citation validation
+  const domainKey = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
+  const citationCheck = validateCitationRelevance(px.book, px.insight, px.steps, domainKey);
+  const mismatchWarnings = detectAdviceMismatch(_lastUserText || '', px.steps, domainKey);
+  
+  let warningsHtml = '';
+  if(citationCheck.issues.length > 0){
+    warningsHtml += citationCheck.issues.map(issue => {
+      const icon = issue.severity === 'high' ? '🔴' : '🟡';
+      return `<div style="font-size:11px;color:var(--ink-faint);margin-top:4px">${icon} ${issue.message}</div>`;
+    }).join('');
+  }
+  if(mismatchWarnings.length > 0){
+    warningsHtml += mismatchWarnings.map(w => {
+      return `<div style="font-size:11px;color:var(--ink-faint);margin-top:4px">🟡 ${w.message}</div>`;
+    }).join('');
+  }
+  if(warningsHtml){
+    warningsHtml = `<div style="background:rgba(184,64,64,.04);border-radius:6px;padding:8px 10px;margin-top:8px">${warningsHtml}</div>`;
+  }
+  
+  const adaptiveResult = adaptiveSteps(px.steps, _currentConfidence);
+  d.innerHTML = `
+    <div style="display:flex;align-items:center;margin-bottom:8px">
+      <div class="p-title" style="margin-bottom:0">📖 处方笺</div>
+      <span class="p-confidence ${_currentConfidence}">${confLabel} · ${confText}</span>
+    </div>
+    <div class="p-book">来自：${px.book}</div>
+    <div class="p-insight">${px.insight}</div>
+    <ul class="p-steps">${adaptiveResult.steps.map(s => `<li>${s}</li>`).join('')}</ul>
+    ${adaptiveResult.note ? `<div style="font-size:11px;color:var(--gold-dark);margin-top:6px;font-style:italic">${adaptiveResult.note}</div>` : ''}
+    <div class="p-quote">"${px.quote}"</div>
+    ${warningsHtml}
+  `;
+  document.getElementById('chatBody').appendChild(d);
+  // Add feedback buttons
+  const fb = attachFeedback(px, prescId);
+  d.appendChild(fb);
+  _lastPrescription = px;
+  _lastPrescriptionId = prescId;
+  scrollChat();
 }
 function showTyping(){const d=document.createElement('div');d.className='chat-typing';d.id='typing';d.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';document.getElementById('chatBody').appendChild(d);scrollChat();}
 function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
@@ -1094,5 +1912,69 @@ ci.addEventListener('input',()=>{ci.style.height='auto';ci.style.height=Math.min
 ci.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat()});
 </script>
+<!-- Supabase 配置（可选，没有配置时社区功能优雅降级） -->
+<script>
+  // 检查是否存在 Supabase 配置
+  window.BP_SUPABASE = window.BP_SUPABASE || null;
+</script>
+<script src="supabase-config.js" onerror="this.remove();"></script>
+<script src="supabase.js" onerror="this.remove();"></script>
+<script>
+// 从 Supabase 加载社区投稿书籍并显示在典籍阁
+(function(){
+  if(!window.BookPillSupabase) {
+    // 没有 Supabase 配置，跳过社区功能
+    console.log('BookPill: 未配置 Supabase，社区投稿功能不可用');
+    return;
+  }
+  var DOMAIN_ORDER = ['拖延','焦虑','内耗','表达','情商','通脉'];
+  var DOMAIN_MAP = {'拖延':0,'焦虑':1,'内耗':2,'表达':3,'情商':4,'通脉':5};
+
+  BookPillSupabase.getApprovedBooks().then(function(books){
+    if(!books || !books.length) return;
+    var groups = document.querySelectorAll('.book-grid .book-group');
+    books.forEach(function(book){
+      var domains = book.domain || [];
+      var domainKey = domains.length ? domains[0] : '通脉';
+      // 映射到对应的脉
+      var groupIdx = DOMAIN_MAP[domainKey];
+      if(groupIdx === undefined) groupIdx = 5; // 默认放通脉
+      var group = groups[groupIdx];
+      if(!group) return;
+      // 检查是否已存在
+      var existing = group.querySelectorAll('.b-chip');
+      var found = false;
+      existing.forEach(function(chip){
+        if(chip.textContent === book.title) found = true;
+      });
+      if(found) return;
+      // 添加新 chip
+      var chip = document.createElement('span');
+      chip.className = 'b-chip community-book';
+      chip.textContent = book.title;
+      chip.title = '社区投稿 · ' + (book.contributor||'匿名');
+      chip.style.borderColor = 'var(--vermillion)';
+      chip.style.color = 'var(--vermillion)';
+      group.querySelector('.book-chips').appendChild(chip);
+    });
+    // 更新计数
+    var secDesc = document.querySelector('.book-section .sec-head p');
+    if(secDesc){
+      var total = 0;
+      document.querySelectorAll('.b-chip').forEach(function(){ total++; });
+      secDesc.textContent = total + ' 本核心经典，社区共建持续扩展';
+    }
+  }).catch(function(e){
+    console.log('Supabase 加载失败，仅显示本地书籍', e);
+  });
+})();
+</script>
 </body>
 </html>
+
+<script>
+window.openHistoryPanel = openHistoryPanel;
+window.showSessionDetail = showSessionDetail;
+window.closeChat = closeChat;
+window.saveSession = saveSession;
+</script>

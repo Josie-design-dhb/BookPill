@@ -12,6 +12,34 @@ var BookPillData = (function(){
     }catch(e){ return []; }
   }
 
+
+var TAG_DICTIONARY = [
+  // 基础分类
+  { tag: '文学', keywords: ['文学','文艺','散文','诗歌','杂文','随笔','经典','名著','世界名著'] },
+  { tag: '小说', keywords: ['小说','长篇','中篇','短篇','小說'] },
+  { tag: '历史', keywords: ['历史','史学','史','通史','历史纪实','史料'] },
+  { tag: '哲学', keywords: ['哲学','哲思','思想史','哲学理论'] },
+  { tag: '心理学', keywords: ['心理学','心理','精神分析','心理治疗'] },
+  { tag: '社会学', keywords: ['社会','社会学','人类学','文化研究','社会结构'] },
+  { tag: '传记', keywords: ['传记','自传','回忆录','人物传记'] },
+  { tag: '经济学', keywords: ['经济','经济学','财经','金融','商业','投资'] },
+  { tag: '管理学', keywords: ['管理','管理学','领导力','组织','企业'] },
+  { tag: '悬疑', keywords: ['悬疑','推理','侦探','探案','破案','罪案','惊悚','犯罪'] },
+  { tag: '科幻', keywords: ['科幻','科学幻想','奇幻','幻想'] },
+  { tag: '魔幻现实主义', keywords: ['魔幻现实主义','魔幻','拉美文学'] },
+  { tag: '女性', keywords: ['女性','女性主义','女权'] },
+  { tag: '成长', keywords: ['成长','成长小说','教育','家庭教育'] },
+  { tag: '艺术', keywords: ['艺术','绘画','音乐','电影','美学'] },
+  { tag: '科普', keywords: ['科普','科学','自然科学','物理','数学'] },
+  { tag: '医学', keywords: ['医学','中医','西医','健康'] },
+  { tag: '教育学', keywords: ['教育','教育学','教学'] },
+  { tag: '法学', keywords: ['法律','法学','法'] },
+  { tag: '内耗', keywords: ['内耗','精神内耗','情绪内耗'] },
+  { tag: '焦虑', keywords: ['焦虑','焦虑症','恐慌','担心'] },
+  { tag: '职场', keywords: ['职场','工作','职业','社畜','打工'] }
+];
+
+
   function _write(arr){
     try{
       localStorage.setItem(KEY, JSON.stringify(arr));
@@ -115,7 +143,7 @@ var BookPillData = (function(){
     var map = {};
     arr.forEach(function(s){
       var d = s.domain || '未分';
-      if(!map[d]) map[d] = { domain: d, count: 0, pending: 0, accepted: 0, rejected: 0 };
+      if(!map[d]) map[d] = { domain: d, count: 0, pending: 0, approved: 0, rejected: 0 };
       map[d].count++;
       var st = s.status || 'pending';
       map[d][st] = (map[d][st] || 0) + 1;
@@ -159,7 +187,7 @@ var BookPillData = (function(){
         map[name] = {
           name: name,
           count: 0,
-          accepted: 0,
+          approved: 0,
           pending: 0,
           rejected: 0,
           domains: {},
@@ -177,7 +205,7 @@ var BookPillData = (function(){
       if(new Date(s.createdAt) < new Date(map[name].first)) map[name].first = s.createdAt;
     });
     return Object.values(map).sort(function(a,b){
-      if(b.accepted !== a.accepted) return b.accepted - a.accepted;
+      if(b.approved !== a.approved) return b.approved - a.approved;
       return b.count - a.count;
     }).slice(0, limit);
   }
@@ -198,24 +226,62 @@ var BookPillData = (function(){
     var arr = _read();
     var map = {};
     arr.forEach(function(s){
-      var tags = s.tags || [];
-      tags.forEach(function(t){
+      var hits = {};
+      // 从 tags 数组提取关键词并映射
+      var rawTags = s.tags || [];
+      rawTags.forEach(function(t){
         if(!t) return;
-        map[t] = (map[t] || 0) + 1;
+        TAG_DICTIONARY.forEach(function(d){
+          if(hits[d.tag]) return; // 每条投稿只统计一次
+          for(var i=0;i<d.keywords.length;i++){
+            if(t.indexOf(d.keywords[i]) !== -1){
+              hits[d.tag] = true;
+              break;
+            }
+          }
+        });
       });
-      if(s.domain) map['域·' + s.domain] = (map['域·' + s.domain] || 0) + 1;
+      // 从 domain 映射
+      if(s.domain){
+        TAG_DICTIONARY.forEach(function(d){
+          if(hits[d.tag]) return;
+          for(var i=0;i<d.keywords.length;i++){
+            if(s.domain.indexOf(d.keywords[i]) !== -1){
+              hits[d.tag] = true;
+              break;
+            }
+          }
+        });
+        // 焦虑脉 → 焦虑
+        if(s.domain.indexOf('焦虑') !== -1) hits['焦虑'] = true;
+        // 内耗 → 内耗
+        if(s.domain.indexOf('内耗') !== -1) hits['内耗'] = true;
+      }
+      // 从 title / bookDesc 再挖掘一次
+      var text = (s.title||'') + ' ' + (s.bookDesc||'') + ' ' + (s.scene||'') + ' ' + (s.insight||'');
+      TAG_DICTIONARY.forEach(function(d){
+        if(hits[d.tag]) return;
+        for(var i=0;i<d.keywords.length;i++){
+          if(text.indexOf(d.keywords[i]) !== -1){
+            hits[d.tag] = true;
+            break;
+          }
+        }
+      });
+      Object.keys(hits).forEach(function(k){
+        map[k] = (map[k] || 0) + 1;
+      });
     });
     return Object.entries(map)
       .map(function(e){ return { tag: e[0], count: e[1] }; })
-      .sort(function(a,b){ return b.count - a.count; })
-      .slice(0, 40);
+      .sort(function(a,b){ return b.count - a.count; });
   }
 
   function getSummaryStats(){
     var arr = _read();
     var total = arr.length;
     var pending = arr.filter(function(s){ return s.status === 'pending'; }).length;
-    var accepted = arr.filter(function(s){ return s.status === 'accepted'; }).length;
+    var approved = arr.filter(function(s){ return s.status === 'approved'; }).length;
     var rejected = arr.filter(function(s){ return s.status === 'rejected'; }).length;
     var uniqueContributors = {};
     arr.forEach(function(s){ uniqueContributors[s.contributor || '匿名'] = true; });
@@ -224,11 +290,11 @@ var BookPillData = (function(){
     var last7 = 0;
     var cutoff = Date.now() - 7 * 86400 * 1000;
     arr.forEach(function(s){ if(new Date(s.createdAt).getTime() >= cutoff) last7++; });
-    var acceptRate = total > 0 ? Math.round((accepted / total) * 100) : 0;
+    var acceptRate = total > 0 ? Math.round((approved / total) * 100) : 0;
     return {
       total: total,
       pending: pending,
-      accepted: accepted,
+      approved: approved,
       rejected: rejected,
       uniqueContributors: contribCount,
       domainCount: domains.length,
@@ -302,7 +368,7 @@ var BookPillData = (function(){
     lines.push('## 概览');
     lines.push('');
     lines.push('- **总投稿数**：' + stats.total);
-    lines.push('- **已收录**：' + stats.accepted + '（收录率 ' + stats.acceptRate + '%）');
+    lines.push('- **已收录**：' + stats.approved + '（收录率 ' + stats.acceptRate + '%）');
     lines.push('- **待审核**：' + stats.pending);
     lines.push('- **未通过**：' + stats.rejected);
     lines.push('- **投稿人数**：' + stats.uniqueContributors);
@@ -312,13 +378,13 @@ var BookPillData = (function(){
     lines.push('## 各脉投稿分布');
     lines.push('');
     stats.byDomain.forEach(function(d){
-      lines.push('- **' + d.domain + '**：' + d.count + '（收录 ' + d.accepted + ' / 待审 ' + d.pending + '）');
+      lines.push('- **' + d.domain + '**：' + d.count + '（收录 ' + d.approved + ' / 待审 ' + d.pending + '）');
     });
     lines.push('');
     lines.push('## 贡献榜 Top 5');
     lines.push('');
     contr.forEach(function(c, i){
-      lines.push((i+1) + '. **' + c.name + '**：累计投稿 ' + c.count + ' 本，收录 ' + c.accepted + ' 本');
+      lines.push((i+1) + '. **' + c.name + '**：累计投稿 ' + c.count + ' 本，收录 ' + c.approved + ' 本');
     });
     return lines.join('\n');
   }

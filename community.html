@@ -92,7 +92,7 @@ section{padding:72px 0;position:relative}
 .sub-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sub-status{font-size:11px;font-family:var(--display);padding:3px 10px;border-radius:100px;white-space:nowrap}
 .sub-status.pending{background:rgba(184,159,107,.18);color:var(--gold-dark)}
-.sub-status.accepted{background:rgba(107,142,111,.16);color:var(--bamboo)}
+.sub-status.approved{background:rgba(107,142,111,.16);color:var(--bamboo)}
 .sub-status.rejected{background:rgba(184,64,64,.12);color:var(--vermillion)}
 .sub-time{font-size:11px;color:var(--ink-faint);font-family:var(--display)}
 .sub-domain{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--display);padding:2px 9px;border-radius:100px;color:#fff;align-self:flex-start}
@@ -321,7 +321,7 @@ var COVERAGE=[
   {domain:'情商',count:3,max:8,need:['冲突处理','亲密关系'],color:'#6B8E6F'}
 ];
 
-var STATUS_LABEL={pending:'待审核',accepted:'已收录',rejected:'未通过'};
+var STATUS_LABEL={pending:'待审核',approved:'已收录',rejected:'未通过'};
 
 /* ========== Helpers ========== */
 function showToast(msg){
@@ -411,7 +411,7 @@ function renderSubmissions(){
 /* ========== Render: new books ========== */
 function loadNewBooks(){
   var list=document.getElementById('commitList');
-  var accepted=BookPillData.getAll().filter(function(s){return s.status==='accepted'});
+  var accepted=BookPillData.getAll().filter(function(s){return s.status==='approved'});
   if(!accepted.length){
     list.innerHTML='<div class="err-state">'+
       '<div class="err-icon">书</div>'+
@@ -471,7 +471,7 @@ function renderContributors(){
 /* ========== Render: coverage ========== */
 function renderCoverage(){
   var grid=document.getElementById('covGrid');
-  var accepted=BookPillData.getAll().filter(function(s){return s.status==='accepted'});
+  var accepted=BookPillData.getAll().filter(function(s){return s.status==='approved'});
   var domainCounts={};
   accepted.forEach(function(s){
     var d=s.domain||'';
@@ -502,7 +502,7 @@ function renderCoverage(){
 /* ========== Init ========== */
 function loadAll(){
   document.getElementById('statSub').textContent=BookPillData.count();
-  document.getElementById('statAcc').textContent=BookPillData.countByStatus('accepted');
+  document.getElementById('statAcc').textContent=BookPillData.countByStatus('approved');
   document.getElementById('statContrib').textContent=BookPillData.getContributors().length;
   document.getElementById('statBooks').textContent='21';
   renderSubmissions();

@@ -100,7 +100,7 @@ nav .inner .nav-cta{justify-self:end}
 .stat-card .delta.up{color:var(--bamboo)}
 .stat-card.total .num{color:var(--ink)}
 .stat-card.pending .num{color:var(--gold-dark)}
-.stat-card.accepted .num{color:var(--bamboo)}
+.stat-card.approved .num{color:var(--bamboo)}
 .stat-card.rejected .num{color:var(--vermillion)}
 .stat-card.contribs .num{color:var(--indigo)}
 .stat-card.rate .num{color:var(--vermillion-dark)}
@@ -108,7 +108,7 @@ nav .inner .nav-cta{justify-self:end}
 .stat-card .accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--aged-dark)}
 .stat-card.total .accent{background:var(--ink-soft)}
 .stat-card.pending .accent{background:var(--gold)}
-.stat-card.accepted .accent{background:var(--bamboo)}
+.stat-card.approved .accent{background:var(--bamboo)}
 .stat-card.rejected .accent{background:var(--vermillion)}
 .stat-card.contribs .accent{background:var(--indigo)}
 .stat-card.rate .accent{background:linear-gradient(90deg,var(--bamboo),var(--gold))}
@@ -224,7 +224,7 @@ nav .inner .nav-cta{justify-self:end}
 .badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-family:var(--display);color:#fff;line-height:1.5}
 .status-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-family:var(--display);line-height:1.5;letter-spacing:.05em}
 .status-badge.pending{background:rgba(184,159,107,.22);color:var(--gold-dark)}
-.status-badge.accepted{background:rgba(107,142,111,.18);color:var(--bamboo)}
+.status-badge.approved{background:rgba(107,142,111,.18);color:var(--bamboo)}
 .status-badge.rejected{background:rgba(184,64,64,.14);color:var(--vermillion)}
 
 .row-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -295,6 +295,79 @@ footer .f-links a:hover{color:#fff}
   .gate-card{padding:36px 24px 30px}
   .dash-head h1{font-size:26px}
 }
+
+
+/* ===== Pagination ===== */
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;padding:20px 22px;border-top:1px solid rgba(184,159,107,.18);flex-wrap:wrap}
+.pagination .pg-btn{min-width:36px;height:36px;padding:0 10px;border:1px solid rgba(184,159,107,.35);background:rgba(255,252,244,.5);color:var(--ink-soft);border-radius:6px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--display);letter-spacing:.05em}
+.pagination .pg-btn:hover:not(:disabled){background:var(--paper-cream);border-color:var(--bamboo);color:var(--ink)}
+.pagination .pg-btn:disabled{opacity:.4;cursor:not-allowed}
+.pagination .pg-btn.active{background:var(--bamboo);color:#fff;border-color:var(--bamboo);font-weight:600}
+.pagination .pg-ellipsis{color:var(--ink-faint);font-size:12px;padding:0 4px}
+.pagination .pg-info{color:var(--ink-faint);font-size:12px;margin-right:12px;font-family:var(--display)}
+
+/* ===== Batch Delete ===== */
+.batch-delete-summary{background:rgba(184,64,64,.08);border:1px solid rgba(184,64,64,.2);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--vermillion-dark);font-family:var(--display);letter-spacing:.05em;line-height:1.8}
+.batch-delete-summary strong{color:var(--vermillion)}
+.batch-delete-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:14px 16px;background:var(--rice-light);border-radius:10px;gap:12px;align-items:center}
+.bdc-label{font-size:12px;color:var(--ink-faint);font-family:var(--display);letter-spacing:.08em}
+.bdc-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-family:var(--display);cursor:pointer;transition:var(--t);border:1.5px solid var(--aged-dark);background:var(--paper);color:var(--ink-soft);letter-spacing:.05em}
+.bdc-chip:hover{border-color:var(--gold);color:var(--ink)}
+.bdc-chip.active{background:var(--vermillion);color:#fff;border-color:var(--vermillion);box-shadow:0 2px 8px rgba(184,64,64,.25)}
+.batch-delete-list{max-height:45vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.bd-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--rice-light);border-radius:8px;border:1px solid rgba(184,159,107,.15);transition:var(--t)}
+.bd-item:hover{border-color:rgba(184,64,64,.3)}
+.bd-item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:1.5px solid var(--aged-dark);border-radius:4px;flex-shrink:0;position:relative;cursor:pointer;background:var(--paper);transition:var(--t)}
+.bd-item input[type=checkbox]:checked{background:var(--vermillion);border-color:var(--vermillion)}
+.bd-item input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+.bdi-main{flex:1;min-width:0}
+.bdi-title{font-family:var(--display);font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bdi-meta{font-size:11px;color:var(--ink-faint);margin-top:2px;font-family:var(--display)}
+.bdi-status{font-size:11px;padding:2px 8px;border-radius:4px;flex-shrink:0}
+.bdi-status.pending{background:rgba(184,159,107,.18);color:var(--gold-dark)}
+.bdi-status.approved{background:rgba(107,142,111,.16);color:var(--bamboo)}
+.bdi-status.rejected{background:rgba(184,64,64,.14);color:var(--vermillion)}
+.batch-delete-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid rgba(184,159,107,.2)}
+.bdf-left{font-size:12px;color:var(--ink-faint);font-family:var(--display)}
+.bdf-left strong{color:var(--vermillion)}
+.bdf-right{display:flex;gap:10px}
+.bdf-btn{padding:9px 20px;border-radius:6px;font-size:12px;font-family:var(--display);cursor:pointer;transition:var(--t);letter-spacing:.08em}
+.bdf-btn.cancel{background:transparent;border:1px solid var(--aged-dark);color:var(--ink-soft)}
+.bdf-btn.cancel:hover{background:var(--rice-light)}
+.bdf-btn.delete{background:var(--vermillion);color:#fff;box-shadow:0 2px 10px rgba(184,64,64,.25)}
+.bdf-btn.delete:hover{background:var(--vermillion-dark)}
+.bdf-btn.delete:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+
+/* ===== Batch Review Button ===== */
+.batch-review-btn{background:var(--vermillion);color:#fff;padding:7px 18px;border-radius:6px;font-size:12px;font-family:var(--display);letter-spacing:.08em;transition:var(--t);box-shadow:0 2px 10px rgba(184,64,64,.2);display:inline-flex;align-items:center;gap:6px}
+.batch-review-btn:hover{background:var(--vermillion-dark);transform:translateY(-1px)}
+.batch-review-btn .badge-count{display:inline-block;background:rgba(255,255,255,.25);padding:1px 8px;border-radius:100px;font-size:11px;min-width:20px;text-align:center}
+
+/* ===== Batch Review Modal ===== */
+.batch-modal{max-width:800px}
+.batch-list{display:flex;flex-direction:column;gap:16px;max-height:60vh;overflow-y:auto;padding:4px}
+.batch-card{background:var(--rice-light);border:1.5px solid rgba(184,159,107,.2);border-left:4px solid var(--gold);border-radius:12px;padding:18px 22px;transition:opacity .3s,transform .3s}
+.batch-card .bc-title{font-family:var(--cal);font-size:17px;color:var(--ink)}
+.batch-card .bc-author{font-size:12px;color:var(--gold-dark);margin-top:2px}
+.batch-card .bc-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.batch-card .bc-info{margin-top:10px;font-size:13px;line-height:1.7;color:var(--ink-soft)}
+.batch-card .bc-content{margin-bottom:6px}
+.batch-card .bc-label{color:var(--gold-dark);font-weight:bold;margin-right:4px}
+.batch-card .bc-contributor{font-size:12px;color:var(--ink-faint);margin-top:8px;font-style:italic}
+.batch-card .bc-actions{display:flex;gap:10px;margin-top:14px}
+.bc-btn{padding:8px 20px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:var(--display);transition:var(--t)}
+.bc-btn.approve{background:var(--bamboo);color:#fff}
+.bc-btn.approve:hover{background:#5A7A5E}
+.bc-btn.reject{background:transparent;border:1.5px solid #ccc!important;color:#999}
+.bc-btn.reject:hover{background:rgba(200,200,200,.1)}
+
+/* ===== Review buttons in detail modal ===== */
+.modal-review-actions{display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(184,159,107,.2)}
+.review-btn{flex:1;padding:12px;border-radius:8px;font-size:14px;font-family:var(--display);letter-spacing:.1em;cursor:pointer;transition:var(--t);border:none}
+.review-btn.approve{background:var(--bamboo);color:#fff;box-shadow:0 2px 12px rgba(107,142,111,.3)}
+.review-btn.approve:hover{background:#5A7A5E;transform:translateY(-1px)}
+.review-btn.reject{background:transparent;border:1.5px solid var(--vermillion);color:var(--vermillion)}
+.review-btn.reject:hover{background:rgba(184,64,64,.08)}
 </style>
 </head>
 <body class="paper-tex">
@@ -384,14 +457,12 @@ footer .f-links a:hover{color:#fff}
     <button class="exp-btn csv" onclick="exportCSV()">📄 导 出 CSV</button>
     <button class="exp-btn json" onclick="exportJSON()">📋 导 出 JSON</button>
     <button class="exp-btn md" onclick="exportMD()">📜 统 计 报 告 (MD)</button>
-    <div class="sep-line"></div>
-    <button class="exp-btn danger" onclick="clearAll()">⚠ 清 空 数 据</button>
   </div>
 
   <!-- Filters -->
   <div class="filter-row">
     <div class="search-wrap">
-      <input type="text" class="filt-input" id="filtSearch" placeholder="搜索书名 / 作者 / 投稿人…" oninput="renderTable()">
+      <input type="text" class="filt-input" id="filtSearch" placeholder="搜索书名 / 作者 / 投稿人…" oninput="_currentPage=1;renderTable()">
     </div>
     <div class="filter-group">
       <label>状态</label>
@@ -399,7 +470,7 @@ footer .f-links a:hover{color:#fff}
         <select class="cd-hidden" id="filtStatus" onchange="onCdChange(this)">
           <option value="">全部</option>
           <option value="pending">待审核</option>
-          <option value="accepted">已收录</option>
+          <option value="approved">已收录</option>
           <option value="rejected">未通过</option>
         </select>
         <div class="cd-trigger" onclick="toggleCd(this)" data-placeholder="状态筛选">
@@ -408,7 +479,7 @@ footer .f-links a:hover{color:#fff}
         <div class="cd-menu" data-menu>
           <div class="cd-option selected" data-value="">全部</div>
           <div class="cd-option" data-value="pending">待审核</div>
-          <div class="cd-option" data-value="accepted">已收录</div>
+          <div class="cd-option" data-value="approved">已收录</div>
           <div class="cd-option" data-value="rejected">未通过</div>
         </div>
       </div>
@@ -433,7 +504,11 @@ footer .f-links a:hover{color:#fff}
   <div class="table-wrap">
     <div class="table-head">
       <h2>投 稿 列 表</h2>
-      <div class="count" id="tableCount">共 0 条</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="count" id="tableCount">共 0 条</div>
+        <button class="batch-review-btn" id="batchReviewBtn" onclick="openBatchReview()">一键审核 <span class="badge-count" id="pendingBadge">0</span></button>
+        <button class="exp-btn danger" onclick="openBatchDelete()" style="padding:7px 16px;font-size:12px;border-radius:6px">一键删除</button>
+      </div>
     </div>
     <table class="tbl">
       <thead>
@@ -449,6 +524,56 @@ footer .f-links a:hover{color:#fff}
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<!-- Batch Delete Modal -->
+<div class="modal-overlay" id="batchDeleteOverlay" onclick="if(event.target===this)closeBatchDelete()">
+  <div class="modal batch-modal" id="batchDeleteModal">
+    <div class="modal-head">
+      <div>
+        <div class="m-title">一 键 删 除</div>
+        <div class="m-author">勾选要删除的投稿，不可恢复</div>
+      </div>
+      <button class="modal-close" onclick="closeBatchDelete()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="batch-delete-summary">⚠ 已收录的书籍也可删除（仅删除本地投稿记录，不会影响知识库展示）。数据库中的书籍如需删除请手动登录 Supabase 操作。</div>
+      <div class="batch-delete-controls">
+        <span class="bdc-label">快速筛选：</span>
+        <div class="bdc-chip" onclick="selectByStatus(this,'all')">全部</div>
+        <div class="bdc-chip" onclick="selectByStatus(this,'pending')">仅待审核</div>
+        <div class="bdc-chip" onclick="selectByStatus(this,'rejected')">仅未通过</div>
+        <div class="bdc-chip" onclick="selectByStatus(this,'approved')">仅已收录</div>
+        <div class="bdc-chip" onclick="invertSelection()">反选</div>
+        <div class="bdc-chip" onclick="clearSelection()">清空</div>
+      </div>
+      <div class="batch-delete-list" id="batchDeleteList"></div>
+      <div class="batch-delete-footer">
+        <div class="bdf-left">已勾选 <strong id="bdSelectedCount">0</strong> 条</div>
+        <div class="bdf-right">
+          <button class="bdf-btn cancel" onclick="closeBatchDelete()">取消</button>
+          <button class="bdf-btn delete" id="bdConfirmBtn" onclick="confirmBatchDelete()" disabled>确认删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Batch Review Modal -->
+<div class="modal-overlay" id="batchOverlay" onclick="if(event.target===this)closeBatchReview()">
+  <div class="modal batch-modal" id="batchModal">
+    <div class="modal-head">
+      <div>
+        <div class="m-title">一 键 审 核</div>
+        <div class="m-author">待审核投稿列表 · 点击通过或拒绝</div>
+      </div>
+      <button class="modal-close" onclick="closeBatchReview()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="batch-list" id="batchList"></div>
+    </div>
   </div>
 </div>
 
@@ -475,6 +600,8 @@ footer .f-links a:hover{color:#fff}
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase.js"></script>
 <script>
 var DOMAIN_MAP={
   '拖延':{color:'#4a6b54',name:'拖延'},
@@ -483,8 +610,8 @@ var DOMAIN_MAP={
   '表达':{color:'#2f6778',name:'表达'},
   '情商':{color:'#a34a55',name:'情商'}
 };
-var STATUS_LABEL={pending:'待审核',accepted:'已收录',rejected:'未通过'};
-var STATUS_COLOR={pending:'#968055',accepted:'#6B8E6F',rejected:'#B84040'};
+var STATUS_LABEL={pending:'待审核',approved:'已收录',rejected:'未通过'};
+var STATUS_COLOR={pending:'#968055',approved:'#6B8E6F',rejected:'#B84040'};
 var AUTH_KEY='bookpill_admin_authed_v2';
 var PWD='bookpill2026';
 
@@ -527,7 +654,7 @@ function statusBadge(status){
 }
 function statusOptions(selected){
   var html='';
-  ['pending','accepted','rejected'].forEach(function(s){
+  ['pending','approved','rejected'].forEach(function(s){
     html+='<option value="'+s+'"'+(s===selected?' selected':'')+'>'+STATUS_LABEL[s]+'</option>';
   });
   return html;
@@ -557,7 +684,6 @@ function enterDashboard(){
   document.getElementById('gate').style.display='none';
   document.getElementById('dash').style.display='block';
   refresh();
-  renderDraftPanel();
 }
 
 /* ===== KPI Cards ===== */
@@ -565,7 +691,7 @@ function renderKPI(stats){
   var items=[
     {cls:'total',label:'总 投 稿 数',num:stats.total,delta:'自社区共建以来',icon:'册'},
     {cls:'pending',label:'待 审 核',num:stats.pending,delta:'等待审方批阅',icon:'审'},
-    {cls:'accepted',label:'已 收 录',num:stats.accepted,delta:'收录率 '+stats.acceptRate+'%',icon:'录'},
+    {cls:'approved',label:'已 收 录',num:stats.approved,delta:'收录率 '+stats.acceptRate+'%',icon:'录'},
     {cls:'rejected',label:'未 通 过',num:stats.rejected,delta:'待补充或说明',icon:'退'},
     {cls:'contribs',label:'投 稿 人 数',num:stats.uniqueContributors,delta:'共 '+stats.domainCount+' 个问题域',icon:'道'},
     {cls:'last7',label:'近 7 天 新 增',num:stats.last7,delta:'周活跃度',icon:'新'}
@@ -639,12 +765,12 @@ function renderLeaders(list){
     var rankCls=i===0?'r1':i===1?'r2':i===2?'r3':'rn';
     var rankNum=i<3?(i===1?'🥇':i===2?'🥈':'🥉'):(i+1);
     var widthPct=Math.max(6,Math.round(c.count/topCount*100));
-    var rate=c.count>0?Math.round(c.accepted/c.count*100):0;
+    var rate=c.count>0?Math.round(c.approved/c.count*100):0;
     html+='<div class="leader-item">'
       +'<div class="leader-rank '+rankCls+'">'+(i<3?rankNum:(i+1))+'</div>'
       +'<div>'
         +'<div class="leader-name">'+escapeHtml(c.name)+'</div>'
-        +'<div class="leader-meta">收录 '+c.accepted+' · 待审 '+c.pending+' · 收录率 '+rate+'%</div>'
+        +'<div class="leader-meta">收录 '+c.approved+' · 待审 '+c.pending+' · 收录率 '+rate+'%</div>'
       +'</div>'
       +'<div class="leader-bar-wrap"><div class="leader-bar"><div class="leader-fill" style="width:'+widthPct+'%"></div></div></div>'
       +'<div class="leader-count">'+c.count+'</div>'
@@ -690,9 +816,51 @@ function populateDomainFilter(){
   }
 }
 
+/* ===== Pagination ===== */
+var _currentPage = 1;
+var _pageSize = 20;
+
+function setPage(p){
+  _currentPage = p;
+  renderTable();
+}
+
+function renderPagination(total, filtered){
+  var dom = document.getElementById('pagination');
+  if(!dom) return;
+  if(filtered <= _pageSize){ dom.innerHTML = ''; return; }
+  var totalPages = Math.ceil(filtered / _pageSize);
+  if(_currentPage > totalPages) _currentPage = totalPages;
+  if(_currentPage < 1) _currentPage = 1;
+  var html = '';
+  html += '<span class="pg-info">第 '+_currentPage+' / '+totalPages+' 页 · 共 '+filtered+' 条</span>';
+  // 上一页
+  html += '<button class="pg-btn" onclick="setPage('+(_currentPage-1)+')"'+(_currentPage===1?' disabled':'')+'>‹ 上一页</button>';
+  // 页码（最多显示7个数字）
+  var pages = [];
+  if(totalPages <= 7){
+    for(var i=1;i<=totalPages;i++) pages.push(i);
+  } else {
+    pages.push(1);
+    var start = Math.max(2, _currentPage - 2);
+    var end = Math.min(totalPages - 1, _currentPage + 2);
+    if(start > 2) pages.push('...');
+    for(var j=start;j<=end;j++) pages.push(j);
+    if(end < totalPages - 1) pages.push('...');
+    pages.push(totalPages);
+  }
+  pages.forEach(function(p){
+    if(p === '...'){ html += '<span class="pg-ellipsis">…</span>'; return; }
+    html += '<button class="pg-btn'+(p===_currentPage?' active':'')+'" onclick="setPage('+p+')">'+p+'</button>';
+  });
+  // 下一页
+  html += '<button class="pg-btn" onclick="setPage('+(_currentPage+1)+')"'+(_currentPage===totalPages?' disabled':'')+'>下一页 ›</button>';
+  dom.innerHTML = html;
+}
+
 /* ===== Render Table ===== */
 function renderTable(){
-  var list=BookPillData.getAll();
+  var list=BookPillData.getAll().sort(function(a,b){ return new Date(b.createdAt) - new Date(a.createdAt); });
   var search=(document.getElementById('filtSearch').value||'').trim().toLowerCase();
   var statusF=document.getElementById('filtStatus').value;
   var domainF=document.getElementById('filtDomain').value;
@@ -704,14 +872,22 @@ function renderTable(){
   });}
   if(statusF)list=list.filter(function(s){return (s.status||'pending')===statusF;});
   if(domainF)list=list.filter(function(s){return s.domain===domainF;});
-  document.getElementById('tableCount').textContent='共 '+list.length+' 条';
+  var filtered = list.length;
+  document.getElementById('tableCount').textContent='共 '+filtered+' 条';
   var tb=document.getElementById('tbody');
   if(!list.length){
     tb.innerHTML='<tr><td colspan="7"><div class="empty">暂无匹配的投稿 · 等待社区共建</div></td></tr>';
+    document.getElementById('pagination').innerHTML = '';
     return;
   }
+  // 分页
+  var totalPages = Math.ceil(filtered / _pageSize);
+  if(_currentPage > totalPages) _currentPage = totalPages;
+  if(_currentPage < 1) _currentPage = 1;
+  var start = (_currentPage - 1) * _pageSize;
+  var pageList = list.slice(start, start + _pageSize);
   var html='';
-  list.forEach(function(it){
+  pageList.forEach(function(it){
     var tags='';
     if(it.tags&&it.tags.length){tags='<div style="margin-top:4px">'+it.tags.slice(0,3).map(function(t){return '<span class="cloud-tag" style="padding:2px 8px;font-size:10px;border-color:var(--aged-dark);color:var(--ink-soft)">'+escapeHtml(t)+'</span>';}).join(' ')+'</div>';}
     html+='<tr data-id="'+escapeHtml(it.id)+'">'
@@ -719,7 +895,7 @@ function renderTable(){
       +'<td class="author-cell">'+escapeHtml(it.author||'佚名')+'</td>'
       +'<td>'+domainBadge(it.domain)+'</td>'
       +'<td>'+escapeHtml(it.contributor||'匿名')+'</td>'
-      +'<td><select class="status-select" onchange="changeStatus(\''+escapeHtml(it.id)+'\',this.value)">'+statusOptions(it.status||'pending')+'</select></td>'
+      +'<td>'+statusBadge(it.status||'pending')+'</td>'
       +'<td class="time-cell" title="'+escapeHtml(it.createdAt||'')+'">'+relativeTime(it.createdAt)+'</td>'
       +'<td><div class="row-actions">'
         +'<button class="act-btn view" onclick="openModal(\''+escapeHtml(it.id)+'\')">查看详情</button>'
@@ -727,7 +903,8 @@ function renderTable(){
       +'</div></td>'
       +'</tr>';
   });
-  tb.innerHTML=html;
+    tb.innerHTML=html;
+  renderPagination(list.length, filtered);
 }
 
 /* ===== Actions ===== */
@@ -735,18 +912,39 @@ function changeStatus(id,newStatus){
   if(!STATUS_LABEL[newStatus])return;
   BookPillData.setStatus(id,newStatus);
   showToast('状态已更新为「'+STATUS_LABEL[newStatus]+'」','success');
+  
+  // 同步到 Supabase
+  var pwd = PWD;
+  if(pwd && window.BookPillSupabase){
+    var supId = id.replace('sup_', '');
+    if(newStatus === 'approved'){
+      BookPillSupabase.adminApprove(pwd, parseInt(supId)).catch(function(){});
+    } else if(newStatus === 'rejected'){
+      BookPillSupabase.adminReject(pwd, parseInt(supId)).catch(function(){});
+    }
+  }
+  
   refresh();
   var m=document.getElementById('modal');
   if(m&&m.dataset.id===id)openModal(id);
 }
 function removeItem(id){
   if(!confirm('确定删除该投稿？此操作不可撤销。'))return;
-  if(BookPillData.remove(id)){showToast('已删除','success');refresh();}
+  var supId = _extractSupId(id);
+  if(BookPillData.remove(id)){
+    if(supId) _markSupIdDeleted(supId);
+    showToast('已删除','success');refresh();
+  }
   else showToast('删除失败','error');
 }
 function clearAll(){
   if(!confirm('将清空所有投稿数据，确定继续？'))return;
   if(!confirm('再次确认：所有数据将被永久删除，确定？'))return;
+  var all = BookPillData.getAll();
+  all.forEach(function(item){
+    var sid = _extractSupId(item.id);
+    if(sid) _markSupIdDeleted(sid);
+  });
   if(BookPillData.clear()){showToast('所有数据已清空','success');refresh();}
   else showToast('清空失败','error');
 }
@@ -808,7 +1006,6 @@ function openModal(id){
     metaHtml+='</div>';
   }
   var statusRow='<div class="modal-status-row"><div class="k">当前状态</div>'
-    +'<select class="status-select" onchange="changeStatus(\''+escapeHtml(it.id)+'\',this.value)">'+statusOptions(it.status||'pending')+'</select>'
     +statusBadge(it.status||'pending')+'</div>';
   var bodyHtml=statusRow+metaHtml;
   if(it.tags&&it.tags.length){
@@ -827,6 +1024,13 @@ function openModal(id){
   });
   if(it.quote)bodyHtml+='<div class="modal-row"><div class="k">核心金句</div><div class="v quote">「'+escapeHtml(it.quote)+'」</div></div>';
   bodyHtml+='<div class="modal-row"><div class="k">创建时间</div><div class="v" style="font-size:12px;color:var(--ink-faint)">'+escapeHtml(it.createdAt||'')+' （'+relativeTime(it.createdAt)+'） · 更新：'+escapeHtml(it.updatedAt||'')+'</div></div>';
+  // 待审核状态添加审核按钮
+  if((it.status||'pending')==='pending'){
+    bodyHtml+='<div class="modal-review-actions">'
+      +'<button class="review-btn approve" onclick="modalApprove(\''+escapeHtml(it.id)+'\')">✓ 通 过 收 录</button>'
+      +'<button class="review-btn reject" onclick="modalReject(\''+escapeHtml(it.id)+'\')">✕ 拒 绝</button>'
+      +'</div>';
+  }
   m.innerHTML='<div class="modal-head">'
     +'<div><div class="m-title">《'+escapeHtml(it.title||'未命名')+'》</div>'
     +'<div class="m-author">'+escapeHtml(it.author||'佚名')+' · '+escapeHtml(it.domain||'未分')+'脉</div></div>'
@@ -864,6 +1068,7 @@ function onCdChange(select){
     if(o.getAttribute('data-value')===val)o.classList.add('selected');
     else o.classList.remove('selected');
   });
+  _currentPage=1;
   trigger.classList.remove('open');
   cd.querySelector('[data-menu]').classList.remove('show');
   renderTable();
@@ -884,8 +1089,99 @@ document.addEventListener('click',function(e){
   select.dispatchEvent(evt);
 });
 
+/* ===== Sync from Supabase ===== */
+function syncFromSupabase(){
+  return new Promise(function(resolve){
+    if(!window.BookPillSupabase){ resolve(false); return; }
+    // 尝试从 Supabase 获取所有书籍数据
+    var pwd = PWD;
+    if(!pwd){ resolve(false); return; }
+    
+    BookPillSupabase.adminGetAll(pwd).then(function(books){
+      if(!books || !books.length){ resolve(true); return; }
+      
+      // 将 Supabase 数据同步到本地存储
+      var existing = BookPillData.getAll();
+      var existingMap = {};
+      existing.forEach(function(item){ existingMap[item.id] = item; });
+      var deletedIds = _getDeletedSupIds();
+      
+      books.forEach(function(b){
+        var localId = 'sup_' + b.id;
+        // 如果本地没有这本书，且未被标记为删除，添加它
+        if(!existingMap[localId] && deletedIds.indexOf(String(b.id)) === -1){
+          var domains = [];
+          try{ domains = typeof b.domain === 'string' ? JSON.parse(b.domain) : (b.domain || []); }catch(e){}
+          
+          BookPillData.add({
+            id: 'sup_' + b.id,
+            title: b.title || '',
+            author: b.author || '',
+            domain: Array.isArray(domains) ? domains[0] : '',
+            scene: b.scene || '',
+            insight: b.core_view || '',
+            bookDesc: b.book_desc || '',
+            prescription: b.steps || '',
+            quote: b.quotes || '',
+            audience: b.audience || '',
+            contributor: b.contributor || '',
+            note: b.note || '',
+            tags: Array.isArray(domains) ? domains : [],
+            publisher: '',
+            pageCount: 0,
+            publishedDate: '',
+            language: '',
+            isbn: '',
+            steps: b.steps || '',
+            keywordsMatched: [],
+            autoGenerated: {},
+            status: b.status || 'pending',
+            createdAt: b.created_at || new Date().toISOString(),
+            updatedAt: b.created_at || new Date().toISOString()
+          });
+        } else {
+          // 如果本地有但状态不同步，更新状态
+          var localItem = existingMap[localId];
+          if(localItem && localItem.status !== b.status){
+            BookPillData.setStatus(localItem.id, b.status);
+          }
+        }
+      });
+      resolve(true);
+    }).catch(function(){
+      resolve(false);
+    });
+  });
+}
+
+/* ===== 已删除的 Supabase ID 追踪 ===== */
+var DELETED_SUP_IDS_KEY = 'bookpill_deleted_sup_ids';
+function _getDeletedSupIds(){
+  try { return JSON.parse(localStorage.getItem(DELETED_SUP_IDS_KEY)) || []; }
+  catch(e){ return []; }
+}
+function _markSupIdDeleted(supId){
+  if(!supId) return;
+  var list = _getDeletedSupIds();
+  var id = typeof supId === 'string' ? supId.replace('sup_', '') : String(supId);
+  if(list.indexOf(id) === -1){
+    list.push(id);
+    // 保持列表不超过 500 个
+    if(list.length > 500) list = list.slice(-500);
+    localStorage.setItem(DELETED_SUP_IDS_KEY, JSON.stringify(list));
+  }
+}
+function _extractSupId(localId){
+  if(!localId) return null;
+  if(localId.indexOf('sup_') === 0) return localId.replace('sup_', '');
+  return null;
+}
+
 /* ===== Main Refresh ===== */
-function refresh(){
+async function refresh(){
+  // 尝试从 Supabase 同步数据
+  await syncFromSupabase();
+  
   var stats=BookPillData.getSummaryStats();
   renderKPI(stats);
   renderTrend(stats.monthly);
@@ -895,6 +1191,7 @@ function refresh(){
   populateDomainFilter();
   syncCdLabels();
   renderTable();
+  updatePendingBadge();
 }
 function syncCdLabels(){
   document.querySelectorAll('[data-cd]').forEach(function(cd){
@@ -902,6 +1199,180 @@ function syncCdLabels(){
     var label=cd.querySelector('.cd-label');
     if(select&&label){label.textContent=select.options[select.selectedIndex].text;}
   });
+}
+
+
+/* ===== Modal Review Actions ===== */
+function modalApprove(id){
+  changeStatus(id,'approved');
+  closeModal();
+}
+function modalReject(id){
+  if(!confirm('确认拒绝这篇投稿？'))return;
+  changeStatus(id,'rejected');
+  closeModal();
+}
+
+/* ===== Batch Review ===== */
+function openBatchReview(){
+  var pending=BookPillData.getAll().filter(function(s){return (s.status||'pending')==='pending';});
+  renderBatchList(pending);
+  document.getElementById('batchOverlay').classList.add('show');
+}
+function closeBatchReview(){
+  document.getElementById('batchOverlay').classList.remove('show');
+}
+function renderBatchList(items){
+  var list=document.getElementById('batchList');
+  if(!items||items.length===0){
+    list.innerHTML='<div class="empty">暂无待审核投稿，全部处理完毕 ✓</div>';
+    return;
+  }
+  list.innerHTML=items.map(function(it){
+    var domains=[];
+    if(it.domain)domains=[it.domain];
+    if(it.tags&&it.tags.length)domains=domains.concat(it.tags);
+    var domainHtml=domains.map(function(d){return '<span style="font-size:11px;padding:2px 10px;border-radius:4px;background:rgba(184,159,107,.15);color:var(--gold-dark)">'+escapeHtml(d)+'</span>';}).join(' ');
+    return '<div class="batch-card" id="batch-'+escapeHtml(it.id)+'">'
+      +'<div class="bc-title">《'+escapeHtml(it.title||'未命名')+'》</div>'
+      +'<div class="bc-author">'+escapeHtml(it.author||'佚名')+'</div>'
+      +(domainHtml?'<div class="bc-meta">'+domainHtml+'</div>':'')
+      +'<div class="bc-info">'
+        +(it.scene?'<div class="bc-content"><span class="bc-label">推荐场景：</span>'+escapeHtml(it.scene)+'</div>':'')
+        +(it.insight?'<div class="bc-content"><span class="bc-label">核心观点：</span>'+escapeHtml(it.insight)+'</div>':'')
+        +(it.prescription?'<div class="bc-content"><span class="bc-label">良方：</span>'+escapeHtml(it.prescription)+'</div>':'')
+        +(it.quote?'<div class="bc-content"><span class="bc-label">金句：</span>'+escapeHtml(it.quote)+'</div>':'')
+        +(it.audience?'<div class="bc-content"><span class="bc-label">适用人群：</span>'+escapeHtml(it.audience)+'</div>':'')
+      +'</div>'
+      +'<div class="bc-contributor">投稿人：'+escapeHtml(it.contributor||'匿名')+' · '+relativeTime(it.createdAt)+'</div>'
+      +'<div class="bc-actions">'
+        +'<button class="bc-btn approve" onclick="batchApprove(\''+escapeHtml(it.id)+'\')">通过收录</button>'
+        +'<button class="bc-btn reject" onclick="batchReject(\''+escapeHtml(it.id)+'\')">拒绝</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+function batchApprove(id){
+  changeStatus(id,'approved');
+  var card=document.getElementById('batch-'+id);
+  if(card){
+    card.style.opacity='0';
+    card.style.transform='translateX(20px)';
+    setTimeout(function(){card.remove();checkBatchEmpty();},300);
+  }
+  updatePendingBadge();
+}
+function batchReject(id){
+  if(!confirm('确认拒绝这篇投稿？'))return;
+  changeStatus(id,'rejected');
+  var card=document.getElementById('batch-'+id);
+  if(card){
+    card.style.opacity='0';
+    card.style.transform='translateX(20px)';
+    setTimeout(function(){card.remove();checkBatchEmpty();},300);
+  }
+  updatePendingBadge();
+}
+function checkBatchEmpty(){
+  var list=document.getElementById('batchList');
+  if(list&&list.querySelectorAll('.batch-card').length===0){
+    list.innerHTML='<div class="empty">所有投稿已审核完毕 ✓</div>';
+  }
+}
+function updatePendingBadge(){
+  var pending=BookPillData.countByStatus('pending');
+  var badge=document.getElementById('pendingBadge');
+  if(badge)badge.textContent=pending;
+}
+
+/* ===== Batch Delete ===== */
+var _bdSelected=new Set();
+function openBatchDelete(){
+  _bdSelected.clear();
+  renderBatchDeleteList();
+  document.getElementById('batchDeleteOverlay').classList.add('show');
+  // 清除 active
+  document.querySelectorAll('.bdc-chip').forEach(function(c){c.classList.remove('active');});
+}
+function closeBatchDelete(){
+  document.getElementById('batchDeleteOverlay').classList.remove('show');
+}
+function renderBatchDeleteList(){
+  var list=BookPillData.getAll().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+  var dom=document.getElementById('batchDeleteList');
+  if(!list||list.length===0){
+    dom.innerHTML='<div class="empty">暂无投稿记录</div>';
+    updateBDCount();
+    return;
+  }
+  dom.innerHTML=list.map(function(it){
+    var checked=_bdSelected.has(it.id)?'checked':'';
+    return '<div class="bd-item" data-id="'+escapeHtml(it.id)+'">'
+      +'<input type="checkbox" '+checked+' onchange="toggleBDItem(\''+escapeHtml(it.id)+'\',this)">'
+      +'<div class="bdi-main">'
+        +'<div class="bdi-title">《'+escapeHtml(it.title||'未命名')+'》</div>'
+        +'<div class="bdi-meta">'+escapeHtml(it.author||'佚名')+' · '+escapeHtml(it.contributor||'匿名')+' · '+relativeTime(it.createdAt)+'</div>'
+      +'</div>'
+      +statusBadge(it.status||'pending').replace('status-badge','bdi-status')
+    +'</div>';
+  }).join('');
+  updateBDCount();
+}
+function toggleBDItem(id,cb){
+  if(cb.checked)_bdSelected.add(id);
+  else _bdSelected.delete(id);
+  updateBDCount();
+}
+function selectByStatus(chip,status){
+  document.querySelectorAll('.bdc-chip').forEach(function(c){c.classList.remove('active');});
+  chip.classList.add('active');
+  var all=BookPillData.getAll();
+  _bdSelected.clear();
+  all.forEach(function(it){
+    if(status==='all' || (it.status||'pending')===status){
+      _bdSelected.add(it.id);
+    }
+  });
+  renderBatchDeleteList();
+}
+function invertSelection(){
+  var all=BookPillData.getAll();
+  var newSet=new Set();
+  all.forEach(function(it){
+    if(!_bdSelected.has(it.id))newSet.add(it.id);
+  });
+  _bdSelected=newSet;
+  renderBatchDeleteList();
+  document.querySelectorAll('.bdc-chip').forEach(function(c){c.classList.remove('active');});
+}
+function clearSelection(){
+  _bdSelected.clear();
+  renderBatchDeleteList();
+  document.querySelectorAll('.bdc-chip').forEach(function(c){c.classList.remove('active');});
+}
+function updateBDCount(){
+  var n=_bdSelected.size;
+  document.getElementById('bdSelectedCount').textContent=n;
+  var btn=document.getElementById('bdConfirmBtn');
+  if(btn)btn.disabled=n===0;
+}
+function confirmBatchDelete(){
+  var n=_bdSelected.size;
+  if(n===0)return;
+  if(!confirm('确认删除已勾选的 '+n+' 条投稿？此操作不可撤销！'))return;
+  if(!confirm('再次确认：删除后数据无法恢复，是否继续？'))return;
+  var done=0,fail=0;
+  _bdSelected.forEach(function(id){
+    var supId = _extractSupId(id);
+    if(BookPillData.remove(id)){
+      if(supId) _markSupIdDeleted(supId);
+      done++;
+    } else fail++;
+  });
+  _bdSelected.clear();
+  showToast('已删除 '+done+' 条'+(fail>0?'，失败 '+fail+' 条':''),'success');
+  closeBatchDelete();
+  refresh();
 }
 
 /* ===== Boot ===== */

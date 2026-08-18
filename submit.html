@@ -211,7 +211,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);bo
 
 
 .rec-status.pending{background:rgba(184,159,107,.18);color:var(--gold-dark)}
-.rec-status.accepted{background:rgba(107,142,111,.16);color:var(--bamboo)}
+.rec-status.approved{background:rgba(107,142,111,.16);color:var(--bamboo)}
 .rec-status.rejected{background:rgba(184,64,64,.12);color:var(--vermillion)}
 
 @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -503,7 +503,9 @@ footer .f-links a:hover{color:#fff}
   </div>
 </footer>
 
-<script src="data.js?v=2.3.0"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase.js"></script>
+<script src="data.js?v=2.4.0"></script>
 <script>
 var DOMAIN_MAP = {
   '拖延':{color:'#8B7EC8',key:'delay',desc:'启动·完美',
@@ -1646,7 +1648,7 @@ function hydrateContributor(){
     var mine = rank.find(function(r){ return r.name === p.name; });
     var all = BookPillData.getAll().filter(function(s){ return s.contributor === p.name; });
     var txt = '共投稿 ' + (mine ? mine.count : 0) + ' 本';
-    if(mine) txt += '，收录 ' + mine.accepted + ' 本，待审 ' + mine.pending + ' 本';
+    if(mine) txt += '，收录 ' + mine.approved + ' 本，待审 ' + mine.pending + ' 本';
     if(all.length > 0){
       var last = all[0];
       if(last) txt += ' · 最近《' + (last.title || '') + '》于 ' + relativeTime(last.createdAt);
@@ -1879,15 +1881,44 @@ function submitLocal(){
   state.busySubmit = true;
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span><span>正在检查…</span>';
+
+  // === 重复投稿检查（二级） ===
+  var titleLower = (state.title||'').trim().toLowerCase();
+  if(!titleLower){ showToast('请输入书名','error'); state.busySubmit=false; btn.disabled=false; btn.innerHTML='✓ 确认投稿'; return; }
+
+  // 一级：检查本地投稿记录
+  var localSubs = BookPillData.getAll();
+  for(var i=0;i<localSubs.length;i++){
+    if(localSubs[i].title && localSubs[i].title.toLowerCase()===titleLower){
+      var st = localSubs[i].status || 'pending';
+      var stText = {pending:'待审核',approved:'已收录',rejected:'未通过'}[st] || st;
+      showToast('《'+state.title+'》您已投稿过，当前状态：'+stText,'info');
+      state.busySubmit=false; btn.disabled=false; btn.innerHTML='✓ 确认投稿'; return;
+    }
+  }
+
+  // 二级：检查 Supabase 社区已收录书籍
   btn.innerHTML = '<span class="spin"></span><span>正在提交…</span>';
+  var supCheck = Promise.resolve(false);
+  if(window.BookPillSupabase && BookPillSupabase.checkDuplicate){
+    supCheck = BookPillSupabase.checkDuplicate(state.title);
+  }
 
-  // save contributor profile for next time
-  BookPillData.setContributorProfile({
-    name: state.contributor,
-    lastAt: new Date().toISOString()
-  });
+  supCheck.then(function(isDup){
+    if(isDup){
+      showToast('《'+state.title+'》已被社区收录，无需重复投稿','info');
+      state.busySubmit=false; btn.disabled=false; btn.innerHTML='✓ 确认投稿';
+      return;
+    }
 
-  setTimeout(function(){
+    // save contributor profile for next time
+    BookPillData.setContributorProfile({
+      name: state.contributor,
+      lastAt: new Date().toISOString()
+    });
+
+    setTimeout(function(){
     var f = collectForm();
     BookPillData.add(f);
 
@@ -1912,8 +1943,34 @@ function submitLocal(){
       + '&body=' + encodeURIComponent(body)
       + '&labels=book-submission,needs-review';
 
-    showToast('投稿数据已生成，正在跳转到 GitHub 确认提交…', 'success');
-    window.open(issueUrl, '_blank');
+    // 提交到 Supabase
+    var domain = state.selectedDomain || (state.detectedDomains.length ? state.detectedDomains[0].domain : '内耗');
+    var bookData = {
+      title: state.title || '',
+      author: state.author || '',
+      domain: [domain],
+      scene: state.autoScene || '',
+      coreView: state.autoInsight || '',
+      steps: (state.autoSteps||[]).map(function(s,i){ return (i+1)+'. '+s; }).join('\n'),
+      quotes: state.autoQuote || '',
+      audience: state.audience || '希望自我成长与改变的读者',
+      bookDesc: state.bookDesc || '',
+      metaInfo: state.metaInfo || '',
+      contributor: state.contributor || '',
+      note: state.note || ''
+    };
+
+    if(window.BookPillSupabase){
+      BookPillSupabase.submitBook(bookData).then(function(){
+        showToast('投稿成功！待审核后即可上线 ✓', 'success');
+      }).catch(function(e){
+        var msg = e && e.message ? e.message : '投稿失败，请稍后重试';
+        showToast(msg, 'error');
+        console.error('Supabase submit error:', e);
+      });
+    } else {
+      showToast('投稿成功！同道又多了一本良方 ✓', 'success');
+    }
 
     state.busySubmit = false;
     btn.innerHTML = '✓ 提交下一本';
@@ -1942,10 +1999,16 @@ function submitLocal(){
           hydrateContributor(); // refresh history line
     }, 1500);
   }, 700);
+  }).catch(function(){
+    state.busySubmit=false;
+    btn.disabled=false;
+    btn.innerHTML='✓ 确认投稿';
+    showToast('投稿检查失败，请稍后重试','error');
+  });
 }
 
 /* ========== Recent submissions ========== */
-var STATUS_LABEL = { pending:'待审核', accepted:'已收录', rejected:'未通过' };
+var STATUS_LABEL = { pending:'待审核', approved:'已收录', rejected:'未通过' };
 
 
 function initReveal(){
