@@ -437,7 +437,7 @@ function renderSubmissions(){
     var book=it.title||'';
     var contributor=it.contributor||'匿名';
     var cc=contribColor(contributor);
-    html+='<div class="sub-card" style="--dc:'+dc+'" data-id="'+it.id+'" onclick="showBookById(this.dataset.id)">'+
+    html+='<div class="sub-card" style="--dc:'+dc+'">'+
       '<div class="sub-top">'+
         '<span class="sub-status '+status+'">'+STATUS_LABEL[status]+'</span>'+
         '<span class="sub-time">'+relativeTime(it.createdAt)+'</span>'+
@@ -448,7 +448,7 @@ function renderSubmissions(){
         '<span style="width:22px;height:22px;border-radius:50%;background:'+cc+';color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+escapeHtml(firstChar(contributor))+'</span>'+
         '<span>'+escapeHtml(contributor)+'</span>'+
       '</div>'+
-      '<div class="sub-foot"><span class="go">查看详情 →</span></div>'+
+      '<div class="sub-foot"></div>'+
     '</div>';
   });
   grid.innerHTML=html;
@@ -503,13 +503,13 @@ function renderContributors(){
     var founder=idx===0;
     var cc=contribColor(c.name);
     var border=founder?'var(--vermillion)':'var(--aged-dark)';
-    html+='<a class="contrib-chip'+(founder?' founder':'')+'" href="submit.html">'+
+    html+='<div class="contrib-chip'+(founder?' founder':'')+'">'+
       '<span style="width:34px;height:34px;border-radius:50%;border:2px solid '+border+';background:'+cc+';color:#fff;font-family:var(--cal);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+escapeHtml(firstChar(c.name))+'</span>'+
       '<div>'+
         '<div class="contrib-name">'+escapeHtml(c.name)+(founder?'<span class="founder-badge">主理人</span>':'')+'</div>'+
         '<div class="contrib-count">'+c.count+' 次投稿</div>'+
       '</div>'+
-    '</a>';
+    '</div>';
   });
   grid.innerHTML=html;
 }
@@ -709,13 +709,7 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Escape')closeModal();
 });
 
-// Event delegation for cards (backup)
-document.addEventListener('click',function(e){
-  var card=e.target.closest('.sub-card');
-  if(card && card.dataset.id){
-    showBookById(card.dataset.id);
-  }
-});
+// Card click disabled intentionally
 
 </script>
 </body>
