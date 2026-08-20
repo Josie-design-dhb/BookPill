@@ -347,12 +347,19 @@ footer .f-links a:hover{color:#fff}
 
 <div class="toast" id="toast"></div>
 
-<script src="data.js">
+<script src="data.js"></script>
+<script>
 /* ========== Book Detail Modal ========== */
-function showBookDetail(idx){
-  var all=BookPillData.getAll();
-  var it=all[idx];
-  if(!it)return;
+function showBookById(id){
+  var it=BookPillData.getById(id);
+  if(!it){
+    // Fallback: search all
+    var all=BookPillData.getAll();
+    for(var i=0;i<all.length;i++){
+      if(all[i].id===id){ it=all[i]; break; }
+    }
+  }
+  if(!it){ alert('未找到该书籍'); return; }
   var domain=it.domain||'';
   var dc=domainColor(domain);
   var status=it.status||'pending';
@@ -426,6 +433,14 @@ document.getElementById('bookModal').addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape')closeModal();
+});
+
+// Event delegation for cards (backup)
+document.addEventListener('click',function(e){
+  var card=e.target.closest('.sub-card');
+  if(card && card.dataset.id){
+    showBookById(card.dataset.id);
+  }
 });
 
 </script>
@@ -517,7 +532,7 @@ function renderSubmissions(){
     var book=it.title||'';
     var contributor=it.contributor||'匿名';
     var cc=contribColor(contributor);
-    html+='<div class="sub-card" style="--dc:'+dc+'" onclick="showBookDetail('+all.indexOf(it)+')">'+
+    html+='<div class="sub-card" style="--dc:'+dc+'" data-id="'+it.id+'" onclick="showBookById(this.dataset.id)">'+
       '<div class="sub-top">'+
         '<span class="sub-status '+status+'">'+STATUS_LABEL[status]+'</span>'+
         '<span class="sub-time">'+relativeTime(it.createdAt)+'</span>'+
