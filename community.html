@@ -348,101 +348,6 @@ footer .f-links a:hover{color:#fff}
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
-<script>
-/* ========== Book Detail Modal ========== */
-function showBookById(id){
-  var it=BookPillData.getById(id);
-  if(!it){
-    // Fallback: search all
-    var all=BookPillData.getAll();
-    for(var i=0;i<all.length;i++){
-      if(all[i].id===id){ it=all[i]; break; }
-    }
-  }
-  if(!it){ alert('未找到该书籍'); return; }
-  var domain=it.domain||'';
-  var dc=domainColor(domain);
-  var status=it.status||'pending';
-  var statusText=STATUS_LABEL[status];
-  var book=it.title||'';
-  var author=it.author||'佚名';
-  var contributor=it.contributor||'匿名';
-  var scene=it.scene||'';
-  var insight=it.coreView||'';
-  var steps=it.steps||'';
-  var quotes=it.quotes||'';
-  var audience=it.audience||'';
-  var bookDesc=it.bookDesc||'';
-  var note=it.note||'';
-  var created=it.createdAt||'';
-
-  document.getElementById('modalTitle').textContent='《'+book+'》';
-  document.getElementById('modalMeta').innerHTML=
-    '<span class="modal-status '+status+'">'+statusText+'</span>'+
-    (domain?'<span class="detail-tag" style="background:'+dc+';color:#fff">'+domain+'脉</span>':'')+
-    '<span>'+author+'</span>';
-
-  var body='';
-  if(scene){
-    body+='<div class="detail-section"><div class="detail-label">推荐场景</div><div class="detail-text">'+escapeHtml(scene)+'</div></div>';
-  }
-  if(insight){
-    body+='<div class="detail-section"><div class="detail-label">核心观点</div><div class="detail-text">'+escapeHtml(insight)+'</div></div>';
-  }
-  if(steps){
-    var stepArr=steps.split(/\n/).filter(function(s){return s.trim()});
-    if(stepArr.length){
-      body+='<div class="detail-section"><div class="detail-label">良方步骤</div><ul class="detail-list">';
-      stepArr.forEach(function(s){body+='<li>'+escapeHtml(s)+'</li>';});
-      body+='</ul></div>';
-    }
-  }
-  if(quotes){
-    body+='<div class="detail-section"><div class="detail-label">核心金句</div><div class="detail-quote">'+escapeHtml(quotes)+'</div></div>';
-  }
-  if(audience){
-    body+='<div class="detail-section"><div class="detail-label">适合人群</div><div class="detail-text">'+escapeHtml(audience)+'</div></div>';
-  }
-  if(bookDesc){
-    body+='<div class="detail-section"><div class="detail-label">书籍简介</div><div class="detail-text">'+escapeHtml(bookDesc)+'</div></div>';
-  }
-  if(note){
-    body+='<div class="detail-section"><div class="detail-label">补充说明</div><div class="detail-text">'+escapeHtml(note)+'</div></div>';
-  }
-  if(!body){
-    body='<div class="detail-text" style="color:var(--ink-faint);text-align:center;padding:20px;">暂无详细内容</div>';
-  }
-  document.getElementById('modalBody').innerHTML=body;
-
-  var timeStr=created?new Date(created).toLocaleString('zh-CN'):'';
-  document.getElementById('modalFooter').innerHTML=
-    '<span>投稿人：'+escapeHtml(contributor)+' · '+timeStr+'</span>'+
-    '<span>ID: '+escapeHtml(it.id||idx)+'</span>';
-
-  document.getElementById('bookModal').classList.add('show');
-  document.body.style.overflow='hidden';
-}
-
-function closeModal(){
-  document.getElementById('bookModal').classList.remove('show');
-  document.body.style.overflow='';
-}
-
-document.getElementById('bookModal').addEventListener('click',function(e){
-  if(e.target===this)closeModal();
-});
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape')closeModal();
-});
-
-// Event delegation for cards (backup)
-document.addEventListener('click',function(e){
-  var card=e.target.closest('.sub-card');
-  if(card && card.dataset.id){
-    showBookById(card.dataset.id);
-  }
-});
-
 </script>
 <script>
 /* ========== Config ========== */
@@ -718,6 +623,100 @@ document.addEventListener('DOMContentLoaded',function(){
   initReveal();
   loadAll();
 });
+
+/* ========== Book Detail Modal ========== */
+function showBookById(id){
+  var it=BookPillData.getById(id);
+  if(!it){
+    var all=BookPillData.getAll();
+    for(var i=0;i<all.length;i++){
+      if(all[i].id===id){ it=all[i]; break; }
+    }
+  }
+  if(!it){ alert('未找到该书籍'); return; }
+  var domain=it.domain||'';
+  var dc=domainColor(domain);
+  var status=it.status||'pending';
+  var statusText=STATUS_LABEL[status];
+  var book=it.title||'';
+  var author=it.author||'佚名';
+  var contributor=it.contributor||'匿名';
+  var scene=it.scene||'';
+  var insight=it.coreView||'';
+  var steps=it.steps||'';
+  var quotes=it.quotes||'';
+  var audience=it.audience||'';
+  var bookDesc=it.bookDesc||'';
+  var note=it.note||'';
+  var created=it.createdAt||'';
+
+  document.getElementById('modalTitle').textContent='《'+book+'》';
+  document.getElementById('modalMeta').innerHTML=
+    '<span class="modal-status '+status+'">'+statusText+'</span>'+
+    (domain?'<span class="detail-tag" style="background:'+dc+';color:#fff">'+domain+'脉</span>':'')+
+    '<span>'+author+'</span>';
+
+  var body='';
+  if(scene){
+    body+='<div class="detail-section"><div class="detail-label">推荐场景</div><div class="detail-text">'+escapeHtml(scene)+'</div></div>';
+  }
+  if(insight){
+    body+='<div class="detail-section"><div class="detail-label">核心观点</div><div class="detail-text">'+escapeHtml(insight)+'</div></div>';
+  }
+  if(steps){
+    var stepArr=steps.split(/\n/).filter(function(s){return s.trim()});
+    if(stepArr.length){
+      body+='<div class="detail-section"><div class="detail-label">良方步骤</div><ul class="detail-list">';
+      stepArr.forEach(function(s){body+='<li>'+escapeHtml(s)+'</li>';});
+      body+='</ul></div>';
+    }
+  }
+  if(quotes){
+    body+='<div class="detail-section"><div class="detail-label">核心金句</div><div class="detail-quote">'+escapeHtml(quotes)+'</div></div>';
+  }
+  if(audience){
+    body+='<div class="detail-section"><div class="detail-label">适合人群</div><div class="detail-text">'+escapeHtml(audience)+'</div></div>';
+  }
+  if(bookDesc){
+    body+='<div class="detail-section"><div class="detail-label">书籍简介</div><div class="detail-text">'+escapeHtml(bookDesc)+'</div></div>';
+  }
+  if(note){
+    body+='<div class="detail-section"><div class="detail-label">补充说明</div><div class="detail-text">'+escapeHtml(note)+'</div></div>';
+  }
+  if(!body){
+    body='<div class="detail-text" style="color:var(--ink-faint);text-align:center;padding:20px;">暂无详细内容</div>';
+  }
+  document.getElementById('modalBody').innerHTML=body;
+
+  var timeStr=created?new Date(created).toLocaleString('zh-CN'):'';
+  document.getElementById('modalFooter').innerHTML=
+    '<span>投稿人：'+escapeHtml(contributor)+' · '+timeStr+'</span>'+
+    '<span>ID: '+escapeHtml(it.id||'')+'</span>';
+
+  document.getElementById('bookModal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('bookModal').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+document.getElementById('bookModal').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')closeModal();
+});
+
+// Event delegation for cards (backup)
+document.addEventListener('click',function(e){
+  var card=e.target.closest('.sub-card');
+  if(card && card.dataset.id){
+    showBookById(card.dataset.id);
+  }
+});
+
 </script>
 </body>
 </html>
