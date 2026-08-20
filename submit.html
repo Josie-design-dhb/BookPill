@@ -1920,7 +1920,8 @@ function submitLocal(){
 
     setTimeout(function(){
     var f = collectForm();
-    BookPillData.add(f);
+    var localItem = BookPillData.add(f);
+    var localId = localItem.id;
 
     // 构建投稿内容，跳转 GitHub Issue 创建页
     var domain = state.selectedDomain || (state.detectedDomains.length ? state.detectedDomains[0].domain : '内耗');
@@ -1961,7 +1962,11 @@ function submitLocal(){
     };
 
     if(window.BookPillSupabase){
-      BookPillSupabase.submitBook(bookData).then(function(){
+      BookPillSupabase.submitBook(bookData).then(function(result){
+        // Update local record with Supabase ID to prevent duplicates
+        if(result && result.id){
+          BookPillData.update(localId, { id: 'sup_' + result.id });
+        }
         showToast('投稿成功！待审核后即可上线 ✓', 'success');
       }).catch(function(e){
         var msg = e && e.message ? e.message : '投稿失败，请稍后重试';

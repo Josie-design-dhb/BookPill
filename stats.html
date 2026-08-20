@@ -1103,13 +1103,25 @@ function syncFromSupabase(){
       // 将 Supabase 数据同步到本地存储
       var existing = BookPillData.getAll();
       var existingMap = {};
-      existing.forEach(function(item){ existingMap[item.id] = item; });
+      var existingDupMap = {};  // 用于标题+作者+投稿人去重
+      existing.forEach(function(item){ 
+        existingMap[item.id] = item;
+        var key = (item.title||'').toLowerCase() + '|' + (item.author||'').toLowerCase() + '|' + (item.contributor||'').toLowerCase();
+        if(!existingDupMap[key]) existingDupMap[key] = [];
+        existingDupMap[key].push(item);
+      });
       var deletedIds = _getDeletedSupIds();
       
       books.forEach(function(b){
         var localId = 'sup_' + b.id;
-        // 如果本地没有这本书，且未被标记为删除，添加它
-        if(!existingMap[localId] && deletedIds.indexOf(String(b.id)) === -1){
+        var titleKey = (b.title||'').toLowerCase();
+        var authorKey = (b.author||'').toLowerCase();
+        var contribKey = (b.contributor||'').toLowerCase();
+        var dupKey = titleKey + '|' + authorKey + '|' + contribKey;
+        
+        // 如果本地没有这本书，且未被标记为删除，且没有重复，添加它
+        var isDuplicate = existingDupMap[dupKey] && existingDupMap[dupKey].length > 0;
+        if(!existingMap[localId] && deletedIds.indexOf(String(b.id)) === -1 && !isDuplicate){
           var domains = [];
           try{ domains = typeof b.domain === 'string' ? JSON.parse(b.domain) : (b.domain || []); }catch(e){}
           
@@ -1144,6 +1156,16 @@ function syncFromSupabase(){
           var localItem = existingMap[localId];
           if(localItem && localItem.status !== b.status){
             BookPillData.setStatus(localItem.id, b.status);
+          }
+          // 如果是通过标题去重找到的重复，更新其ID为sup_格式
+          if(!localItem && isDuplicate && existingDupMap[dupKey]){
+            var dupItem = existingDupMap[dupKey][0];
+            if(dupItem && !dupItem.id.startsWith('sup_')){
+              BookPillData.update(dupItem.id, { id: 'sup_' + b.id });
+            }
+            if(dupItem && dupItem.status !== b.status){
+              BookPillData.setStatus(dupItem.id, b.status);
+            }
           }
         }
       });
