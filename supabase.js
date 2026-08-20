@@ -102,6 +102,7 @@
         if(!data || !data.length) return [];
         return data.map(function(row){
           return {
+            id: row.id,
             title: row.title,
             author: row.author,
             domain: parseJSON(row.domain, []),

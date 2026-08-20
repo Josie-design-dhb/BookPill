@@ -627,6 +627,7 @@ function renderCoverage(){
 
 /* ========== Init ========== */
 function loadAll(){
+  // Load from local storage first
   document.getElementById('statSub').textContent=BookPillData.count();
   document.getElementById('statAcc').textContent=BookPillData.countByStatus('approved');
   document.getElementById('statContrib').textContent=BookPillData.getContributors().length;
@@ -635,6 +636,50 @@ function loadAll(){
   loadNewBooks();
   renderContributors();
   renderCoverage();
+  
+  // Sync from Supabase (public data)
+  if(window.BookPillSupabase && BookPillSupabase.getApprovedBooks){
+    BookPillSupabase.getApprovedBooks().then(function(books){
+      if(!books || !books.length) return;
+      // Sync approved books to local storage
+      var existing = BookPillData.getAll();
+      var existingMap = {};
+      existing.forEach(function(item){ existingMap[item.id] = item; });
+      
+      books.forEach(function(b){
+        var localId = 'supub_' + (b.id || b.source || b.title);
+        if(!existingMap[localId]){
+          var domains = [];
+          try{ domains = Array.isArray(b.domain) ? b.domain : JSON.parse(b.domain || '[]'); }catch(e){}
+          BookPillData.add({
+            id: localId,
+            title: b.title || '',
+            author: b.author || '',
+            domain: Array.isArray(domains) ? domains[0] : '',
+            scene: b.scene || '',
+            insight: b.coreView || '',
+            bookDesc: b.desc || '',
+            prescription: b.steps || '',
+            quote: b.quotes || '',
+            audience: b.audience || '',
+            contributor: b.contributor || '社区贡献者',
+            note: '',
+            tags: Array.isArray(domains) ? domains : [],
+            status: 'approved',
+            createdAt: new Date().toISOString()
+          });
+        }
+      });
+      // Re-render with updated data
+      document.getElementById('statSub').textContent=BookPillData.count();
+      document.getElementById('statAcc').textContent=BookPillData.countByStatus('approved');
+      document.getElementById('statContrib').textContent=BookPillData.getContributors().length;
+      renderSubmissions();
+      loadNewBooks();
+      renderContributors();
+      renderCoverage();
+    }).catch(function(){});
+  }
 }
 
 function initReveal(){
