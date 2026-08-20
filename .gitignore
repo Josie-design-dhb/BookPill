@@ -16,7 +16,6 @@ desktop.ini
 __pycache__/
 
 # Supabase config (contains project-specific keys)
-supabase-config.js
 
 # Deploy scripts
 deploy_to_supabase.py
