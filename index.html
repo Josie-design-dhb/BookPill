@@ -88,19 +88,30 @@ section{padding:96px 0;position:relative}
 /* 情商卡片 - 桌面端背景素材 */
 @media(min-width:480px){
   .domain-grid > .d-card:nth-child(5){grid-column:1/-1;border-right:0;grid-template-columns:64px 1fr;position:relative;overflow:hidden;background:#f4ede2}
+  .domain-grid > .d-card:nth-child(5)::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:50%;
+    background:linear-gradient(to right, #faf5ed 50%, rgba(250,245,237,0.85) 100%);
+    z-index:0;
+    pointer-events:none;
+  }
   .domain-grid > .d-card:nth-child(5)::after{
     content:'';
     position:absolute;
     right:0;
     top:0;
     bottom:0;
-    width:50%;
-    background-image:url('assets/eq-default.jpg');
+    width:100%;
+    background-image:url('assets/eq-hover.jpg');
     background-size:cover;
-    background-position:right center;
+    background-position:center center;
     background-repeat:no-repeat;
-    opacity:1;
-    transition:background-image .5s ease, opacity .5s ease;
+    opacity:0.95;
+    transition:opacity .5s ease, transform .5s ease;
     pointer-events:none;
     z-index:0;
   }
@@ -108,7 +119,8 @@ section{padding:96px 0;position:relative}
     background:#faf5ed!important;
   }
   .domain-grid > .d-card:nth-child(5):hover::after{
-    background-image:url('assets/eq-hover.jpg');
+    opacity:1;
+    transform:scale(1.02);
   }
 }
 .d-card::before{display:none}
