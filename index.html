@@ -1390,6 +1390,74 @@ function calcDomainScore(text,domainKey){
   return{score:score,matched:matched};
 }
 
+// ============ 跨域书籍概念库 ============
+// 书籍核心概念 - 可跨域匹配，命中即算有效关联
+const BOOK_CONCEPTS = [
+  // 《被讨厌的勇气》- 岸见一郎
+  {book:'《被讨厌的勇气》', author:'岸见一郎', concepts:['课题分离','阿德勒','个体心理学','被讨厌的勇气','自由就是被别人讨厌','课题','他人的课题','自己的课题','认可欲求','寻求认可','被评价','不在意别人'], domains:['anxiety','express','eq']},
+  // 《非暴力沟通》- 马歇尔·卢森堡
+  {book:'《非暴力沟通》', author:'马歇尔·卢森堡', concepts:['非暴力沟通','观察','感受','需要','请求','表达','沟通','倾听'], domains:['express','eq']},
+  // 《当下的力量》- 埃克哈特·托利
+  {book:'《当下的力量》', author:'埃克哈特·托利', concepts:['当下','正念','临在','当下的力量','思维','情绪','观察思维','活在当下'], domains:['anxiety','internal']},
+  // 《蛤蟆先生去看心理医生》- 罗伯特·戴博德
+  {book:'《蛤蟆先生去看心理医生》', author:'罗伯特·戴博德', concepts:['蛤蟆先生','苍鹭','心理咨询','TA沟通','成人自我','儿童自我','父母自我','讨好','适应'], domains:['internal','eq']},
+  // 《微习惯》- 斯蒂芬·盖斯
+  {book:'《微习惯》', author:'斯蒂芬·盖斯', concepts:['微习惯','微小目标','不可能失败','小到可笑','迷你习惯'], domains:['delay']},
+  // 《原子习惯》- 詹姆斯·克利尔
+  {book:'《原子习惯》', author:'詹姆斯·克利尔', concepts:['原子习惯','原子','习惯的力量','1%','复利','环境设计','身份认同'], domains:['delay']},
+  // 《拖延心理学》- 简·博克
+  {book:'《拖延心理学》', author:'简·博克', concepts:['拖延心理学','拖延','拖延症','完美主义','回避型拖延','启动困难'], domains:['delay']},
+  // 《关键对话》- 帕特里克·布拉德利
+  {book:'《关键对话》', author:'帕特里克·布拉德利', concepts:['关键对话','高难度对话','观点','对比法','STATE','START'], domains:['express','eq']},
+  // 《情商》- 丹尼尔·戈尔曼
+  {book:'《情商》', author:'丹尼尔·戈尔曼', concepts:['情商','EQ','情绪智力','自我觉察','自我管理','社交意识','关系管理'], domains:['eq']},
+  // 《身份的焦虑》- 阿兰·德波顿
+  {book:'《身份的焦虑》', author:'阿兰·德波顿', concepts:['身份的焦虑','比较','社会地位','身份认同','价值感','自我评价'], domains:['anxiety','internal','eq']},
+  // 《也许你该找个人聊聊》- 洛莉·戈特利布
+  {book:'《也许你该找个人聊聊》', author:'洛莉·戈特利布', concepts:['也许你该找个人聊聊','心理咨询',' therapists','治疗师','情绪','人生困境'], domains:['internal','anxiety']},
+  // 《影响力》- 罗伯特·西奥迪尼
+  {book:'《影响力》', author:'罗伯特·西奥迪尼', concepts:['影响力','说服','社会工程学','互惠','承诺一致','权威'], domains:['express','eq']},
+  // 《高效能人士的七个习惯》- 史蒂芬·柯维
+  {book:'《高效能人士的七个习惯》', author:'史蒂芬·柯维', concepts:['七个习惯','高效能','主动积极','以终为始','要事第一','双赢思维','知彼解己','统合综效','不断更新'], domains:['eq','delay']},
+  // 《把时间当作朋友》- 李笑来
+  {book:'《把时间当作朋友》', author:'李笑来', concepts:['把时间当作朋友','时间管理','心智','耐心','积累'], domains:['delay']},
+  // 《自我关怀》- 克里斯汀·内夫
+  {book:'《自我关怀》', author:'克里斯汀·内夫', concepts:['自我关怀','自我同情','善待自己','自我批评','自我接纳'], domains:['internal','eq']},
+  // 《被忽视的孩子》- 乔尼丝·韦伯
+  {book:'《被忽视的孩子》', author:'乔尼丝·韦伯', concepts:['被忽视的孩子','情感忽视','童年忽视','隐性创伤','空寂感'], domains:['internal']},
+  // 《社交天性》- 马修·利伯曼
+  {book:'《社交天性》', author:'马修·利伯曼', concepts:['社交天性','社交','人际连接','归属感','社会痛苦'], domains:['eq','express']},
+  // 《焦虑的人》- 弗雷德里克·巴克曼
+  {book:'《焦虑的人》', author:'弗雷德里克·巴克曼', concepts:['焦虑的人','焦虑','过度担心','灾难化思维','忧虑'], domains:['anxiety']}
+];
+
+// 检测书籍概念匹配 - 返回匹配的书籍列表
+function detectBookConcepts(text, domainKey){
+  const matched = [];
+  BOOK_CONCEPTS.forEach(book => {
+    let matchedConcept = null;
+    for(const concept of book.concepts){
+      if(text.includes(concept)){
+        matchedConcept = concept;
+        break;
+      }
+    }
+    if(matchedConcept){
+      // 检查该书是否支持当前问题域
+      const domainSupport = book.domains.includes(domainKey);
+      matched.push({
+        book: book.book,
+        author: book.author,
+        concept: matchedConcept,
+        domainSupport: domainSupport,
+        // 支持域内 = 高权重；跨域 = 中权重
+        weight: domainSupport ? 3 : 2
+      });
+    }
+  });
+  return matched;
+}
+
 // 检测问题域不匹配：只有当当前域匹配分数<1 且其他域有更高分数时才判定为不匹配
 function detectDomainMismatch(text,domainKey){
   const currentScore=calcDomainScore(text,domainKey).score;
@@ -1608,7 +1676,14 @@ function recommendDomain(text){
 // ============ 置信度分级计算 ============
 function calcConfidence(text, domainKey){
   const scoreInfo = calcDomainScore(text, domainKey);
-  const score = scoreInfo.score;
+  const domainScore = scoreInfo.score;
+  
+  // 书籍概念匹配 - 跨域书籍识别
+  const bookConcepts = detectBookConcepts(text, domainKey);
+  const bookMatched = bookConcepts.length > 0;
+  const bookScore = bookMatched ? Math.max(...bookConcepts.map(b => b.weight)) : 0;
+  
+  // 特异性评分
   const inputLen = text.length;
   const hasSpecificDetail = text.length >= 8;
   const highValueMarkers = [
@@ -1623,15 +1698,33 @@ function calcConfidence(text, domainKey){
   });
   if(hasSpecificDetail) specificityScore += 1;
   
-  const totalScore = score + specificityScore;
+  // 综合评分
+  const totalScore = domainScore + bookScore + specificityScore;
   
-  if(totalScore >= 4){
-    return { level:'high', score:totalScore, label:'高置信度 · 精准匹配' };
+  // 置信度判定 - 书籍概念命中提升置信度
+  let level, label;
+  if(totalScore >= 5){
+    level = 'high';
+    label = '高置信度 · 精准匹配';
+  } else if(bookMatched && totalScore >= 1.5){
+    level = 'medium';
+    label = '中置信度 · 书籍关联';
   } else if(totalScore >= 1.5){
-    return { level:'medium', score:totalScore, label:'中置信度 · 部分匹配' };
+    level = 'medium';
+    label = '中置信度 · 部分匹配';
   } else {
-    return { level:'low', score:totalScore, label:'低置信度 · 需澄清' };
+    level = 'low';
+    label = '低置信度 · 需澄清';
   }
+  
+  return { 
+    level: level, 
+    score: totalScore, 
+    label: label,
+    bookConcepts: bookConcepts,
+    domainScore: domainScore,
+    bookScore: bookScore
+  };
 }
 
 // ============ 纠错反馈系统 ============
@@ -1799,7 +1892,24 @@ function respondByConfidence(domainKey, text, confLevel){
   if(confLevel === 'medium'){
     const scoreInfo = calcDomainScore(text, domainKey);
     const matchedKws = scoreInfo.matched.map(m => m.word).slice(0, 3).join('、');
-    let response = '我注意到你提到了「' + (matchedKws || '一些相关的情况') + '」。这让我大概摸到了方向，不过我想确认一下——\n\n能不能具体说说：';
+    const bookConcepts = detectBookConcepts(text, domainKey);
+    const topBook = bookConcepts[0] || null;
+    
+    let response = '';
+    
+    // 如果命中了书籍概念，标注来源
+    if(topBook){
+      response += '📚 我注意到你的问题涉及「' + topBook.concept + '」';
+      response += '——这是《' + topBook.book + '》中的核心概念';
+      if(!topBook.domainSupport){
+        response += '（虽不属当前问题域，但关联度高，仅供参考）';
+      }
+      response += '。\n\n';
+    } else {
+      response += '我注意到你提到了「' + (matchedKws || '一些相关的情况') + '」。这让我大概摸到了方向。\n\n';
+    }
+    
+    response += '为了给你更精准的建议，我想确认一下：';
     if(domainKey === 'delay'){
       response += '是什么事让你动不起来？是不知道怎么开始，还是怕做不好？';
     } else if(domainKey === 'anxiety'){
@@ -1878,7 +1988,7 @@ function handleUserInput(text){ trackMessage("user", text);
   }
   
   if(conf.level === 'low' && chatStep === 1){
-    // 低置信度：坦诚边界
+    // 低置信度：直白告知知识库暂无相关内容
     addBot(respondByConfidence(domainKey, text, 'low'));
     waitingForUser = true;
     document.getElementById('chatInput').focus();
@@ -1886,10 +1996,18 @@ function handleUserInput(text){ trackMessage("user", text);
   }
   
   if(conf.level === 'medium' && chatStep === 1){
-    // 中置信度：追问澄清 + 偏差提醒
+    // 中置信度：追问澄清 + 书籍来源标注
     if(deviationWarning){ addBot(deviationWarning); }
     const mediumResponse = respondByConfidence(domainKey, text, 'medium');
     addBot(mediumResponse);
+    // 如果有书籍概念匹配，显示来源提示
+    if(conf.bookConcepts && conf.bookConcepts.length > 0){
+      const bookHtml = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:8px 0 4px;font-size:12.5px;color:#4a6b54;line-height:1.7;">' +
+        '💡 <strong>观点来源：</strong>' + conf.bookConcepts.map(b => '<span style="color:var(--gold-dark)">《' + b.book + '》</span> — ' + b.author).join(' / ') +
+        (conf.bookConcepts.some(b => !b.domainSupport) ? '<br><span style="color:var(--vermillion);font-style:italic;">* 跨域关联，仅供参考</span>' : '') +
+        '</div>';
+      addBot(bookHtml);
+    }
     waitingForUser = true;
     document.getElementById('chatInput').focus();
     return;
