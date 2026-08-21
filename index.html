@@ -1148,9 +1148,18 @@ function sendMessage(){
 
 
 // Health & crisis detection before routing to domain engine
-function detectHealthOrCrisis(text){
-  const crisisKeywords=['自杀','不想活','活不下去','伤害自己','想结束','轻生'];
-  const physicalKeywords=[
+function detectBoundaryViolation(text){
+  const crisisKeywords=['自杀','不想活','活不下去','伤害自己','想结束','轻生','想死','活着没意思'];
+  const hasCrisis=crisisKeywords.some(k=>text.includes(k));
+  if(hasCrisis){
+    return {
+      type:'crisis',
+      block:true,
+      response:'我听到了你的话，这让我很担心。你现在的感受很真实，请一定要记住：你不是一个人。\n\n如果你有伤害自己的想法，请立即拨打：\n• 北京心理危机研究与干预中心：010-82951332\n• 全国心理援助热线：400-161-9995\n• 紧急情况请拨打 120\n\n你的生命很重要，请一定寻求专业帮助。我在这里陪着你。'
+    };
+  }
+
+  const medicalKeywords=[
     '疱疹','湿疹','发烧','发热','咳嗽','头疼','头痛','胃疼','腹痛','腹泻',
     '过敏','感染','发炎','出血','吐血','便血','肿块','肿瘤','结石',
     '骨折','扭伤','烧伤','烫伤','剧痛','持续痛',
@@ -1158,28 +1167,59 @@ function detectHealthOrCrisis(text){
     '心跳过速','心律不齐','胸痛','胸闷','呼吸困难','喘不上气',
     '中风','癫痫','抽搐','昏迷','晕厥',
     '口腔溃疡','牙痛','牙肿',
-    '吃药','用药','药物','副作用','戒断',
+    '吃药','用药','药物','副作用','戒断','吃什么药','该吃什么药',
     '怀孕','流产','不孕',
     '癌','瘤','晚期','化疗','放疗',
     '血压高','血压低','糖尿病','血糖','甲状腺',
-    '痔疮','肛裂','带状疱疹','单纯疱疹'
+    '痔疮','肛裂','带状疱疹','单纯疱疹',
+    '诊断','确诊','治疗','症状','感染','细菌','病毒',
+    '处方药','非处方药','剂量','副作用大'
   ];
-  const hasCrisis=crisisKeywords.some(k=>text.includes(k));
-  const hasPhysical=physicalKeywords.some(k=>text.includes(k));
-  
-  if(hasCrisis){
+  const medicalPatterns=[
+    /.{0,4}(该吃|要吃|可以吃|吃什么|怎么吃).{0,6}(药|药物|药片|胶囊)/,
+    /.{0,4}(胸口|心脏|肚子|头部|背部|腰部).{0,4}(疼|痛|疼得|痛得|不舒服)/,
+    /.{0,4}(需要|应该|怎么).{0,4}(就医|看病|检查|治疗)/,
+    /.{0,4}(发烧|咳嗽|腹泻|呕吐).{0,4}(怎么办|吃什么|要吃)/
+  ];
+  const hasMedical=medicalKeywords.some(k=>text.includes(k))||medicalPatterns.some(p=>p.test(text));
+  if(hasMedical){
     return {
-      type:'crisis',
-      response:'我听到了你的话，这让我很担心。你现在的感受很真实，请一定要记住：你不是一个人。\n\n如果你有伤害自己的想法，请立即拨打：\n• 北京心理危机研究与干预中心：010-82951332\n• 全国心理援助热线：400-161-9995\n• 紧急情况请拨打 120\n\n你的生命很重要，请一定寻求专业帮助。我在这里陪着你。'
+      type:'medical',
+      block:true,
+      response:'抱歉，我必须明确告诉你：**这超出了我的能力边界。**\n\n我是一款基于书籍的自我反思工具，**不具备任何医疗诊断或用药建议能力**。你的问题涉及身体健康，这需要真正的医学专业判断。\n\n👉 **请立即：**\n1. 如果是急性或严重症状 → 尽快就医或拨打 120\n2. 如果是慢性问题 → 预约医生进行专业检查\n3. 切勿自行用药，尤其是处方药\n\n**为什么我必须拒绝？** 因为身体健康没有试错空间，我的任何建议都可能延误你的治疗。这不是我不想帮你，而是对你负责。\n\n如果你的身体不适和心理状态有关——比如长期压力导致的身体反应——我可以在情绪梳理层面帮你。但身体本身，请一定交给专业医生。'
     };
   }
-  if(hasPhysical){
+
+  const legalKeywords=['犯法','违法','犯罪','坐牢','判刑','起诉','官司','律师','法律','法规','合同','违约','赔偿','诉讼','报警','报案','拘留','逮捕'];
+  const hasLegal=legalKeywords.some(k=>text.includes(k));
+  if(hasLegal){
     return {
-      type:'physical',
-      response:'你提到了身体健康方面的问题。这类情况我没办法替代专业医生的诊断——这不是我不想帮你，而是身体健康需要真正的医学专业判断。\n\n**强烈建议你：**\n1. 如果是急性或严重症状，请立即就医或拨打 120\n2. 如果是慢性或轻微症状，尽快预约医生检查\n3. 不要自行用药，尤其是处方药\n\n如果你愿意告诉我，这种身体不适是否和你最近的心理状态有关——比如压力大、焦虑时身体出现反应——我可以在心理层面帮你梳理。但身体本身，请一定交给专业医生。',
-      quick:['去看医生了','已经在治疗','医生说没什么大事','身体不舒服心情不好']
+      type:'legal',
+      block:true,
+      response:'抱歉，这超出了我的能力边界。\n\n我是一款心理支持工具，**不提供任何法律建议**。法律问题涉及你的合法权益，需要专业律师的判断。\n\n👉 请咨询：\n• 当地法律援助中心（12348）\n• 专业律师事务所\n• 政府法律救济渠道'
     };
   }
+
+  const financeKeywords=['股票','基金','投资','理财','贷款','借贷','欠债','债务','破产','税务','逃税','洗钱','虚拟币','比特币','炒股','期货','杠杆'];
+  const hasFinance=financeKeywords.some(k=>text.includes(k));
+  if(hasFinance){
+    return {
+      type:'finance',
+      block:true,
+      response:'抱歉，这超出了我的能力边界。\n\n我是一款心理支持工具，**不提供任何投资或金融建议**。金融决策涉及你的财产安全，需要专业的财务顾问判断。\n\n👉 请咨询：\n• 持牌理财顾问\n• 银行专业人员\n• 注册会计师或税务师'
+    };
+  }
+
+  const violenceKeywords=['打人','暴力','伤害','杀人','威胁','恐吓','家暴','虐待','打架','斗殴'];
+  const hasViolence=violenceKeywords.some(k=>text.includes(k));
+  if(hasViolence){
+    return {
+      type:'violence',
+      block:true,
+      response:'抱歉，这超出了我的能力边界。\n\n涉及暴力和人身安全的问题，**需要联系相关专业机构**：\n\n• 紧急情况 → 请拨打 110\n• 家庭暴力 → 联系妇联或专业社工机构\n• 人身安全威胁 → 请立即报警并寻求保护'
+    };
+  }
+
   return null;
 }
 
@@ -1729,18 +1769,15 @@ let _lastUserText = '';
 function handleUserInput(text){ trackMessage("user", text); 
   _lastUserText = text;
   // Step 0: Check for physical health or crisis first
-  const healthCheck=detectHealthOrCrisis(text);
-  if(healthCheck){
-    addBot(healthCheck.response);
-    if(healthCheck.quick){
-      const qd=document.createElement('div');qd.className='chat-quick';
-      healthCheck.quick.forEach(q=>{
-        const b=document.createElement('button');b.className='quick-btn';b.textContent=q;
-        b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};
-        qd.appendChild(b);
-      });
-      document.getElementById('chatBody').appendChild(qd);scrollChat();
-    }
+  const boundaryCheck=detectBoundaryViolation(text);
+  if(boundaryCheck){
+    // 显示边界拦截卡片
+    const blockHtml = '<div style="background:rgba(184,64,64,.06);border:1.5px solid rgba(184,64,64,.4);border-radius:12px;padding:16px 18px;margin:4px 0;">' +
+      '<div style="font-family:var(--cal);color:var(--vermillion);font-size:14px;margin-bottom:10px;letter-spacing:0.1em;">⚠ 能力边界提示</div>' +
+      '<div style="font-size:13px;color:var(--ink-soft);line-height:2;white-space:pre-wrap;">' + boundaryCheck.response + '</div>' +
+      '</div>';
+    addBot(blockHtml);
+    waitingForUser = false;
     return;
   }
   
