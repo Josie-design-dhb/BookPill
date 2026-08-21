@@ -1099,13 +1099,16 @@ function startChat(domain,keepHistory){
   document.getElementById('chatTitle').textContent=curDomain.name;
   document.getElementById('chatSub').textContent=curDomain.sub;
   // Update confidence indicator in header
-  const confInd = document.createElement('span');
-  confInd.id = 'chatConfBadge';
-  confInd.style.cssText = 'margin-left:8px;padding:2px 8px;border-radius:100px;font-size:10px;background:rgba(107,142,111,.14);color:#4a6b54;font-family:var(--display);letter-spacing:.08em';
-  confInd.textContent = '● 高置信度';
   const chatHead = document.querySelector('.chat-head');
   if(chatHead){
     const hInfo = chatHead.querySelector('.h-info');
+    // Remove existing badge if present to avoid duplicates
+    const existingBadge = document.getElementById('chatConfBadge');
+    if(existingBadge){ existingBadge.remove(); }
+    const confInd = document.createElement('span');
+    confInd.id = 'chatConfBadge';
+    confInd.style.cssText = 'margin-left:8px;padding:2px 8px;border-radius:100px;font-size:10px;background:rgba(107,142,111,.14);color:#4a6b54;font-family:var(--display);letter-spacing:.08em';
+    confInd.textContent = '● 高置信度';
     if(hInfo){ hInfo.appendChild(confInd); }
     else { chatHead.appendChild(confInd); }
   }
