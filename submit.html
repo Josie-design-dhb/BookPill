@@ -252,6 +252,47 @@ footer .f-links a:hover{color:#fff}
   .hero-inner{grid-template-columns:1fr;gap:24px;padding:0 36px}
   .hero-side{display:none}
 }
+
+/* Contribution Guide Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,40,37,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal-box{background:var(--paper);border-radius:16px;width:90%;max-width:520px;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(44,40,37,.3);transform:translateY(20px) scale(.96);transition:transform .4s cubic-bezier(.4,0,.2,1);border:1px solid rgba(184,159,107,.2)}
+.modal-overlay.open .modal-box{transform:translateY(0) scale(1)}
+.modal-header{background:linear-gradient(135deg,rgba(184,64,64,.08),rgba(184,159,107,.1));padding:24px 28px 20px;border-bottom:1px solid rgba(184,159,107,.16);display:flex;align-items:center;justify-content:space-between}
+.modal-header .mh-left{display:flex;align-items:center;gap:12px}
+.modal-header .mh-seal{width:36px;height:36px;border-radius:6px;background:var(--vermillion);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--cal);font-size:18px;flex-shrink:0}
+.modal-header h3{font-family:var(--cal);font-size:22px;color:var(--ink);letter-spacing:.04em}
+.modal-header .mh-sub{font-size:11px;color:var(--gold-dark);font-family:var(--display);letter-spacing:.2em;margin-top:2px}
+.modal-close{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:20px;transition:var(--t);cursor:pointer;flex-shrink:0}
+.modal-close:hover{background:rgba(184,64,64,.1);color:var(--vermillion)}
+.modal-body{padding:24px 28px;overflow-y:auto;flex:1}
+.modal-body h4{font-family:var(--display);font-size:13px;color:var(--gold-dark);letter-spacing:.15em;margin:18px 0 10px;display:flex;align-items:center;gap:10px}
+.modal-body h4::before{content:'';width:3px;height:14px;background:var(--vermillion);border-radius:2px}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p{font-size:13.5px;color:var(--ink-soft);line-height:1.9;margin:8px 0}
+.modal-body .guide-item{background:rgba(184,159,107,.06);border:1px solid rgba(184,159,107,.14);border-radius:10px;padding:14px 18px;margin:10px 0}
+.modal-body .guide-item .gi-label{font-family:var(--display);font-size:12px;color:var(--vermillion);letter-spacing:.1em;margin-bottom:6px}
+.modal-body .guide-item .gi-desc{font-size:13px;color:var(--ink-soft);line-height:1.75}
+.modal-body .status-list{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.modal-body .status-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;border:1px solid}
+.modal-body .status-item.approved{background:rgba(107,142,111,.08);border-color:rgba(107,142,111,.2);color:var(--bamboo)}
+.modal-body .status-item.pending{background:rgba(184,159,107,.1);border-color:rgba(184,159,107,.22);color:var(--gold-dark)}
+.modal-body .status-item.rejected{background:rgba(184,64,64,.08);border-color:rgba(184,64,64,.2);color:var(--vermillion)}
+.modal-body .status-item .si-label{font-family:var(--cal);font-size:16px;min-width:60px}
+.modal-body .status-item .si-desc{font-size:12.5px;line-height:1.6;flex:1}
+.modal-body .tip-box{background:linear-gradient(135deg,rgba(184,64,64,.05),rgba(184,159,107,.06));border:1px solid rgba(184,64,64,.15);border-radius:10px;padding:14px 18px;margin-top:16px}
+.modal-body .tip-box .tip-title{font-family:var(--display);font-size:12px;color:var(--vermillion);letter-spacing:.15em;margin-bottom:6px}
+.modal-body .tip-box .tip-content{font-size:12.5px;color:var(--ink-soft);line-height:1.8}
+.modal-footer{padding:16px 28px 20px;border-top:1px solid rgba(184,159,107,.12);display:flex;justify-content:flex-end;gap:12px}
+.modal-footer .btn-guide{padding:10px 28px;border-radius:8px;font-size:13px;font-family:var(--display);letter-spacing:.12em;transition:var(--t);cursor:pointer}
+.modal-footer .btn-guide.primary{background:var(--vermillion);color:#fff;box-shadow:0 3px 12px rgba(184,64,64,.25)}
+.modal-footer .btn-guide.primary:hover{background:var(--vermillion-dark)}
+.modal-footer .btn-guide.ghost{background:transparent;border:1px solid var(--aged-dark);color:var(--ink-soft)}
+.modal-footer .btn-guide.ghost:hover{border-color:var(--gold);color:var(--ink)}
+.guide-link{color:var(--vermillion);cursor:pointer;text-decoration:underline;text-decoration-color:rgba(184,64,64,.3);text-underline-offset:3px;transition:var(--t)}
+.guide-link:hover{text-decoration-color:var(--vermillion);color:var(--vermillion-dark)}
+@media(max-width:560px){.modal-box{width:94%;max-height:90vh}.modal-header{padding:20px 22px}.modal-body{padding:20px 22px}.modal-footer{padding:14px 22px 18px}}
+
 </style>
 </head>
 <body class="paper-tex">
@@ -476,7 +517,7 @@ footer .f-links a:hover{color:#fff}
           <div class="cb-title">投 · 稿 · 确 · 认</div>
           <label class="cb-item"><input type="checkbox" id="cb1"><span>AI 自动生成的内容我已审阅，核心观点忠实原书</span></label>
           <label class="cb-item"><input type="checkbox" id="cb2"><span>书籍信息真实准确，非虚构书籍（或小说类说明为虚构但有启发性）</span></label>
-          <label class="cb-item"><input type="checkbox" id="cb3"><span>已阅读《贡献指南》，了解「收录」「待审核」「未通过」的含义</span></label>
+          <label class="cb-item"><input type="checkbox" id="cb3"><span>已阅读<a class="guide-link" onclick="event.preventDefault();event.stopPropagation();openGuideModal()">《贡献指南》</a>，了解「收录」「待审核」「未通过」的含义</span></label>
         </div>
 
         <div class="submit-bar">
@@ -2056,5 +2097,61 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
   <div class="toast" id="toast"></div>
+
+<!-- 贡献指南弹窗 -->
+<div class="modal-overlay" id="guideModal" onclick="if(event.target===this)closeGuideModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="mh-left">
+        <div class="mh-seal">贡</div>
+        <div>
+          <h3>贡献指南</h3>
+          <div class="mh-sub">CONTRIBUTION GUIDE</div>
+        </div>
+      </div>
+      <div class="modal-close" onclick="closeGuideModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <h4>投稿前须知</h4>
+      <div class="guide-item">
+        <div class="gi-label">📖 书籍信息</div>
+        <div class="gi-desc">请确保书名、作者准确无误。AI 会自动生成核心观点与金句，但请你审阅内容是否忠实原书。</div>
+      </div>
+      <div class="guide-item">
+        <div class="gi-label">✍️ 内容质量</div>
+        <div class="gi-desc">贡献者身份会显示在书籍详情页。请选择对你影响最深的书，让良方真正帮到他人。</div>
+      </div>
+      
+      <h4>审核状态说明</h4>
+      <div class="status-list">
+        <div class="status-item approved">
+          <span class="si-label">收录</span>
+          <span class="si-desc">审核通过，书籍已加入社区知识库，其他读者可以看到你的贡献。</span>
+        </div>
+        <div class="status-item pending">
+          <span class="si-label">待审核</span>
+          <span class="si-desc">已提交，等待管理员审核。通常在 24 小时内处理。</span>
+        </div>
+        <div class="status-item rejected">
+          <span class="si-label">未通过</span>
+          <span class="si-desc">内容需要调整（如信息不准确、非书籍内容等）。可修改后重新提交。</span>
+        </div>
+      </div>
+      
+      <div class="tip-box">
+        <div class="tip-title">💡 小贴士</div>
+        <div class="tip-content">
+          虚构小说类作品可在备注中注明「虚构但有启发性」，审核时会酌情处理。<br>
+          如有疑问，可在备注中留言，管理员会回复。
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-guide ghost" onclick="closeGuideModal()">稍后再看</button>
+      <button class="btn-guide primary" onclick="closeGuideModal();document.getElementById('cb3').click()">我已阅读</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
