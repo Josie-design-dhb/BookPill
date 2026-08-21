@@ -2095,6 +2095,25 @@ document.addEventListener('DOMContentLoaded', function(){
     if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('f-contributor').focus(); }
   });
 });
+
+// 贡献指南弹窗控制
+function openGuideModal(){
+  const modal = document.getElementById('guideModal');
+  if(!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGuideModal(){
+  const modal = document.getElementById('guideModal');
+  if(!modal) return;
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+// ESC 键关闭
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeGuideModal();
+});
+
 </script>
   <div class="toast" id="toast"></div>
 
