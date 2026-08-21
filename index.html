@@ -404,9 +404,38 @@ footer .f-links a:hover{color:#fff}
 .chat-history-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:var(--t)}
 .chat-history-btn:hover{background:rgba(184,159,107,.1)}
 
+
+/* 微信浏览器提示遮罩 */
+.wx-mask{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;color:#fff;text-align:center;animation:wxFadeIn .3s ease}
+.wx-mask.show{display:flex}
+.wx-mask .wx-icon{font-size:48px;margin-bottom:24px}
+.wx-mask .wx-title{font-size:20px;font-weight:600;margin-bottom:12px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.wx-mask .wx-desc{font-size:15px;color:rgba(255,255,255,.8);line-height:1.8;margin-bottom:32px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.wx-mask .wx-arrow{width:60px;height:60px;margin-bottom:20px;animation:wxArrow 1.5s ease-in-out infinite}
+.wx-mask .wx-btn{background:#07C160;color:#fff;padding:12px 32px;border-radius:8px;font-size:15px;border:none;cursor:pointer;margin-top:16px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.wx-mask .close-btn{position:absolute;top:24px;right:24px;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:20px;border:none}
+@keyframes wxFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes wxArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 </style>
 </head>
 <body class="paper-tex">
+<!-- 微信浏览器提示 -->
+<div class="wx-mask" id="wxMask">
+  <div class="wx-icon">🔒</div>
+  <div class="wx-title">请在浏览器中打开</div>
+  <div class="wx-desc">
+    点击右上角 <b>···</b><br>
+    选择 <b>"在浏览器打开"</b> 即可正常访问
+  </div>
+  <div class="wx-arrow">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 10 L30 50 M30 50 L20 40 M30 50 L40 40" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <button class="wx-btn" onclick="document.getElementById('wxMask').classList.remove('show')">我知道了</button>
+  <button class="close-btn" onclick="document.getElementById('wxMask').classList.remove('show')">×</button>
+</div>
+
 
 <nav>
   <div class="inner">
@@ -1990,3 +2019,16 @@ window.showSessionDetail = showSessionDetail;
 window.closeChat = closeChat;
 window.saveSession = saveSession;
 </script>
+
+// 微信浏览器检测与提示
+(function(){
+  var ua = navigator.userAgent.toLowerCase();
+  var isWeixin = ua.indexOf('micromessenger') !== -1;
+  if(isWeixin){
+    // 延迟显示，让页面先加载
+    setTimeout(function(){
+      var mask = document.getElementById('wxMask');
+      if(mask) mask.classList.add('show');
+    }, 500);
+  }
+})();
