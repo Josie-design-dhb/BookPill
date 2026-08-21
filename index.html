@@ -1226,6 +1226,61 @@ function detectBoundaryViolation(text){
   return null;
 }
 
+// ============ 输入异常检测（乱码/无意义/知识缺失） ============
+function detectInputAnomaly(text, domainKey){
+  if(!text || text.trim().length < 2){
+    return {
+      type:'too_short',
+      response:'我需要多一点信息才能帮到你。试着用一句话描述你现在的感受或遇到的问题，比如"我最近总拖延"或"我总是焦虑不安"。'
+    };
+  }
+  
+  // 异常1: 乱码/无意义字符检测
+  // 规则：中文字符占比极低，且包含大量特殊字符或无意义字母数字组合
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const totalChars = text.replace(/\s/g, '').length;
+  const chineseRatio = totalChars > 0 ? chineseChars / totalChars : 0;
+  const specialChars = (text.match(/[!@#$%^&*()_+\[\]{}|;:'",.<>/?\\~`-]/g) || []).length;
+  const hasExcessiveSpecial = specialChars >= totalChars * 0.3 && totalChars > 3;
+  const isGibberish = chineseRatio < 0.15 && totalChars >= 3;
+  
+  if(isGibberish || hasExcessiveSpecial){
+    return {
+      type:'gibberish',
+      response:'看起来你可能输入了一些测试字符或不太清楚怎么描述。没关系，我在这里。\n\n试着用最简单的话告诉我：\n• 你现在的主要感受是什么？（焦虑、拖延、内耗...）\n• 大概是什么情况让你有这种感觉？\n\n不用想得很完美，随便说就好。'
+    };
+  }
+  
+  // 异常2: 纯情绪宣泄（无问题诉求）
+  // 规则：只有情绪词，没有具体描述或求助意图
+  const emotionOnlyPatterns = [
+    /^(好烦|好累|好难过|好生气|好委屈|好痛苦|好崩溃|好绝望|好无助|好累啊|好难过啊|好烦啊)$/,
+    /^(烦死了|气死了|累死了|难过死了|崩溃了|绝望了|想哭|不想活了|没意思)$/,
+    /^(唉|哎|嗯|哦|啊|呢|呵|哈)+[!！。.~～]*$/
+  ];
+  const isEmotionOnly = emotionOnlyPatterns.some(p => p.test(text.trim()));
+  
+  if(isEmotionOnly){
+    // 根据当前问题域定制共情回应
+    const domainEmpathy = {
+      delay:'我感受到了你的烦躁。拖延有时候就是这样——明明没做什么，却已经精疲力尽。\n\n不用急着"变好"，先告诉我：是什么事情让你连开始的力气都没有？',
+      anxiety:'焦虑的时候，整个世界好像都在缩小，只剩一个大大的"万一"挂在眼前。\n\n我在这里陪你。能不能告诉我：此刻你身体的哪个部位最紧张？是胸口、喉咙，还是脑子停不下来？',
+      internal:'内耗就像心里有两个人在打架，谁也说服不了谁，结果你被夹在中间精疲力尽。\n\n你在纠结什么？不用想清楚再说，想到什么就说什么。',
+      express:'说不出口的话就像心里卡了一根刺，明明有很多感受，却一个字都吐不出来。\n\n能不能告诉我：如果不用考虑后果，你最想说的一句话是什么？',
+      eq:'情绪涌上来的时候，就像被巨浪拍中，根本来不及反应。\n\n不用分析原因，先告诉我：你现在身体哪个部位最有感觉？是心跳加速、胸口发闷，还是浑身紧绷？'
+    };
+    const empathy = domainEmpathy[domainKey] || '我感受到了你的情绪。\n\n不用急着解释或想开，先允许自己有这种感觉。能不能多告诉我一点？';
+    return {
+      type:'emotion_only',
+      response:empathy
+    };
+  }
+  
+  // 异常3: 知识库知识缺失（当检测到领域关键词但无法匹配具体书籍时）
+  // 这个检测会在后续流程中使用，这里先标记
+  return null;
+}
+
 // Detect if user input doesn't match selected domain
 // 问题域语义匹配引擎：多层关键词+模式匹配
 const DOMAIN_NAMES={delay:'拖延',anxiety:'焦虑',internal:'内耗',express:'表达',eq:'情商'};
@@ -1771,16 +1826,29 @@ function respondByConfidence(domainKey, text, confLevel){
 let _lastUserText = '';
 function handleUserInput(text){ trackMessage("user", text); 
   _lastUserText = text;
-  // Step 0: Check for physical health or crisis first
+  // Step 0: Check for boundary violations first (crisis, medical, legal, finance, violence)
   const boundaryCheck=detectBoundaryViolation(text);
   if(boundaryCheck){
-    // 显示边界拦截卡片
     const blockHtml = '<div style="background:rgba(184,64,64,.06);border:1.5px solid rgba(184,64,64,.4);border-radius:12px;padding:16px 18px;margin:4px 0;">' +
       '<div style="font-family:var(--cal);color:var(--vermillion);font-size:14px;margin-bottom:10px;letter-spacing:0.1em;">⚠ 能力边界提示</div>' +
       '<div style="font-size:13px;color:var(--ink-soft);line-height:2;white-space:pre-wrap;">' + boundaryCheck.response + '</div>' +
       '</div>';
     addBot(blockHtml);
     waitingForUser = false;
+    return;
+  }
+  
+  // Step 0.2: Check for input anomalies (gibberish, emotion-only, too short)
+  const domainKeyForAnomaly = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
+  const anomalyCheck = detectInputAnomaly(text, domainKeyForAnomaly);
+  if(anomalyCheck){
+    const anomalyHtml = '<div style="background:rgba(184,159,107,.08);border:1px solid rgba(184,159,107,.25);border-radius:12px;padding:16px 18px;margin:4px 0;">' +
+      '<div style="font-family:var(--cal);color:var(--gold-dark);font-size:14px;margin-bottom:10px;letter-spacing:0.1em;">💡 引导提示</div>' +
+      '<div style="font-size:13px;color:var(--ink-soft);line-height:2;white-space:pre-wrap;">' + anomalyCheck.response + '</div>' +
+      '</div>';
+    addBot(anomalyHtml);
+    waitingForUser = true;
+    document.getElementById('chatInput').focus();
     return;
   }
   
