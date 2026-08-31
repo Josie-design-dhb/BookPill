@@ -1884,6 +1884,96 @@ function showHumanFallback(){
   showToast('已为你推荐专业资源');
 }
 
+// 从用户输入中提取一个简短的核心片段用于回显
+function extractCorePhrase(text){
+  if(!text) return '';
+  // 去掉常见前缀词
+  let t = text.trim().replace(/^(我觉得|我感觉|我想|我就是|我真的|我一直|我总是|我经常|现在|最近|其实)/g, '');
+  // 如果太长，截取到第一个逗号/句号/空格组之前
+  const cutPoints = [t.indexOf('，'), t.indexOf(','), t.indexOf('。'), t.indexOf('.')];
+  let cut = t.length;
+  cutPoints.forEach(p => { if(p > 0 && p < cut) cut = p; });
+  t = t.slice(0, cut);
+  // 控制长度在 4-12 字之间
+  if(t.length > 12) t = t.slice(0, 12) + '…';
+  if(t.length < 2) return '';
+  return t;
+}
+
+// 基于用户输入和问题域生成更人性化的追问
+function generateHumanFollowup(domainKey, text){
+  const t = text || '';
+  
+  // === 拖延域 ===
+  if(domainKey === 'delay'){
+    if(/抠细节|完美主义|要求高|精益求精|追求完美|强迫症/.test(t)){
+      return '听起来你对「做出来」和「做好」之间有自己的标准。我好奇：如果60分能交付，你会允许自己先交吗？还是说"做到满意"本身对你就是一种需要？';
+    }
+    if(/控制不住|忍不住|非要|不得不/.test(t)){
+      return '你说的「忍不住」很关键——是明知不该做却停不下来，还是明知道该做却怎么也启动不了？';
+    }
+    if(/不敢|害怕|怕/.test(t)){
+      return '是怕做不好被评判，还是怕开始了就要面对那个不完美的自己？';
+    }
+    if(/设计|画|写|改|反复|改了又改/.test(t)){
+      return '听起来和创作/设计有关。我想确认一下——是"一直改不满意所以交不出去"，还是"压根不想开始"？';
+    }
+    return '是什么让你动不起来？是不知道怎么开头，还是怕做出来的结果不让自己满意？';
+  }
+  
+  // === 焦虑域 ===
+  if(domainKey === 'anxiety'){
+    if(/失眠|睡不着|醒得早|心慌|胸闷|头疼/.test(t)){
+      return '你提到了身体的反应——焦虑在你身上，更像是"心里紧"，还是"身体先出信号"？';
+    }
+    if(/控制不住|停不下来|一直想|反复想/.test(t)){
+      return '脑子里停不下来的时候，通常是什么画面在转？是某个还没解决的事，还是还没发生的担忧？';
+    }
+    if(/担心|怕|害怕|万一/.test(t)){
+      return '你在担心的那个"万一"，如果真的发生了，最坏会怎样——你想过吗？';
+    }
+    return '焦虑的时候，你的身体会怎么告诉你？是心慌、睡不着，还是脑子里停不下来？';
+  }
+  
+  // === 内耗域 ===
+  if(domainKey === 'internal'){
+    if(/纠结|犹豫|拿不定|选哪个/.test(t)){
+      return '当你在A和B之间摇摆的时候，是两个选项各有优势让你难选，还是"选了就不能后悔"这件事让你害怕？';
+    }
+    if(/后悔|不该|当初|早知道/.test(t)){
+      return '你说的这种后悔——是事情已经过去了还在想，还是类似的场景下次再出现，你还是会一样纠结？';
+    }
+    return '你通常在纠结什么？是选择本身难，还是"做了决定就不能后悔"这件事让你卡住？';
+  }
+  
+  // === 表达域 ===
+  if(domainKey === 'express'){
+    if(/开会|汇报|老板|同事/.test(t)){
+      return '在工作场景下说不出口——是怕说出来显得自己不够专业，还是怕说了之后要承担额外的事？';
+    }
+    if(/伴侣|对象|老公|老婆|亲密|吵架/.test(t)){
+      return '跟亲密的人说不出口，和跟同事不一样——你是怕说了会吵架，还是怕说了对方不懂，反而更孤独？';
+    }
+    if(/不敢|害怕|怕/.test(t)){
+      return '说不出口的那个"怕"——是怕被否定，还是怕说了之后气氛会变尴尬？';
+    }
+    return '在什么场景下最说不出口？是在人前发言，还是跟特定的人沟通？';
+  }
+  
+  // === 情商域 ===
+  if(domainKey === 'eq'){
+    if(/控制不住|忍不住|爆发|发火|生气/.test(t)){
+      return '情绪上来的那个瞬间——你是事后后悔，还是当下就知道不该但就是压不住？';
+    }
+    if(/委屈|压抑|憋着|不说/.test(t)){
+      return '你选择憋在心里——是怕说了破坏关系，还是觉得说了也没用？';
+    }
+    return '通常是什么情境让你情绪上头？是被误解、被否定，还是觉得自己没被看见？';
+  }
+  
+  return '能具体说说是什么情况吗？这样我能更准确地帮你梳理。';
+}
+
 // ============ 置信度分级响应 ============
 function respondByConfidence(domainKey, text, confLevel){
   if(confLevel === 'high'){
@@ -1894,10 +1984,11 @@ function respondByConfidence(domainKey, text, confLevel){
     const matchedKws = scoreInfo.matched.map(m => m.word).slice(0, 3).join('、');
     const bookConcepts = detectBookConcepts(text, domainKey);
     const topBook = bookConcepts[0] || null;
+    const corePhrase = extractCorePhrase(text);
     
     let response = '';
     
-    // 如果命中了书籍概念，标注来源
+    // Step 1: 人性化回显用户说的具体内容
     if(topBook){
       response += '📚 我注意到你的问题涉及「' + topBook.concept + '」';
       response += '——这是《' + topBook.book + '》中的核心概念';
@@ -1905,22 +1996,22 @@ function respondByConfidence(domainKey, text, confLevel){
         response += '（虽不属当前问题域，但关联度高，仅供参考）';
       }
       response += '。\n\n';
+    } else if(corePhrase){
+      response += '你说「' + corePhrase + '」——';
+      if(matchedKws){
+        response += '这让我捕捉到一些重要的线索。\n\n';
+      } else {
+        response += '我想更准确地理解你的处境。\n\n';
+      }
+    } else if(matchedKws){
+      response += '从你提到的「' + matchedKws + '」来看，我大概摸到了方向。\n\n';
     } else {
-      response += '我注意到你提到了「' + (matchedKws || '一些相关的情况') + '」。这让我大概摸到了方向。\n\n';
+      response += '我听到你在说一个具体的困扰，让我试着更准确地理解它。\n\n';
     }
     
-    response += '为了给你更精准的建议，我想确认一下：';
-    if(domainKey === 'delay'){
-      response += '是什么事让你动不起来？是不知道怎么开始，还是怕做不好？';
-    } else if(domainKey === 'anxiety'){
-      response += '焦虑的时候，你身体有什么反应？是失眠、心慌，还是脑子里停不下来？';
-    } else if(domainKey === 'internal'){
-      response += '你在纠结什么？是做了决定后悔，还是想太多停不下来？';
-    } else if(domainKey === 'express'){
-      response += '在什么场景下最说不出口？是开会发言、跟同事沟通，还是跟亲密的人？';
-    } else if(domainKey === 'eq'){
-      response += '通常是什么情境让你控制不住情绪？是跟家人、同事，还是自己一个人的时候？';
-    }
+    // Step 2: 根据用户输入生成个性化追问
+    response += generateHumanFollowup(domainKey, text);
+    
     return response;
   }
   if(confLevel === 'low'){
