@@ -3,7 +3,7 @@
 > 从个人 Skill 升级为社区共建 Agent — 不只是回答问题，而是记住你、理解你、持续陪伴你。
 
 **GitHub**: https://github.com/Josie-design-dhb/BookPill  
-**在线体验**: https://josie-design-dhb.github.io/BookPill/
+**在线体验**: https://bookpill.pages.dev/
 **许可证**: MIT  
 **版本**: v2.0.0  
 **状态**: 社区共建中
@@ -99,13 +99,13 @@ BookPill-v2/
 |------|------|------|
 | GitHub PR | 熟悉 Git 的开发者 | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Issue 模板 | 有 GitHub 账号 | [投稿入口](https://github.com/Josie-design-dhb/BookPill/issues/new/choose) |
-| 在线表单 | 所有人 | [立即投稿](https://josie-design-dhb.github.io/BookPill/submit.html) |
+| 在线表单 | 所有人 | [立即投稿](https://bookpill.pages.dev/submit.html) |
 
 ### 社区动态
 
 查看社区成员最近投了什么书、哪些书被收录了、谁在贡献：
 
-- **社区动态页**：[https://josie-design-dhb.github.io/BookPill/community.html](https://josie-design-dhb.github.io/BookPill/community.html)
+- **社区动态页**：[https://bookpill.pages.dev/community.html](https://bookpill.pages.dev/community.html)
 - **GitHub Issues**：[查看所有投稿](https://github.com/Josie-design-dhb/BookPill/issues?q=label:book-submission)
 
 ### 贡献者等级
