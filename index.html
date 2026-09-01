@@ -628,6 +628,14 @@ footer .f-links a:hover{color:#fff}
 function extractTime(t){return t.match(/(\d+)\s*[个月周年天]/g)||[]}
 function extractFirstClause(t){return t.split(/[，。！？,.\n]/)[0].trim()}
 function hasAny(t,w){return w.some(x=>t.includes(x))}
+// 判断是否预标签点击场景：短句 + 无具体行为描述
+function isPrefillTag(text){
+  if(!text||text.length>10)return false;
+  // 纯乱码排除：必须包含至少一个中文字符
+  if(!/[\u4e00-\u9fa5]/.test(text))return false;
+  const ACTION_WORDS=['做','写','改','画','看','读','准备','学习','工作','设计','图','PPT','论文','稿','代码','文案','客户','项目','deadline','截止','考试','作业','报告','演讲','面试','沟通','吵架','开会','同事','领导','老板','妈妈','爸爸','老婆','老公','孩子'];
+  return !ACTION_WORDS.some(w=>text.includes(w));
+}
 
 // Generate tailored, actionable steps based on user's actual input
 function genSteps(domain,userText){
@@ -678,19 +686,31 @@ delay:{
   quick:['就是不想开始','完美主义','总是拖到deadline'],
   opening(){return'听得出来你有事压在心里。说说看，最近什么事让你觉得"该做但就是动不了"？'},
   respond1(text){
+    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
+    // 预标签场景：引导用户说具体事
+    if(isPrefillTag(text)){
+      let r=`你点了「${text.trim()}」——这是拖延脉·启动困难里很常见的一种。\n\n`;
+      if(hasAny(_ctx,['完美','苛求','改','修']))r+=`完美主义常常藏在具体的事里——能告诉我，它影响了你哪件事吗？（比如做设计、改稿、写论文？）`;
+      else if(hasAny(_ctx,['不想','启动','开始']))r+=`"不想开始"的背后藏着更深的原因。是哪件事让你启动不了？`;
+      else if(hasAny(_ctx,['deadline','截止']))r+=`拖到 deadline 才动——这件事是什么？`;
+      else r+=`能告诉我，具体是哪件事让你有这种感觉吗？`;
+      return{response:r,patterns:{},isPrefillTag:true};
+    }
     const time=extractTime(text);
-    const hasStudy=hasAny(text,['学习','看书','准备','研究','计划','上课','课程']);
-    const hasNotAction=hasAny(text,['没去','还没','一直没','迟迟','不想','不敢','没开始','一致没','一直没']);
-    const hasFear=hasAny(text,['害怕','怕','担心','恐惧','不敢']);
-    const hasPerfectionism=hasAny(text,['完美','最好','应该','必须','不够好','差','差劲']);
-    const hasComparison=hasAny(text,['别人都','同龄人','别人已经','人家']);
+    const hasStudy=hasAny(_ctx,['学习','看书','准备','研究','计划','上课','课程']);
+    const hasNotAction=hasAny(_ctx,['没去','还没','一直没','迟迟','不想','不敢','没开始','一致没','一直没','启动不了','做不下去']);
+    const hasFear=hasAny(_ctx,['害怕','怕','担心','恐惧','不敢']);
+    const hasPerfectionism=hasAny(_ctx,['完美','最好','应该','必须','不够好','差','差劲','苛求','精益求精','抠细节','改','改了又改','改来改去','反复改','改不完','不敢交','交不出去','控制不住改','过度打磨','过度优化','等完美','总是改']);
+    const hasComparison=hasAny(_ctx,['别人都','同龄人','别人已经','人家']);
     let r='';
-    if(time.length>0)r+=`你说${time[0]}了`;
-    if(hasStudy&&hasNotAction)r+=`，一直在准备但还没开始行动。我注意到一个模式——学习让你觉得"我在进步"，但它同时成了一种安全的回避：用"准备"来替代"开始"。学习本身没错，但它变成了一种"安全的忙碌"，帮你回避真正需要面对的事。`;
-    else if(hasPerfectionism)r+=`。我听到一个信号：你可能有点完美主义——不是不想做，而是怕做出来的不够好。这种"要么做到最好，要么干脆不做"的想法，恰恰是拖延最大的帮凶。`;
-    else if(hasFear)r+=`。你提到了"害怕"。这其实才是拖延的真正原因——《拖延心理学》说得很清楚：拖延不是时间管理问题，是情绪调节问题。你在用拖延来回避某种不舒服的感觉。`;
-    else if(hasComparison)r+=`。我听到你在和"别人"比较——这种比较会增加焦虑，让行动变得更难。你不是没有行动力，是焦虑压住了你。`;
-    else{const fc=extractFirstClause(text);r+=`。你说的"${fc}"，我听到了。拖延的本质不是懒——它在帮你回避某种不舒服的感觉。`;}
+    if(time.length>0)r+=`你说${time[0]}了——`;
+    else r+=`你说的情况，我听到了。`;
+    // 根据核心模式给出洞察
+    if(hasStudy&&hasNotAction)r+=`我注意到一个模式：一直在准备但还没开始行动。学习让你觉得"我在进步"，但它同时成了一种安全的回避——用"准备"来替代"开始"。学习本身没错，但它变成了一种"安全的忙碌"，帮你回避真正需要面对的事。`;
+    else if(hasPerfectionism)r+=`我听到一个信号：你可能有点完美主义——不是不想做，而是怕做出来的不够好。这种"要么做到最好，要么干脆不做"的想法，恰恰是拖延最大的帮凶。`;
+    else if(hasFear)r+=`这其实才是拖延的真正原因——《拖延心理学》说得很清楚：拖延不是时间管理问题，是情绪调节问题。你在用拖延来回避某种不舒服的感觉。`;
+    else if(hasComparison)r+=`我听到你在和"别人"比较——这种比较会增加焦虑，让行动变得更难。你不是没有行动力，是焦虑压住了你。`;
+    else{const fc=extractFirstClause(text);r+=`你说的"${fc}"，让我试着更准确地理解它。拖延的本质不是懒——它在帮你回避某种不舒服的感觉。`;}
     r+='\n\n我想问你：当你想到要做这件事的时候，身体是什么感觉？是胸口发紧？还是想去做别的？';
     return{response:r,patterns:{hasStudy,hasNotAction,hasFear,hasPerfectionism,hasComparison}};
   },
@@ -713,15 +733,25 @@ delay:{
 },
 anxiety:{
   name:'焦虑',sub:'焦虑脉 · 压力紧绷',
-  quick:['最近压力很大','睡不着','什么都想做好'],
+  quick:['最近压力很大','睡不着','什么都想做好']    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
+,
   opening(){return'听起来你现在绷得比较紧。跟我说说，最近什么事让你觉得焦虑？'},
   respond1(text){
+    // 预标签场景：引导用户说具体事
+    if(isPrefillTag(text)){
+      let r=`你点了「${text.trim()}」——这是焦虑脉·心头紧绷里很常见的一种。\n\n`;
+      if(hasAny(_ctx,['睡不着','失眠']))r+=`睡不着的时候，脑子里在想什么？是什么让你放不下？`;
+      else if(hasAny(_ctx,['压力']))r+=`压力大到喘不过气——是哪些事堆在一起了？`;
+      else if(hasAny(_ctx,['完美','什么都想']))r+=`什么都想做好——是在哪件事上特别明显？`;
+      else r+=`能告诉我，具体是什么让你焦虑吗？`;
+      return{response:r,patterns:{},isPrefillTag:true};
+    }
     const time=extractTime(text);
-    const hasSleep=hasAny(text,['睡不着','失眠','睡不好','醒来','早醒']);
-    const hasOthers=hasAny(text,['别人怎么看','评价','眼光','认可','看法']);
-    const hasEverything=hasAny(text,['什么都想做','什么都做好','所有','每件事']);
-    const hasPhysical=hasAny(text,['心跳','胸闷','喘','手抖','出汗','头晕','心慌']);
-    const hasComparison=hasAny(text,['别人都','同龄人','人家','别人已经']);
+    const hasSleep=hasAny(_ctx,['睡不着','失眠','睡不好','醒来','早醒']);
+    const hasOthers=hasAny(_ctx,['别人怎么看','评价','眼光','认可','看法']);
+    const hasEverything=hasAny(_ctx,['什么都想做','什么都做好','所有','每件事']);
+    const hasPhysical=hasAny(_ctx,['心跳','胸闷','喘','手抖','出汗','头晕','心慌']);
+    const hasComparison=hasAny(_ctx,['别人都','同龄人','人家','别人已经']);
     let r='';
     if(time.length>0)r+=`你说${time[0]}了`;
     if(hasSleep&&hasEverything)r+=`，什么都想做又睡不着。我听到两个信号叠加在一起：白天追求完美，晚上大脑停不下来——它们其实是同一个问题：你太想控制一切了。`;
@@ -752,15 +782,25 @@ anxiety:{
   wrapUp(){return'这剂良方，今晚睡前试试。\n\n下次来的时候，告诉我你的焦虑有没有轻一点——哪怕轻了一点点，也来跟我说。';}
 },
 internal:{
-  name:'内耗',sub:'内耗脉 · 反复纠结',
+  name:'内耗',sub:'内耗脉     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
+· 反复纠结',
   quick:['想太多','自我怀疑','做了决定又后悔'],
   opening(){return'你一定很累吧。反复纠结同一件事，做了决定又后悔，没做又焦虑——这种内耗比真正做事还累人。\n\n你现在最纠结的是什么事？'},
   respond1(text){
-    const hasRegret=hasAny(text,['后悔','早知道','不应该','当初']);
-    const hasSelfDoubt=hasAny(text,['不够好','没用','废物','差','不行']);
-    const hasOverthink=hasAny(text,['想太多','反复','停不下来','脑子','想三天','转']);
-    const hasOthers=hasAny(text,['别人一句话','别人的话','他说','她说','别人怎么看']);
-    const hasDecision=hasAny(text,['决定','选择','选','纠结','不知道该']);
+    // 预标签场景：引导用户说具体事
+    if(isPrefillTag(text)){
+      let r=`你点了「${text.trim()}」——这是内耗脉·反复纠结里很常见的一种。\n\n`;
+      if(hasAny(_ctx,['想太多','反复']))r+=`反复纠结的是哪件具体的事？`;
+      else if(hasAny(_ctx,['自我怀疑','不够好']))r+=`"我不够好"这个声音，通常在什么场景下冒出来？`;
+      else if(hasAny(_ctx,['后悔','决定']))r+=`做了决定又后悔——是哪次决定让你印象最深？`;
+      else r+=`能告诉我，最近是哪件事让你在消耗自己？`;
+      return{response:r,patterns:{},isPrefillTag:true};
+    }
+    const hasRegret=hasAny(_ctx,['后悔','早知道','不应该','当初']);
+    const hasSelfDoubt=hasAny(_ctx,['不够好','没用','废物','差','不行']);
+    const hasOverthink=hasAny(_ctx,['想太多','反复','停不下来','脑子','想三天','转']);
+    const hasOthers=hasAny(_ctx,['别人一句话','别人的话','他说','她说','别人怎么看']);
+    const hasDecision=hasAny(_ctx,['决定','选择','选','纠结','不知道该']);
     let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"，我听到了。`;
     if(hasRegret&&hasDecision)r+=`\n\n做了决定又后悔——这其实不是"选择"问题，是"不接纳"问题。你总觉得自己选的那条路是错的，但其实任何选择都会有遗憾。内耗就来自于"想要一个完美的选择"——但它不存在。`;
     else if(hasSelfDoubt)r+=`\n\n"我不够好"——这句话是不是经常在脑子里转？《蛤蟆先生去看心理医生》里说，这是你的"内在批评者"在说话。它不是你的声音，是从小被灌输的。`;
@@ -786,18 +826,28 @@ internal:{
     else px={book:'《自我关怀》— 克里斯汀·内夫',insight:'内耗的本质是用别人的声音跟自己打架。停下来的方式不是"想通"，是"对自己温柔一点"。',steps:genSteps('internal',userText1),quote:'对自己说你会对好朋友说的话。自我同情比自我批评更能带来改变。'};
     return{response:r,prescription:px};
   },
-  wrapUp(){return'这剂良方，纠结的时候就试试。\n\n下次来的时候，告诉我那个批评的声音有没有小一点——哪怕小了一点点，也来跟我说。';}
+  wrapUp(){return'这剂良方，纠结的时候就试试。\n\n下次来的时候，告诉我那个批评的声音有没有小一点——    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
+哪怕小了一点点，也来跟我说。';}
 },
 express:{
   name:'表达',sub:'表达脉 · 词不达意',
   quick:['不敢开口','说了对方没get到','社交紧张'],
   opening(){return'表达这件事，真的是"知道该说什么"和"实际能说出来"之间隔着一道坎。你并不是不会想，而是卡在了"说出来"这一步。\n\n你最近在什么场景下觉得表达最困难？'},
   respond1(text){
-    const hasMeeting=hasAny(text,['开会','会议','发言','报告']);
-    const hasSpecific=hasAny(text,['同事','领导','老板','老师','特定的人','他']);
-    const hasMiscomm=hasAny(text,['没懂','没get','误解','没听懂','说了但']);
-    const hasOffend=hasAny(text,['得罪','说重了','伤人','冲','发火']);
-    const hasVague=hasAny(text,['词不达意','说不出口','不知道怎么说','表达不出来']);
+    // 预标签场景：引导用户说具体事
+    if(isPrefillTag(text)){
+      let r=`你点了「${text.trim()}」——这是表达脉·词不达意里很常见的一种。\n\n`;
+      if(hasAny(_ctx,['不敢开口']))r+=`不敢开口的场景通常是——跟谁说？在哪种场合？`;
+      else if(hasAny(_ctx,['没get','误解']))r+=`对方没get到的那次沟通，是在说什么事？`;
+      else if(hasAny(_ctx,['社交紧张']))r+=`社交紧张通常在什么场合触发？`;
+      else r+=`能告诉我，最近在哪种场景下你觉得表达最困难？`;
+      return{response:r,patterns:{},isPrefillTag:true};
+    }
+    const hasMeeting=hasAny(_ctx,['开会','会议','发言','报告']);
+    const hasSpecific=hasAny(_ctx,['同事','领导','老板','老师','特定的人','他']);
+    const hasMiscomm=hasAny(_ctx,['没懂','没get','误解','没听懂','说了但']);
+    const hasOffend=hasAny(_ctx,['得罪','说重了','伤人','冲','发火']);
+    const hasVague=hasAny(_ctx,['词不达意','说不出口','不知道怎么说','表达不出来']);
     let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
     if(hasMeeting)r+=`\n\n开会不敢发言——这其实不是"不会说"，是"怕说错被否定"。开会时人多，你觉得每个人的眼光都在评判你。但其实《关键对话》里说，会议里大部分人只关心结论，不关心你说得完美不完美。`;
     else if(hasMiscomm)r+=`\n\n"说了但对方没懂"——这说明你的表达跳了步骤。你可能脑子里想清楚了，但说出来时跳过了对方需要的背景信息。《非暴力沟通》说，好的表达不是"说自己想说的"，是"说对方能接住的"。`;
@@ -822,7 +872,8 @@ express:{
     else if(p.hasVague)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达越简单越有力量。不是你没能力，是你太想把话说"好"了。',steps:genSteps('express',userText1),quote:'最好的表达不是最精巧的，是最真实的。'};
     else if(p.hasSpecific)px={book:'《关键对话》— 科里·帕特森',insight:'面对特定的人说不出话，不是表达能力问题，是关系紧张。解药不在"怎么说"，在"怎么看待这段关系"。',steps:genSteps('express',userText1),quote:'你怕的不是说错话，你怕的是说完之后关系变了。但不说，关系也在变。'};
     else px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达困难的本质是"怕"。怕说错、怕被否定、怕暴露。但不说才是最大的遗憾。',steps:genSteps('express',userText1),quote:'你不需要说得好，你只需要说出来。'};
-    return{response:r,prescription:px};
+    return{response:r,prescription    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
+:px};
   },
   wrapUp(){return'这剂良方，明天遇到要开口的场景就试试。\n\n下次来的时候，告诉我你试了没有——哪怕只说了一句话，也来跟我说。';}
 },
@@ -831,10 +882,19 @@ eq:{
   quick:['容易发火','人际关系紧张','控制不住'],
   opening(){return'能意识到"控制不住情绪"这一点，说明你的觉察力其实不差——很多人发完火还觉得是别人的问题。\n\n你说"控制不住"，能具体说说最近哪次让你印象最深吗？是什么事、什么人触发的？'},
   respond1(text){
-    const hasFamily=hasAny(text,['家人','父母','妈','爸','老婆','老公','孩子']);
-    const hasWork=hasAny(text,['同事','领导','老板','客户','工作']);
-    const hasAnger=hasAny(text,['发火','生气','暴','冲','骂']);
-    const hasRegret=hasAny(text,['后悔','不该','不应该','事后','后来想想']);
+    // 预标签场景：引导用户说具体事
+    if(isPrefillTag(text)){
+      let r=`你点了「${text.trim()}」——这是情商脉·情绪管理里很常见的一种。\n\n`;
+      if(hasAny(_ctx,['发火','脾气']))r+=`最近那次让你印象最深的发火，是因为什么事？跟谁？`;
+      else if(hasAny(_ctx,['人际关系']))r+=`人际关系紧张——是哪段关系、什么事开始的？`;
+      else if(hasAny(_ctx,['控制不住','忍不住']))r+=`控制不住情绪的那几秒，是什么触发的？`;
+      else r+=`能告诉我，哪件事让你意识到自己需要管理情绪？`;
+      return{response:r,patterns:{},isPrefillTag:true};
+    }
+    const hasFamily=hasAny(_ctx,['家人','父母','妈','爸','老婆','老公','孩子']);
+    const hasWork=hasAny(_ctx,['同事','领导','老板','客户','工作']);
+    const hasAnger=hasAny(_ctx,['发火','生气','暴','冲','骂']);
+    const hasRegret=hasAny(_ctx,['后悔','不该','不应该','事后','后来想想']);
     let r='';const fc=extractFirstClause(text);r+=`你说的"${fc}"。`;
     if(hasFamily&&hasAnger)r+=`\n\n跟家人发火——这很常见。我们最容易对最亲近的人发火，因为潜意识里觉得"他们不会离开我"。但这也意味着，家人承受了你最多的情绪。`;
     else if(hasWork&&hasAnger)r+=`\n\n工作中发火——职业场合的情绪爆发通常代价更大。《情商》里说，职场情商的核心不是"不发火"，是"知道什么时候可以发、什么时候不能"。`;
@@ -862,7 +922,7 @@ eq:{
 }
 };
 
-let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='';
+let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='';
 let _currentConfidence='high';  // high | medium | low
 let _correctionCount=0;
 let _lastPrescription=null;
@@ -1114,7 +1174,7 @@ function startChat(domain,keepHistory){
   }
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
-    chatStep=1;savedPatterns={};savedUserText1='';
+    chatStep=1;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
     qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
@@ -1123,7 +1183,7 @@ function startChat(domain,keepHistory){
     d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域，请重新描述你的情况：';
     document.getElementById('chatBody').appendChild(d);scrollChat();
   }else{
-    chatStep=0;savedPatterns={};savedUserText1='';
+    chatStep=0;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatBody').innerHTML='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
@@ -1287,7 +1347,7 @@ const DOMAIN_NAMES={delay:'拖延',anxiety:'焦虑',internal:'内耗',express:'�
 const DOMAIN_PATTERNS={
   delay:{
     name:'拖延',
-    keywords:['拖延','不想','动不起来','启动','deadline','截止','效率','懒得','没动力','动不了','启动困难','迟迟','拖了','拖着','拖延症','迟迟不','一直没','没去','没做','没动手','没开始','迟迟未','一拖再拖','推到','推迟','延后','迟迟不动','拖拖拉拉','惰性','不想动','懒得动','迈不开','开始困难','第一步','迟迟不做','拖着不','拖延','迟迟不开始','一直拖着','迟迟不动'],
+    keywords:['拖延','不想','动不起来','启动','deadline','截止','效率','懒得','没动力','动不了','启动困难','迟迟','拖了','拖着','拖延症','迟迟不','一直没','没去','没做','没动手','没开始','迟迟未','一拖再拖','推到','推迟','延后','迟迟不动','拖拖拉拉','惰性','不想动','懒得动','迈不开','开始困难','第一步','迟迟不做','拖着不','迟迟不开始','一直拖着','完美主义','完美','苛求','精益求精','抠细节','改了又改','改来改去','反复改','改不完','改不停','不满意','不敢交','交不出去','做不完','非要','控制不住改','越做越慢','越改越多','钻牛角尖','过度打磨','过度优化','过度准备','准备过度','等完美','等好了','等满意','再改改','再优化','再想想','再准备','总觉得不够好','不够好','还没好','还不够','不想交稿','不敢提交','怕不完美','怕做不好','怕出错','怕不满意','做设计','做图','做PPT','改文案','改代码','改设计','改图','改稿','写论文','写稿','写文章','做不下去','做不完','做不出来','启动不了','迟迟不动工','迟迟不动笔','迟迟不开工'],
     patterns:[
       {regex:/拖.{0,4}(年|月|天|周|久|很久|好久)/,score:3},
       {regex:/一直.{0,3}(没|不|未)/,score:2.5},
@@ -1299,7 +1359,15 @@ const DOMAIN_PATTERNS={
       {regex:/.{0,3}启动.{0,3}(困难|不了|不起来)/,score:2.5},
       {regex:/.{0,4}deadline.{0,4}(快|近|到|过)/i,score:2},
       {regex:/.{0,4}截止.{0,4}(快|到|日期|时间)/,score:2},
-      {regex:/.{0,3}效率.{0,3}(低|差|慢|不高)/,score:2}
+      {regex:/.{0,3}效率.{0,3}(低|差|慢|不高)/,score:2},
+      {regex:/.{0,3}(抠|改|反复|越改).{0,4}(细节|稿|图|PPT|设计|代码|文案)/,score:3},
+      {regex:/.{0,3}(完美主义|追求完美|太追求|过于追求)/,score:3},
+      {regex:/.{0,4}(改了又改|改来改去|改不完|改不停|反复改)/,score:3},
+      {regex:/.{0,4}(不敢交|交不出去|做不完|做不下去|做不出来)/,score:2.5},
+      {regex:/.{0,3}(控制不住|忍不住|非要).{0,3}(改|抠|修|优化)/,score:3},
+      {regex:/.{0,3}(过度|太).{0,3}(打磨|优化|准备|修改)/,score:2.5},
+      {regex:/.{0,3}(等|要).{0,3}(完美|满意|好).{0,3}(再|才)/,score:2.5},
+      {regex:/.{0,3}(不够好|还没好|还不够|不满意|怕不完美|怕做不好|怕出错)/,score:2}
     ]
   },
   anxiety:{
@@ -2056,7 +2124,8 @@ function handleUserInput(text){ trackMessage("user", text);
   
   // Step 0.3: Confidence level calculation and branching
   const domainKey = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
-  const conf = calcConfidence(text, domainKey);
+  const confText = savedPrefillTag ? text + ' ' + savedPrefillTag : text;
+  const conf=calcConfidence(confText,domainKey);
   _currentConfidence = conf.level;
   
   // Update confidence badge in header
@@ -2086,23 +2155,8 @@ function handleUserInput(text){ trackMessage("user", text);
     return;
   }
   
-  if(conf.level === 'medium' && chatStep === 1){
-    // 中置信度：追问澄清 + 书籍来源标注
-    if(deviationWarning){ addBot(deviationWarning); }
-    const mediumResponse = respondByConfidence(domainKey, text, 'medium');
-    addBot(mediumResponse);
-    // 如果有书籍概念匹配，显示来源提示
-    if(conf.bookConcepts && conf.bookConcepts.length > 0){
-      const bookHtml = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:8px 0 4px;font-size:12.5px;color:#4a6b54;line-height:1.7;">' +
-        '💡 <strong>观点来源：</strong>' + conf.bookConcepts.map(b => '<span style="color:var(--gold-dark)">《' + b.book + '》</span> — ' + b.author).join(' / ') +
-        (conf.bookConcepts.some(b => !b.domainSupport) ? '<br><span style="color:var(--vermillion);font-style:italic;">* 跨域关联，仅供参考</span>' : '') +
-        '</div>';
-      addBot(bookHtml);
-    }
-    waitingForUser = true;
-    document.getElementById('chatInput').focus();
-    return;
-  }
+  // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
+  // 仅在 respond1 输出后附上书籍来源提示（如果有）
   
   // 高置信度 → 走正常流程 (chatStep >= 1 时)
   if(deviationWarning){ addBot(deviationWarning); }
@@ -2139,11 +2193,33 @@ function handleUserInput(text){ trackMessage("user", text);
   }
   
   if(chatStep===1){
-    savedUserText1=text;
     const result=curDomain.respond1(text);
+    // 预标签引导：保存预标签作为域上下文，不推进 chatStep（继续挖具体事）
+    if(result.isPrefillTag){
+      savedPrefillTag = text.trim(); // 保存预标签作为域线索
+      showTyping();
+      setTimeout(()=>{hideTyping();addBot(result.response);waitingForUser=true;document.getElementById('chatInput').focus();},800);
+      return;
+    }
+    savedUserText1=text;
     savedPatterns=result.patterns||{};
     showTyping();
-    setTimeout(()=>{hideTyping();addBot(result.response);chatStep=2;waitingForUser=true;document.getElementById('chatInput').focus();},800);
+    // respond1 跑完，预标签上下文用完了
+    if(savedPrefillTag){savedPrefillTag='';}
+    setTimeout(()=>{
+      hideTyping();
+      addBot(result.response);
+      // 中置信度且有书籍概念匹配：在 respond1 回复后附上来源提示
+      if(conf.level === 'medium' && conf.bookConcepts && conf.bookConcepts.length > 0){
+        const bookHtml = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:8px 0 4px;font-size:12.5px;color:#4a6b54;line-height:1.7;">' +
+          '💡 <strong>观点来源：</strong>' + conf.bookConcepts.map(b => '<span style="color:var(--gold-dark)">《' + b.book + '》</span> — ' + b.author).join(' / ') +
+          (conf.bookConcepts.some(b => !b.domainSupport) ? '<br><span style="color:var(--vermillion);font-style:italic;">* 跨域关联，仅供参考</span>' : '') +
+          '</div>';
+        document.getElementById('chatBody').insertAdjacentHTML('beforeend', bookHtml);
+        scrollChat();
+      }
+      chatStep=2;waitingForUser=true;document.getElementById('chatInput').focus();
+    },800);
   }else if(chatStep===2){
     const result=curDomain.respond2(text,savedPatterns,savedUserText1);
     showTyping();

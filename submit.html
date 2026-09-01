@@ -1677,34 +1677,48 @@ function updateProgress(){
 }
 
 /* ========== Contributor memory ========== */
+function updateContribCard(name){
+  name = (name || '').trim();
+  var card = document.getElementById('contribCard');
+  var memTag = document.getElementById('contribMemTag');
+  var welcome = document.getElementById('contribWelcome');
+  var history = document.getElementById('contribHistory');
+  if(!name){
+    if(card) card.style.display = 'none';
+    return;
+  }
+  if(card) card.style.display = 'block';
+  if(memTag) memTag.style.display = 'inline-block';
+  if(welcome) welcome.textContent = '🎋 欢迎来，老同道';
+  var rank = BookPillData.getContributorRanking(20);
+  var mine = rank.find(function(r){ return r.name === name; });
+  var all = BookPillData.getAll().filter(function(s){ return s.contributor === name; });
+  var txt = '共投稿 ' + (mine ? mine.count : 0) + ' 本';
+  if(mine) txt += '，收录 ' + mine.approved + ' 本，待审 ' + mine.pending + ' 本';
+  if(all.length > 0){
+    var last = all[0];
+    if(last) txt += ' · 最近《' + (last.title || '') + '》于 ' + relativeTime(last.createdAt);
+  }else{
+    txt += ' · 这是你在本设备上的第一次投稿 🎉';
+  }
+  if(history) history.textContent = txt;
+}
+
 function hydrateContributor(){
   var p = BookPillData.getContributorProfile();
-  if(p && p.name){
-    document.getElementById('f-contributor').value = p.name;
-    state.contributor = p.name;
-    document.getElementById('contribMemTag').style.display = 'inline-block';
-    var card = document.getElementById('contribCard');
-    if(card) card.style.display = 'block';
-    var rank = BookPillData.getContributorRanking(20);
-    var mine = rank.find(function(r){ return r.name === p.name; });
-    var all = BookPillData.getAll().filter(function(s){ return s.contributor === p.name; });
-    var txt = '共投稿 ' + (mine ? mine.count : 0) + ' 本';
-    if(mine) txt += '，收录 ' + mine.approved + ' 本，待审 ' + mine.pending + ' 本';
-    if(all.length > 0){
-      var last = all[0];
-      if(last) txt += ' · 最近《' + (last.title || '') + '》于 ' + relativeTime(last.createdAt);
-    }else{
-      txt += ' · 这是你在本设备上的第一次投稿 🎉';
-    }
-    document.getElementById('contribHistory').textContent = txt;
-  }
-  // bind input
   var ci = document.getElementById('f-contributor');
+  if(p && p.name){
+    ci.value = p.name;
+    state.contributor = p.name;
+    updateContribCard(p.name);
+  }
+  // bind input - update card on every keystroke
   ci.addEventListener('input', function(){
     state.contributor = ci.value.trim();
     updateProgress();
     updateSubmitBtn();
     updatePreview();
+    updateContribCard(state.contributor);
   });
 }
 
@@ -1712,8 +1726,7 @@ function clearContrib(){
   BookPillData.clearContributorProfile();
   document.getElementById('f-contributor').value = '';
   state.contributor = '';
-  document.getElementById('contribMemTag').style.display = 'none';
-  document.getElementById('contribCard').style.display = 'none';
+  updateContribCard('');
   showToast('已清除本地贡献者记忆', 'info');
 }
 
@@ -1934,7 +1947,14 @@ function submitLocal(){
     if(localSubs[i].title && localSubs[i].title.toLowerCase()===titleLower){
       var st = localSubs[i].status || 'pending';
       var stText = {pending:'待审核',approved:'已收录',rejected:'未通过'}[st] || st;
-      showToast('《'+state.title+'》您已投稿过，当前状态：'+stText,'info');
+      var existingContributor = localSubs[i].contributor || '';
+      var currentContributor = (state.contributor || '').trim();
+      // 区分是自己的投稿还是他人的投稿
+      if(existingContributor && currentContributor && existingContributor === currentContributor){
+        showToast('《'+state.title+'》您已投稿过，当前状态：'+stText,'info');
+      } else {
+        showToast('《'+state.title+'》已被其他同道投稿，当前状态：'+stText,'info');
+      }
       state.busySubmit=false; btn.disabled=false; btn.innerHTML='✓ 确认投稿'; return;
     }
   }
@@ -1948,7 +1968,8 @@ function submitLocal(){
 
   supCheck.then(function(isDup){
     if(isDup){
-      showToast('《'+state.title+'》已被社区收录，无需重复投稿','info');
+      var currentContributorSup = (state.contributor || '').trim();
+      showToast('《'+state.title+'》已被社区收录，感谢关注！如需补充不同观点，请联系管理员','info');
       state.busySubmit=false; btn.disabled=false; btn.innerHTML='✓ 确认投稿';
       return;
     }
