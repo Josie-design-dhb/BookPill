@@ -733,10 +733,10 @@ delay:{
 },
 anxiety:{
   name:'焦虑',sub:'焦虑脉 · 压力紧绷',
-  quick:['最近压力很大','睡不着','什么都想做好']    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
-,
+  quick:['最近压力很大','睡不着','什么都想做好'],
   opening(){return'听起来你现在绷得比较紧。跟我说说，最近什么事让你觉得焦虑？'},
   respond1(text){
+    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
     // 预标签场景：引导用户说具体事
     if(isPrefillTag(text)){
       let r=`你点了「${text.trim()}」——这是焦虑脉·心头紧绷里很常见的一种。\n\n`;
@@ -782,11 +782,11 @@ anxiety:{
   wrapUp(){return'这剂良方，今晚睡前试试。\n\n下次来的时候，告诉我你的焦虑有没有轻一点——哪怕轻了一点点，也来跟我说。';}
 },
 internal:{
-  name:'内耗',sub:'内耗脉     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
-· 反复纠结',
+  name:'内耗',sub:'内耗脉 · 反复纠结',
   quick:['想太多','自我怀疑','做了决定又后悔'],
   opening(){return'你一定很累吧。反复纠结同一件事，做了决定又后悔，没做又焦虑——这种内耗比真正做事还累人。\n\n你现在最纠结的是什么事？'},
   respond1(text){
+    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
     // 预标签场景：引导用户说具体事
     if(isPrefillTag(text)){
       let r=`你点了「${text.trim()}」——这是内耗脉·反复纠结里很常见的一种。\n\n`;
@@ -826,14 +826,14 @@ internal:{
     else px={book:'《自我关怀》— 克里斯汀·内夫',insight:'内耗的本质是用别人的声音跟自己打架。停下来的方式不是"想通"，是"对自己温柔一点"。',steps:genSteps('internal',userText1),quote:'对自己说你会对好朋友说的话。自我同情比自我批评更能带来改变。'};
     return{response:r,prescription:px};
   },
-  wrapUp(){return'这剂良方，纠结的时候就试试。\n\n下次来的时候，告诉我那个批评的声音有没有小一点——    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
-哪怕小了一点点，也来跟我说。';}
+  wrapUp(){return'这剂良方，纠结的时候就试试。\n\n下次来的时候，告诉我那个批评的声音有没有小一点——哪怕小了一点点，也来跟我说。';}
 },
 express:{
   name:'表达',sub:'表达脉 · 词不达意',
   quick:['不敢开口','说了对方没get到','社交紧张'],
   opening(){return'表达这件事，真的是"知道该说什么"和"实际能说出来"之间隔着一道坎。你并不是不会想，而是卡在了"说出来"这一步。\n\n你最近在什么场景下觉得表达最困难？'},
   respond1(text){
+    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
     // 预标签场景：引导用户说具体事
     if(isPrefillTag(text)){
       let r=`你点了「${text.trim()}」——这是表达脉·词不达意里很常见的一种。\n\n`;
@@ -872,8 +872,7 @@ express:{
     else if(p.hasVague)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达越简单越有力量。不是你没能力，是你太想把话说"好"了。',steps:genSteps('express',userText1),quote:'最好的表达不是最精巧的，是最真实的。'};
     else if(p.hasSpecific)px={book:'《关键对话》— 科里·帕特森',insight:'面对特定的人说不出话，不是表达能力问题，是关系紧张。解药不在"怎么说"，在"怎么看待这段关系"。',steps:genSteps('express',userText1),quote:'你怕的不是说错话，你怕的是说完之后关系变了。但不说，关系也在变。'};
     else px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达困难的本质是"怕"。怕说错、怕被否定、怕暴露。但不说才是最大的遗憾。',steps:genSteps('express',userText1),quote:'你不需要说得好，你只需要说出来。'};
-    return{response:r,prescription    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
-:px};
+    return{response:r,prescription:px};
   },
   wrapUp(){return'这剂良方，明天遇到要开口的场景就试试。\n\n下次来的时候，告诉我你试了没有——哪怕只说了一句话，也来跟我说。';}
 },
@@ -882,6 +881,7 @@ eq:{
   quick:['容易发火','人际关系紧张','控制不住'],
   opening(){return'能意识到"控制不住情绪"这一点，说明你的觉察力其实不差——很多人发完火还觉得是别人的问题。\n\n你说"控制不住"，能具体说说最近哪次让你印象最深吗？是什么事、什么人触发的？'},
   respond1(text){
+    const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
     // 预标签场景：引导用户说具体事
     if(isPrefillTag(text)){
       let r=`你点了「${text.trim()}」——这是情商脉·情绪管理里很常见的一种。\n\n`;
