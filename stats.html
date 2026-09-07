@@ -908,23 +908,28 @@ function renderTable(){
 }
 
 /* ===== Actions ===== */
-function changeStatus(id,newStatus){
+async function changeStatus(id,newStatus){
   if(!STATUS_LABEL[newStatus])return;
   BookPillData.setStatus(id,newStatus);
   showToast('状态已更新为「'+STATUS_LABEL[newStatus]+'」','success');
   
-  // 同步到 Supabase
+  // 同步到 Supabase —— 先等远端成功再 refresh，避免旧数据覆盖
   var pwd = PWD;
   if(pwd && window.BookPillSupabase){
     var supId = id.replace('sup_', '');
-    if(newStatus === 'approved'){
-      BookPillSupabase.adminApprove(pwd, parseInt(supId)).catch(function(){});
-    } else if(newStatus === 'rejected'){
-      BookPillSupabase.adminReject(pwd, parseInt(supId)).catch(function(){});
+    try{
+      if(newStatus === 'approved'){
+        await BookPillSupabase.adminApprove(pwd, parseInt(supId));
+      } else if(newStatus === 'rejected'){
+        await BookPillSupabase.adminReject(pwd, parseInt(supId));
+      }
+    }catch(e){
+      console.error('Supabase 同步失败:', e);
+      showToast('本地已更新，但云端同步失败，请检查网络','error');
     }
   }
   
-  refresh();
+  await refresh();
   var m=document.getElementById('modal');
   if(m&&m.dataset.id===id)openModal(id);
 }
@@ -1153,9 +1158,13 @@ function syncFromSupabase(){
           });
         } else {
           // 如果本地有但状态不同步，更新状态
+          // 保护：用户刚在本地改了状态（如 pending→approved），Supabase 可能还返回旧值
+          // 只在 Supabase 有更新的已收录状态时才同步，不要用旧值覆盖新值
           var localItem = existingMap[localId];
           if(localItem && localItem.status !== b.status){
-            BookPillData.setStatus(localItem.id, b.status);
+            if(b.status === 'approved' || localItem.status === 'rejected'){
+              BookPillData.setStatus(localItem.id, b.status);
+            }
           }
           // 如果是通过标题去重找到的重复，更新其ID为sup_格式
           if(!localItem && isDuplicate && existingDupMap[dupKey]){
@@ -1164,7 +1173,9 @@ function syncFromSupabase(){
               BookPillData.update(dupItem.id, { id: 'sup_' + b.id });
             }
             if(dupItem && dupItem.status !== b.status){
-              BookPillData.setStatus(dupItem.id, b.status);
+              if(b.status === 'approved' || dupItem.status === 'rejected'){
+                BookPillData.setStatus(dupItem.id, b.status);
+              }
             }
           }
         }
