@@ -987,7 +987,7 @@ eq:{
 let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='';
 let chatHistory=[];
 const DOMAIN_KEY_MAP={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情绪':'eq'};
-const WORKER_URL='https://bookpill-ai-773810864.workers.dev';
+const WORKER_URL='/api/ask';
 async function askAI(domainKey,step,text){
   try{
     const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({domain:domainKey,step,text,history:chatHistory})});

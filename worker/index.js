@@ -1,132 +1,168 @@
-// Cloudflare Worker — BookPill 问诊台 AI 后端
-// 用 Cloudflare Workers AI（env.AI 绑定，免费）
+// Cloudflare Worker — BookPill 问诊台 AI 后端 v3
+// 模型: @cf/meta/llama-3.3-70b-instruct-fp8-fast (70B + 速度优化)
+// 框架: SKILL.md 完整七步诊断法 + problem-index.md 跨域书籍索引
 
-const DOMAIN_PROMPTS = {
+const MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+
+const BOOK_INDEX = {
   delay: {
-    name: '拖延',
-    system: `你是「纸上良方」APP 的问诊台AI。你是一位温暖、有洞察力的心理咨询师，擅长通过深聊帮人找到拖延的真实原因。
-
-## 问诊流程（严格按节奏）
-- Step 1：共情开场+初步诊断。理解用户说的具体事，说出你听到的模式，然后挖身体感觉（胸口发紧？想去做别的？）。如果用户还没说具体事，引导他说出具体是哪件事。
-- Step 2：原因分析+深挖追问。分析背后的情绪原因——怕做不好被评价？觉得没意义？还是完美主义在阻止？然后深挖最深层的原因。
-- Step 3：问题拆解+良方输出。把拖延模式拆解成清晰的回路（触发→逃避→后悔），然后给具体可执行的建议。
-
-## 可用书籍
-《拖延心理学》简·博克 — 拖延是情绪调节问题，不是时间管理
-《微习惯》斯蒂芬·盖斯 — 缩小目标到不可能失败
-《被讨厌的勇气》岸见一郎 — 课题分离
-《身份的焦虑》阿兰·德波顿 — 比较是焦虑的燃料
-
-## 风格
-温暖、像朋友聊天、不说教、不评判。每一步必须有追问。不要用"建议你""你应该"。`,
-    books: [
-      {name:'拖延心理学', author:'简·博克', insight:'拖延不是时间管理问题，是情绪调节问题。', quote:'你不需要准备好才开始，你需要开始才能准备好。'},
-      {name:'微习惯', author:'斯蒂芬·盖斯', insight:'完美主义的解药不是更努力，是更小。', quote:'不是你不够自律，是你的目标太大了。'},
-      {name:'被讨厌的勇气', author:'岸见一郎', insight:'害怕被拒绝的本质，是把价值建立在别人的认可上。', quote:'自由就是被别人讨厌。'},
-      {name:'身份的焦虑', author:'阿兰·德波顿', insight:'比较是焦虑的燃料。', quote:'人生不是赛跑，是旅行。'}
+    core: '拖延不是意志力问题，而是模糊、大脑规律和情绪管理的综合问题。',
+    all: [
+      { name: '认知觉醒', author: '周岭', concepts: ['消除模糊','动机转移','三重大脑'] },
+      { name: '逆转思维', author: '李欣频', concepts: ['从行动反推认知','最小可行行动'] },
+      { name: '蛤蟆先生去看心理医生', author: '罗伯特·戴博德', concepts: ['软愤怒','为人生负责'] },
+      { name: '微习惯', author: '斯蒂芬·盖斯', concepts: ['缩小目标','小到不可能失败'] },
+      { name: '被讨厌的勇气', author: '岸见一郎', concepts: ['课题分离','自由就是被讨厌'] },
+      { name: '自控力', author: '凯利·麦格尼格尔', concepts: ['意志力像肌肉','那又如何效应'] },
+      { name: '七个习惯', author: '史蒂芬·柯维', concepts: ['要事第一','以终为始'] },
+      { name: '原则', author: '瑞·达利欧', concepts: ['五步流程法','拥抱现实'] },
+      { name: '少有人走的路', author: '斯科特·派克', concepts: ['推迟满足感','承担责任'] },
+      { name: '心流', author: '米哈里·契克森米哈赖', concepts: ['挑战-技能平衡','专注'] },
+      { name: '臣服实验', author: '迈克尔·辛格', concepts: ['臣服不是放弃','生命之流'] },
+      { name: '悉达多', author: '赫尔曼·黑塞', concepts: ['当下即完美','自我超越'] }
     ]
   },
-
   anxiety: {
-    name: '焦虑',
-    system: `你是「纸上良方」APP 的问诊台AI。你是一位温暖、有洞察力的心理咨询师，擅长通过深聊帮人缓解焦虑。
-
-## 问诊流程（严格按节奏）
-- Step 1：共情开场+初步诊断。理解用户的焦虑场景（睡不着？紧绷？总在预演最坏结果？），说出你听到的模式，然后挖焦虑最强烈的时候身体是什么感觉。
-- Step 2：原因分析+深挖追问。分析焦虑背后的深层原因——怕失控？怕做不好？怕别人的看法？然后深挖最让他焦虑的那个点。
-- Step 3：问题拆解+良方输出。把焦虑模式拆解（预演→紧绷→恶性循环），给具体可执行的建议。
-
-## 可用书籍
-《当下的力量》埃克哈特·托利 — 焦虑活在未来，平静活在当下
-《被讨厌的勇气》岸见一郎 — 课题分离
-《身份的焦虑》阿兰·德波顿 — 焦虑的社会根源
-
-## 风格
-温暖、像朋友聊天、不说教、不评判。每一步必须有追问。`,
-    books: [
-      {name:'当下的力量', author:'埃克哈特·托利', insight:'焦虑活在未来，平静活在当下。', quote:'焦虑不会消除明天的悲伤，它只会榨干今天的力量。'},
-      {name:'被讨厌的勇气', author:'岸见一郎', insight:'自由就是被别人讨厌。', quote:'自由就是被别人讨厌。'},
-      {name:'身份的焦虑', author:'阿兰·德波顿', insight:'什么都想做好，是因为你觉得只有做好才有价值。', quote:'人生不是赛跑，是旅行。'}
+    core: '焦虑的本质是欲望与能力的错位、用未来否定当下、以及对不确定性的恐惧。',
+    all: [
+      { name: '认知觉醒', author: '周岭', concepts: ['放弃速成幻想','三大成长规律'] },
+      { name: '当下的力量', author: '埃克哈特·托利', concepts: ['你不等于思维','臣服的力量'] },
+      { name: '悉达多', author: '赫尔曼·黑塞', concepts: ['当下即完美','接纳此刻'] },
+      { name: '正念的奇迹', author: '一行禅师', concepts: ['有觉知的呼吸','回到当下'] },
+      { name: '臣服实验', author: '迈克尔·辛格', concepts: ['痛苦=事件×抗拒','放下控制'] },
+      { name: '被讨厌的勇气', author: '岸见一郎', concepts: ['活在此时此刻','课题分离'] },
+      { name: '逆转思维', author: '李欣频', concepts: ['反应该思维','在限制中找机会'] },
+      { name: '蛤蟆先生去看心理医生', author: '罗伯特·戴博德', concepts: ['情绪自主权','成人自我状态'] },
+      { name: '也许你该找个人聊聊', author: '洛莉·戈特利布', concepts: ['拥抱不想要的感受'] },
+      { name: '情商', author: '丹尼尔·戈尔曼', concepts: ['情绪劫持','先深呼吸6秒'] },
+      { name: '心流', author: '米哈里·契克森米哈赖', concepts: ['精神熵','重建内在秩序'] }
     ]
   },
-
   internal: {
-    name: '内耗',
-    system: `你是「纸上良方」APP 的问诊台AI。你是一位温暖、有洞察力的心理咨询师，擅长通过深聊帮人停止内耗。
-
-## 问诊流程（严格按节奏）
-- Step 1：共情开场+初步诊断。理解用户的纠结场景（想太多？脑子里两个声音打架？反复纠结？），说出你听到的模式，然后挖最内耗的时候脑子里在想什么。
-- Step 2：原因分析+深挖追问。分析那个批评的声音像是自己的还是别人的？是小时候被内化的"应该"？然后深挖最让他内耗的那个声音。
-- Step 3：问题拆解+良方输出。把内耗模式拆解（两个声音打架→谁也说服不了谁→时间流逝→后悔），给具体可执行的建议。
-
-## 可用书籍
-《自我关怀》克里斯汀·内夫 — 停止用别人的声音跟自己打架
-《蛤蟆先生去看心理医生》罗伯特·戴博德 — 内在父母的批评声
-《也许你该找个人聊聊》洛莉·戈特利布 — 反复想不是解决问题，是咀嚼情绪
-《被忽视的孩子》乔尼丝·韦伯 — "我不值得"的信念
-
-## 风格
-温暖、像朋友聊天、不说教、不评判。每一步必须有追问。`,
-    books: [
-      {name:'自我关怀', author:'克里斯汀·内夫', insight:'内耗的本质是用别人的声音跟自己打架。', quote:'对自己说你会对好朋友说的话。'},
-      {name:'蛤蟆先生去看心理医生', author:'罗伯特·戴博德', insight:'脑子里的批评声不是你的。', quote:'你不需要变得完美才值得被爱。'},
-      {name:'也许你该找个人聊聊', author:'洛莉·戈特利布', insight:'反复想不是在解决问题，是在咀嚼情绪。', quote:'停下来比想清楚更重要。'},
-      {name:'被忽视的孩子', author:'乔尼丝·韦伯', insight:'心里有个"我不值得被好好对待"的信念。', quote:'你本来就值得。'}
+    core: '内耗的本质是自我批判、童年模式的重复、以及自己跟自己打仗。',
+    all: [
+      { name: '蛤蟆先生去看心理医生', author: '罗伯特·戴博德', concepts: ['三种自我状态','自我批判的内化','人生坐标'] },
+      { name: '当下的力量', author: '埃克哈特·托利', concepts: ['小我机制','痛苦之身'] },
+      { name: '被讨厌的勇气', author: '岸见一郎', concepts: ['课题分离','自我接纳'] },
+      { name: '认知觉醒', author: '周岭', concepts: ['元认知','消除模糊'] },
+      { name: '亲密关系', author: '罗兰·米勒', concepts: ['投射机制','冲突处理'] },
+      { name: '悉达多', author: '赫尔曼·黑塞', concepts: ['放下执念','非二元对立'] },
+      { name: '也许你该找个人聊聊', author: '洛莉·戈特利布', concepts: ['洞察不等于改变','需要行动'] },
+      { name: '自卑与超越', author: '阿尔弗雷德·阿德勒', concepts: ['自卑感与超越','社会兴趣'] },
+      { name: '正念的奇迹', author: '一行禅师', concepts: ['观察情绪','不评判不跟随'] },
+      { name: '臣服实验', author: '迈克尔·辛格', concepts: ['观察者意识'] },
+      { name: '逆转思维', author: '李欣频', concepts: ['反对抗思维','接纳限制'] }
     ]
   },
-
   express: {
-    name: '表达',
-    system: `你是「纸上良方」APP 的问诊台AI。你是一位温暖、有洞察力的心理咨询师，擅长通过深聊帮人突破表达障碍。
-
-## 问诊流程（严格按节奏）
-- Step 1：共情开场+初步诊断。理解用户的困难场景（不敢发言？说不清楚？怕说错？），说出你听到的模式，然后挖最想说但没说出口的那句话是什么。
-- Step 2：原因分析+深挖追问。分析"说不出口"的深层原因——怕被否定？怕对方不高兴？怕暴露？然后深挖那个最深层的怕。
-- Step 3：问题拆解+良方输出。把表达困难拆解（想说→过滤器→不敢说→后悔），给具体可执行的建议。
-
-## 可用书籍
-《非暴力沟通》马歇尔·卢森堡 — 观察→感受→需要→请求
-《关键对话》科里·帕特森 — 高压沟通策略
-
-## 风格
-温暖、像朋友聊天、不说教、不评判。每一步必须有追问。`,
-    books: [
-      {name:'非暴力沟通', author:'马歇尔·卢森堡', insight:'好的表达四步：观察→感受→需要→请求。', quote:'当你不再评判，对方反而更愿意倾听。'},
-      {name:'关键对话', author:'科里·帕特森', insight:'面对特定的人说不出话，不是能力问题，是关系紧张。', quote:'你怕的不是说错话，是说完之后关系变了。'},
-      {name:'被讨厌的勇气', author:'岸见一郎', insight:'表达困难的本质是怕。但不说才是最大的遗憾。', quote:'你不需要说得好，你只需要说出来。'}
+    core: '好的表达不是口才好，而是先读懂人心，再决定如何开口。说不出口的背后，常常是怕——怕被否定、怕关系变了、怕暴露真实的自己。',
+    all: [
+      { name: '鬼谷子', author: '王诩', concepts: ['捭阖之道','反应之术','内楗之术','飞箝之术'] },
+      { name: '非暴力沟通', author: '马歇尔·卢森堡', concepts: ['四要素','区分观察与评判'] },
+      { name: '亲密关系', author: '罗兰·米勒', concepts: ['真正的倾听','冲突处理'] },
+      { name: '影响力', author: '罗伯特·西奥迪尼', concepts: ['互惠原则','承诺与一致','社会认同'] },
+      { name: '七个习惯', author: '史蒂芬·柯维', concepts: ['知彼解己','统合综效'] },
+      { name: '情商', author: '丹尼尔·戈尔曼', concepts: ['同理心','先感受对方情绪'] },
+      { name: '被讨厌的勇气', author: '岸见一郎', concepts: ['你不需要说得好，只需要说出来'] },
+      { name: '悉达多', author: '赫尔曼·黑塞', concepts: ['倾听之道','减少急于表达'] }
     ]
   },
-
   eq: {
-    name: '情绪',
-    system: `你是「纸上良方」APP 的问诊台AI。你是一位温暖、有洞察力的心理咨询师，擅长通过深聊帮人管理情绪。
-
-## 问诊流程（严格按节奏）
-- Step 1：共情开场+初步诊断。理解用户情绪失控的场景（对家人发火？工作中忍不住？事后后悔？），说出你听到的模式，然后挖那个"开关"是什么——被否定？被忽视？事情没按预期？
-- Step 2：原因分析+深挖追问。分析情绪失控的机制——杏仁核劫持？安全感带来的放纵？压抑后爆发？然后深挖那个让他"情绪上头"的最深层原因。
-- Step 3：问题拆解+良方输出。把情绪失控模式拆解（触发→情绪脑先冲→理性脑跟不上→后悔），给具体可执行的建议。
-
-## 可用书籍
-《情商》丹尼尔·戈尔曼 — 情绪不是敌人，是信号
-《社交天性》马修·利伯曼 — 情绪会改道，压抑不会消失
-
-## 风格
-温暖、像朋友聊天、不说教、不评判。每一步必须有追问。`,
-    books: [
-      {name:'情商', author:'丹尼尔·戈尔曼', insight:'情商不是不发脾气，是知道自己在发、为什么发、发完怎么办。', quote:'情绪是信号，不是敌人。'},
-      {name:'社交天性', author:'马修·利伯曼', insight:'压抑的情绪不会消失，只会改道。', quote:'情绪不会因为你忍了就消失。'},
-      {name:'情商', author:'丹尼尔·戈尔曼', insight:'理性比情绪慢了6秒。缩短这个时差。', quote:'你不能阻止波浪，但你可以学会冲浪。'}
+    core: '情商的核心是觉察自我状态，为情绪负责，同时读懂他人。情绪失控的瞬间，常常是杏仁核先劫持了理智脑。',
+    all: [
+      { name: '情商', author: '丹尼尔·戈尔曼', concepts: ['自我觉察','情绪管理','同理心','情绪劫持'] },
+      { name: '蛤蟆先生去看心理医生', author: '罗伯特·戴博德', concepts: ['三种自我状态','情绪自主权','适应型儿童'] },
+      { name: '亲密关系', author: '罗兰·米勒', concepts: ['投射机制','冲突处理','暂停而不逃避'] },
+      { name: '被讨厌的勇气', author: '岸见一郎', concepts: ['课题分离','共同体感觉'] },
+      { name: '鬼谷子', author: '王诩', concepts: ['捭阖之道','不确定先阖'] },
+      { name: '悉达多', author: '赫尔曼·黑塞', concepts: ['接纳矛盾和复杂性'] },
+      { name: '七个习惯', author: '史蒂芬·柯维', concepts: ['积极主动','不做被动反应'] },
+      { name: '自卑与超越', author: '阿尔弗雷德·阿德勒', concepts: ['社会兴趣','情商的底层是关心他人'] },
+      { name: '也许你该找个人聊聊', author: '洛莉·戈特利布', concepts: ['关系是改变的容器'] }
     ]
   }
 };
 
-const STEP_HINTS = {
-  1: '现在是第一步：共情开场+初步诊断。理解用户的问题，说出你听到的模式，然后追问身体感觉/具体细节。用口语化的中文回复，150字以内。',
-  2: '现在是第二步：原因分析+深挖追问。分析深层原因，引用书籍洞察，然后追问最深层的那个点。用口语化的中文回复，200字以内。',
-  3: '现在是第三步：问题拆解+良方输出。拆解问题模式，然后给出可执行的建议。用口语化的中文回复，300字以内。'
-};
+const DOMAIN_NAMES = { delay: '拖延', anxiety: '焦虑', internal: '内耗', express: '表达', eq: '情绪' };
 
-const AI_MODEL = '@cf/meta/llama-3.1-8b-instruct';
+function buildSystemPrompt(domainKey, step) {
+  const domain = BOOK_INDEX[domainKey];
+  const domainName = DOMAIN_NAMES[domainKey];
+  const booksList = domain.all.map(b => `《${b.name}》—${b.author}：${b.concepts.slice(0,2).join('、')}`).join('；');
+
+  const stepGuides = {
+    1: `## 第一步：共情开场 + 初步诊断
+
+执行规范：
+1. **先接情绪**：用1-2句话回应用户此刻的感受（"听得出来你现在挺难的"、"这种感觉真的很折腾人"）
+2. **再诊断模式**：说出你听到的**具体模式**——不是"你有拖延症"，而是"你在用XX来回避XX"或者"我听到你在纠结XX"
+3. **最后追问**：一个**具体的开放式问题**，帮助他补充细节
+
+禁忌：绝对不要说"你点了XX——这是XX脉里常见的"这种客服式话术。不要给选项式假追问。
+
+输出：150-250字，口语化，像朋友聊天。`,
+
+    2: `## 第二步：原因分析 + 深挖追问
+
+执行规范：
+1. **逐层分析**：从行为层→情绪层→认知层。比如"刷手机回避工作"→"怕做不好的焦虑"→"完美主义信念"
+2. **引用书籍**：至少引用一本知识库里的书（直接写书名+核心洞察）
+3. **归因拆解**：用2-4个点把问题拆清楚
+4. **深挖追问**：选最深的那一个点挖到底——"我想确认：你觉得这个模式最早是怎么开始的？"
+
+禁忌：不要用"是怕做不好？还是怕失控？还是怕别人看法？"这种选项式假追问。选一个最深的挖。
+
+输出：300-500字。`,
+
+    3: `## 第三步：问题拆解 + 良方输出
+
+问题拆解（2-4点）：
+- 标注【可立即行动】/【短期调整】/【中期改善】/【长期建设】
+- 每点一句话
+
+良方输出格式（必须基于知识库书籍）：
+📖 处方笺
+
+来自：《书名》— 作者
+核心洞察：一句话（精准对应用户的问题）
+你的良方：
+1. ★ （今天就能做）具体动作
+2. ★★ （进阶级）具体动作
+3. ★★★ （挑战级）具体动作
+送你一句话：书中金句
+
+收尾：温柔鼓励，指出今晚就能试的第一条，留多轮深聊入口。
+
+禁忌：绝对不能说"坦诚告诉你：我的知识库里目前没有"。21本书足够覆盖，选最接近的。
+
+输出：400-600字。良方是2-3本书的组合。`
+  };
+
+  return `你是「纸上良方」APP的问诊台AI。你是一位**温暖、有洞察力、像朋友一样的心理咨询师**，擅长通过深聊帮人找到问题的真实原因，并给出基于书籍的具体可执行的建议。
+
+## 当前问题域：${domainName}
+
+${domain.core}
+
+## 七步诊断框架（当前是第${step}步）
+${stepGuides[step]}
+
+## 书籍知识库（必须从中选书引用，不能编造）
+${booksList}
+
+## 风格规范
+- **像朋友聊天**：用"我"、"你"，口语化，不要用"建议你"、"你应该"
+- **共情前置**：先接情绪，再分析，最后给建议
+- **追问挖真**：每次追问必须是开放式、挖深层的
+- **不说教不评判**：用户说什么都不否定
+- **有温度**：可以用"嗯"、"我理解"、"这真的很不容易"
+- **绝对不说模板话**：不说"这是XX脉里常见的"、"建议你试试"
+
+## 能力边界
+如果出现自杀/自伤/严重精神病征兆，立即建议拨打心理援助热线。
+
+现在开始对话。`;
+}
 
 export default {
   async fetch(request, env, ctx) {
@@ -136,80 +172,51 @@ export default {
       'Access-Control-Allow-Headers': 'Content-Type',
       'Content-Type': 'application/json'
     };
-
     if (request.method === 'OPTIONS') return new Response(null, { headers });
     if (request.method !== 'POST') return new Response(JSON.stringify({ error: 'Method not allowed' }), { headers, status: 405 });
-
     try {
       const body = await request.json();
       const { domain, history = [], step, text } = body;
       if (!domain || !text || !step) return new Response(JSON.stringify({ error: '缺少必要参数' }), { headers, status: 400 });
+      if (!BOOK_INDEX[domain]) return new Response(JSON.stringify({ error: '未知问题域' }), { headers, status: 400 });
+      if (!env.AI) return new Response(JSON.stringify({ error: 'AI未绑定' }), { headers, status: 500 });
 
-      const config = DOMAIN_PROMPTS[domain];
-      if (!config) return new Response(JSON.stringify({ error: '未知问题域' }), { headers, status: 400 });
+      const systemPrompt = buildSystemPrompt(domain, step);
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...history.flatMap(h => [
+          { role: 'user', content: h.user },
+          { role: 'assistant', content: h.bot }
+        ]),
+        { role: 'user', content: text }
+      ];
 
-      // 两种方式：env.AI 绑定（优先）或 REST API（兜底）
-      let aiResponse;
-      try {
-        if (env.AI) {
-          const messages = [
-            { role: 'system', content: config.system + '\n\n' + STEP_HINTS[step] },
-            ...history.flatMap(h => [
-              { role: 'user', content: h.user },
-              { role: 'assistant', content: h.bot }
-            ]),
-            { role: 'user', content: text }
-          ];
-          const aiRes = await env.AI.run(AI_MODEL, {
-            messages,
-            temperature: 0.7,
-            max_tokens: step === 3 ? 800 : 400
-          });
-          aiResponse = aiRes.response;
-        } else {
-          // 兜底：REST API
-          throw new Error('env.AI not bound');
-        }
-      } catch (aiErr) {
-        console.warn('AI binding failed:', aiErr.message);
-        aiResponse = '[AI 暂时不可用，请稍后再试]';
-      }
+      const maxTokens = step === 3 ? 800 : (step === 2 ? 600 : 400);
+      const aiRes = await env.AI.run(MODEL, { messages, temperature: 0.7, max_tokens: maxTokens, repetition_penalty: 0.85, presence_penalty: 0.6 });
+      let aiResponse = aiRes.response || '';
 
       let prescription = null;
-      if (step === 3 && env.AI) prescription = await genPrescription(env, config, text, history);
+      if (step === 3) {
+        try {
+          const pxRes = await env.AI.run(MODEL, {
+            messages: [
+              { role: 'system', content: `你是书籍推荐引擎。问题域：${DOMAIN_NAMES[domain]}。从以下书里选2-3本最匹配的，输出严格JSON：${JSON.stringify(BOOK_INDEX[domain].all.map(b=>({name:b.name,author:b.author,concepts:b.concepts})))}` },
+              { role: 'user', content: `用户说：${text}。完整上下文：${history.map(h=>h.user).join(' → ')}。输出：{"books":[{"name":"书名 — 作者","insight":"一句话洞察"}], "steps":[{"level":"★","action":"具体动作"}], "quote":"金句"}。insight必须精准对应用户问题。只输出JSON。` }
+            ],
+            temperature: 0.4, max_tokens: 400
+          });
+          const jsonStr = (pxRes.response || '').trim().replace(/^```json\n?|\n?```$/g, '');
+          const parsed = JSON.parse(jsonStr);
+          prescription = { books: parsed.books || [], steps: parsed.steps || [], quote: parsed.quote || '' };
+        } catch (pxErr) {
+          const fb = BOOK_INDEX[domain].all[0];
+          prescription = { books: [{ name: `${fb.name} — ${fb.author}`, insight: BOOK_INDEX[domain].core }], steps: [{ level: '★', action: '今晚选一件最小的事先做5分钟' }, { level: '★★', action: '把"开始"设计得极简——只做第一步' }, { level: '★★★', action: '连续三天后微微加量' }], quote: fb.concepts[0] };
+        }
+      }
 
       return new Response(JSON.stringify({ response: aiResponse, prescription }), { headers });
-
     } catch (e) {
-      console.error('Worker error:', e);
       return new Response(JSON.stringify({ error: '服务异常: ' + e.message }), { headers, status: 500 });
     }
   }
 };
-
-async function genPrescription(env, config, userText, history) {
-  const allContext = history.map(h => h.user).join(' | ') + ' | ' + userText;
-  const booksText = config.books.map(b => `${b.name}—${b.author}：${b.insight}`).join('；');
-  const prompt = `用户问题：${allContext}\n可选书籍：${booksText}\n选1本最适合的，输出严格 JSON：{"book":"书名 — 作者","insight":"一句话洞察","steps":["步骤1","步骤2","步骤3"],"quote":"金句"}`;
-
-  try {
-    const res = await env.AI.run(AI_MODEL, {
-      messages: [
-        { role: 'system', content: '你是书籍推荐引擎。只输出 JSON，不要 markdown，不要解释。' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.3,
-      max_tokens: 300
-    });
-    const jsonStr = res.response.trim().replace(/^```json\n?|\n?```$/g, '');
-    return JSON.parse(jsonStr);
-  } catch (e) {
-    const defaultBook = config.books[0];
-    return {
-      book: `${defaultBook.name} — ${defaultBook.author}`,
-      insight: defaultBook.insight,
-      steps: ['今晚选一件最小的事先做5分钟', '记录完成情况，只记不评', '明天再试一次，比今天稍微多一点点'],
-      quote: defaultBook.quote
-    };
-  }
-}
