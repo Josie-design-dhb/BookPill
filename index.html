@@ -720,19 +720,7 @@ delay:{
     else if(/想.*做别的|转移|逃避|刷手机|看视频|干别的|分心/.test(text))r+=`你说的"想做别的"，这就是拖延的机制——大脑在帮你"逃跑"，从让你不舒服的事逃到让你舒服的事上。不是你不想做，是大脑自动帮你按了"逃避键"。`;
     else if(/怕|害怕|担心|做不好|不够好|被拒|被否|睡不着|着急|心慌/.test(text))r+=`你说的这些感觉——不管是不安、心慌还是怕——它们才是你拖延的真正原因。不是你不够自律，是你的大脑在保护你不被伤害。`;
     else r+=`谢谢你告诉我。不管那个感觉是什么，它都是真实的，值得被认真对待。`;
-    r+='\n\n《拖延心理学》里有一句话："拖延不是性格缺陷，而是一种应对策略——虽然它最终会伤害你，但在当下，它确实帮你回避了不舒服。"\n\n我想再确认一下：你觉得让你逃避这件事的最深层原因是——怕做不好被评价？还是觉得这件事本身毫无意义？或者别的？';
-    let px;
-    if(p.hasStudy&&p.hasNotAction)px={book:'《拖延心理学》— 简·博克',insight:'用"准备"来回避"行动"是最隐蔽的拖延——因为准备让你觉得在做事，但它其实是一种"安全的忙碌"。',steps:genSteps('delay',userText1),quote:'你不需要准备好才开始，你需要开始才能准备好。'};
-    else if(p.hasPerfectionism)px={book:'《微习惯》— 斯蒂芬·盖斯',insight:'完美主义的解药不是"更努力"，而是"更小"——把目标缩小到"不可能失败"的程度。',steps:genSteps('delay',userText1),quote:'不是你不够自律，而是你的目标太大了。缩小它，直到它变得可笑。'};
-    else if(p.hasFear)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'害怕被拒绝的本质，是把自己的价值建立在别人的认可上。自由就是被别人讨厌。',steps:genSteps('delay',userText1),quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
-    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样——人生不是赛跑，是旅行。',steps:genSteps('delay',userText1),quote:'人生的意义不在于跑得比别人快，而在于找到自己的节奏。'};
-    else px={book:'《拖延心理学》— 简·博克',insight:'拖延不是时间管理问题，而是情绪调节问题。你在用拖延来回避某种不舒服的感觉。',steps:genSteps('delay',userText1),quote:'你不需要准备好才开始，你需要开始才能准备好。'};
-    return{response:r,patterns:p};
-  },
-  respond3(text,p,userText1){
-    let r='';
-    r+=`明白了。你的拖延模式，其实是这样的：\n① 想到要做那件事 → 触发不舒服的感觉\n② 大脑自动帮你'逃'（刷手机/做别的）\n③ 事后后悔 → 下次还是一样\n解药不是'更自律'，是'缩小目标'——小到大脑不觉得有威胁。`;
-    r+='\n\n现在，我给你开一剂良方 👇';
+    r+='\n\n《拖延心理学》里有一句话："拖延不是性格缺陷，而是一种应对策略——虽然它最终会伤害你，但在当下，它确实帮你回避了不舒服。"\n\n现在，我给你开一剂良方 👇';
     let px;
     if(p.hasStudy&&p.hasNotAction)px={book:'《拖延心理学》— 简·博克',insight:'用"准备"来回避"行动"是最隐蔽的拖延——因为准备让你觉得在做事，但它其实是一种"安全的忙碌"。',steps:genSteps('delay',userText1),quote:'你不需要准备好才开始，你需要开始才能准备好。'};
     else if(p.hasPerfectionism)px={book:'《微习惯》— 斯蒂芬·盖斯',insight:'完美主义的解药不是"更努力"，而是"更小"——把目标缩小到"不可能失败"的程度。',steps:genSteps('delay',userText1),quote:'不是你不够自律，而是你的目标太大了。缩小它，直到它变得可笑。'};
@@ -781,20 +769,7 @@ anxiety:{
     else if(/怕被否|被否|评价|眼光|认可/.test(text))r+=`"怕被否定"——你把评价权交给了别人。阿德勒心理学说，这是"认可欲求"——寻求别人的认可，反而失去了自由。`;
     else if(/怕失控|失控|控制|不确定/.test(text))r+=`"怕失控"——你想控制一切，但世界上大部分事你控制不了。焦虑就是"想控制"和"控制不了"之间的裂缝。`;
     else r+=`谢谢你告诉我。不管是哪种"怕"，它都是真实的。`;
-    r+='\n\n《当下的力量》里有一句话："焦虑不会消除明天的悲伤，它只会榨干今天的力量。"\n\n我想再确认一下：你觉得让你焦虑的最深层原因是——怕做不好？怕失控？还是怕别人的看法？';
-    let px;
-    if(p.hasSleep&&p.hasEverything)px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑活在"未来"，平静活在"当下"。你睡不着，是因为身体在现在，脑子在未来。',steps:genSteps('anxiety',userText1),quote:'你无法阻止波浪，但你可以学会冲浪。'};
-    else if(p.hasOthers)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'自由就是被别人讨厌。不再寻求认可，反而获得了真正的自由。',steps:genSteps('anxiety',userText1),quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
-    else if(p.hasPhysical)px={book:'《焦虑的人》— 弗雷德里克·巴克曼',insight:'焦虑不是因为你有问题，而是因为你在乎得太多。能焦虑说明你还活着，还在乎。',steps:genSteps('anxiety',userText1),quote:'焦虑的人不是懦弱，他们只是太在乎了。'};
-    else if(p.hasEverything)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'什么都想做好，是因为你觉得"只有做好才有价值"。但你的价值不取决于你做了多少。',steps:genSteps('anxiety',userText1),quote:'人生的意义不在于什么都做好，而在于找到值得做的那一件事。'};
-    else if(p.hasComparison)px={book:'《身份的焦虑》— 阿兰·德波顿',insight:'比较是焦虑的燃料。你的节奏不需要和别人一样。',steps:genSteps('anxiety',userText1),quote:'人生不是赛跑，是旅行。'};
-    else px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑是对未来的恐惧。把你拉回现在，焦虑就无处立足。',steps:genSteps('anxiety',userText1),quote:'焦虑不会消除明天的悲伤，它只会榨干今天的力量。'};
-    return{response:r,patterns:p};
-  },
-  respond3(text,p,userText1){
-    let r='';
-    r+=`明白了。你的焦虑模式，其实是这样的：\n① 脑中预演不好的结果 → 触发身体紧绷\n② 越想控制越失控 → 恶性循环\n③ 把注意力拉回「现在」才能破`;
-    r+='\n\n现在，我给你开一剂良方 👇';
+    r+='\n\n《当下的力量》里有一句话："焦虑不会消除明天的悲伤，它只会榨干今天的力量。"\n\n现在，我给你开一剂良方 👇';
     let px;
     if(p.hasSleep&&p.hasEverything)px={book:'《当下的力量》— 埃克哈特·托利',insight:'焦虑活在"未来"，平静活在"当下"。你睡不着，是因为身体在现在，脑子在未来。',steps:genSteps('anxiety',userText1),quote:'你无法阻止波浪，但你可以学会冲浪。'};
     else if(p.hasOthers)px={book:'《被讨厌的勇气》— 岸见一郎',insight:'自由就是被别人讨厌。不再寻求认可，反而获得了真正的自由。',steps:genSteps('anxiety',userText1),quote:'自由就是被别人讨厌。如果你想获得自由，就必须有勇气接受这一点。'};
@@ -841,20 +816,7 @@ internal:{
     if(/像.*妈|像.*爸|像.*老师|长辈|父母|不是我自己/.test(text))r+=`对——那个批评你的声音，其实不是你的。它是某个长辈、老师的声音，被你内化了。你用别人批评你的方式，在批评自己。这不是你的错，但你需要知道：那个声音不是你的，你可以不让它说话。`;
     else if(/自己的声音|我自己|就是我自己/.test(text))r+=`你说那个声音是你自己的——那说明它已经内化得很深了。但《自我关怀》里说，自我批评不是"自己跟自己说话"，是"用别人批评你的方式跟自己说话"。它的根源，仍然是外在的。`;
     else r+=`不管那个声音像谁，重要的是：它不是"事实"，它只是"想法"。想法不代表真相。`;
-    r+='\n\n《自我关怀》里有一句话："你不需要变得完美才值得被爱——包括被你自己爱。"\n\n我想再确认一下：你觉得那个让你内耗的声音，听起来更像是自己的，还是像某个长辈/老师/家人的声音？';
-    let px;
-    if(p.hasRegret&&p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'重要的不是选对，是选了之后对自己好。任何选择都会有遗憾，但你可以选择善待做出选择的自己。',steps:genSteps('internal',userText1),quote:'你不需要做出完美的选择，你需要学会善待做出了选择的自己。'};
-    else if(p.hasSelfDoubt)px={book:'《蛤蟆先生去看心理医生》— 罗伯特·戴博德',insight:'你脑子里的批评声不是你的声音——它是从小被内化的"内在父母"。你可以学会不让它说话。',steps:genSteps('internal',userText1),quote:'你不需要变得完美才值得被爱——包括被你自己爱。'};
-    else if(p.hasOverthink&&p.hasOthers)px={book:'《被忽视的孩子》— 乔尼丝·韦伯',insight:'别人的话能伤你三天，是因为你心里有一个"我不值得被好好对待"的信念。改变从看见它开始。',steps:genSteps('internal',userText1),quote:'你不需要别人的认可才知道自己值多少。你本来就值得。'};
-    else if(p.hasOverthink)px={book:'《也许你该找个人聊聊》— 洛莉·戈特利布',insight:'反复想不是在解决问题，是在咀嚼情绪。你需要做的是"停下来"而不是"想清楚"。',steps:genSteps('internal',userText1),quote:'你以为你在解决问题，其实你只是在原地转圈。走出来比想清楚更重要。'};
-    else if(p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'害怕选错，其实是害怕"选错之后自己不值得被善待"。但你可以选择善待自己。',steps:genSteps('internal',userText1),quote:'自由不是选对，是选了之后对自己好。'};
-    else px={book:'《自我关怀》— 克里斯汀·内夫',insight:'内耗的本质是用别人的声音跟自己打架。停下来的方式不是"想通"，是"对自己温柔一点"。',steps:genSteps('internal',userText1),quote:'对自己说你会对好朋友说的话。自我同情比自我批评更能带来改变。'};
-    return{response:r,patterns:p};
-  },
-  respond3(text,p,userText1){
-    let r='';
-    r+=`明白了。你的内耗模式，其实是这样的：\n① 脑子里有两个声音在打架\n② 一个说「应该这样」，另一个说「但万一那样呢」\n③ 停下来的方式不是「想通」，是「让其中一个声音先闭嘴」`;
-    r+='\n\n现在，我给你开一剂良方 👇';
+    r+='\n\n《自我关怀》里有一句话："你不需要变得完美才值得被爱——包括被你自己爱。"\n\n现在，我给你开一剂良方 👇';
     let px;
     if(p.hasRegret&&p.hasDecision)px={book:'《自我关怀》— 克里斯汀·内夫',insight:'重要的不是选对，是选了之后对自己好。任何选择都会有遗憾，但你可以选择善待做出选择的自己。',steps:genSteps('internal',userText1),quote:'你不需要做出完美的选择，你需要学会善待做出了选择的自己。'};
     else if(p.hasSelfDoubt)px={book:'《蛤蟆先生去看心理医生》— 罗伯特·戴博德',insight:'你脑子里的批评声不是你的声音——它是从小被内化的"内在父母"。你可以学会不让它说话。',steps:genSteps('internal',userText1),quote:'你不需要变得完美才值得被爱——包括被你自己爱。'};
@@ -902,20 +864,7 @@ express:{
     else if(/不高兴|生气|得罪|对方不/.test(text))r+=`"怕对方不高兴"——你把"表达自己"和"伤害别人"搞混了。表达你的感受不是伤害对方，不说才会在心里积攒成更大的问题。`;
     else if(/暴露|真实|被看穿|真实想法/.test(text))r+=`"怕暴露真实想法"——这其实是在害怕"如果别人看到了真实的我，会不会不喜欢我"。但《非暴力沟通》说，恰恰是真实表达，才能建立真正的关系。`;
     else r+=`谢谢你告诉我。不管怕的是什么，那个"怕"才是你表达不出来的真正原因。`;
-    r+='\n\n《非暴力沟通》里有一句话："当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。"\n\n我想再确认一下：你觉得让你说不出口的最深层原因是——怕被否定？怕对方不高兴？还是怕暴露自己的真实想法？';
-    let px;
-    if(p.hasMeeting)px={book:'《关键对话》— 科里·帕特森',insight:'开会不敢发言不是因为没想法，是因为你把"安全"看得比"真实"重。但会议上被记住的，恰恰是说了真话的人。',steps:genSteps('express',userText1),quote:'会议上被记住的，不是说得最完美的人，是说了别人不敢说的真话的人。'};
-    else if(p.hasMiscomm)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'好的表达不是说你想说的，是说对方能接住的。四步：观察→感受→需要→请求。',steps:genSteps('express',userText1),quote:'当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。'};
-    else if(p.hasOffend)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'问题不在情绪本身，在于你把"评判"当成了"表达"。说"你总是"是评判，说"我感到"是表达。',steps:genSteps('express',userText1),quote:'愤怒时说的话，通常不是你想说的话，是情绪在替你说。'};
-    else if(p.hasVague)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达越简单越有力量。不是你没能力，是你太想把话说"好"了。',steps:genSteps('express',userText1),quote:'最好的表达不是最精巧的，是最真实的。'};
-    else if(p.hasSpecific)px={book:'《关键对话》— 科里·帕特森',insight:'面对特定的人说不出话，不是表达能力问题，是关系紧张。解药不在"怎么说"，在"怎么看待这段关系"。',steps:genSteps('express',userText1),quote:'你怕的不是说错话，你怕的是说完之后关系变了。但不说，关系也在变。'};
-    else px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'表达困难的本质是"怕"。怕说错、怕被否定、怕暴露。但不说才是最大的遗憾。',steps:genSteps('express',userText1),quote:'你不需要说得好，你只需要说出来。'};
-    return{response:r,patterns:p};
-  },
-  respond3(text,p,userText1){
-    let r='';
-    r+=`明白了。你的表达困难，拆一下：\n① 你脑子里有想说的话\n② 但有个「过滤器」在阻止你说出来\n③ 那个过滤器就是「怕」\n现在的问题不是「怎么说得更好」，是「怎么让过滤器松一点」`;
-    r+='\n\n现在，我给你开一剂良方 👇';
+    r+='\n\n《非暴力沟通》里有一句话："当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。"\n\n现在，我给你开一剂良方 👇';
     let px;
     if(p.hasMeeting)px={book:'《关键对话》— 科里·帕特森',insight:'开会不敢发言不是因为没想法，是因为你把"安全"看得比"真实"重。但会议上被记住的，恰恰是说了真话的人。',steps:genSteps('express',userText1),quote:'会议上被记住的，不是说得最完美的人，是说了别人不敢说的真话的人。'};
     else if(p.hasMiscomm)px={book:'《非暴力沟通》— 马歇尔·卢森堡',insight:'好的表达不是说你想说的，是说对方能接住的。四步：观察→感受→需要→请求。',steps:genSteps('express',userText1),quote:'当你不再评判，而是真实表达你的感受和需要时，对方反而更愿意倾听。'};
@@ -961,18 +910,7 @@ eq:{
     else if(/握紧|紧|拳头|手/.test(text))r+=`手握紧——这是身体在准备"战斗"。大脑检测到"威胁"，自动进入了战斗模式。你要做的不是"忍住不发"，是在这个信号出现时给自己6秒钟。`;
     else if(/空白|一片空白|懵|断片/.test(text))r+=`脑子一片空白——这就是"杏仁核劫持"：情绪脑直接接管了，理性脑暂时下线了。所以你发火时说的话，往往不是你真正想说的。`;
     else r+=`谢谢你告诉我。不管那个感觉是什么，它就是你的"情绪预警信号"。抓住它，你就能在爆发前按暂停。`;
-    r+='\n\n《情商》里有一句话："你不能阻止波浪，但你可以学会冲浪。情绪也是一样。"\n\n我想再确认一下：你觉得那个触发你情绪的开关是什么——是被否定？被忽视？还是事情没按你预期走？';
-    let px;
-    if(p.hasFamily)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'对家人发火不是"脾气差"，是"安全感"带来的放纵。你不会对陌生人这样，因为你知道家人不会离开。',steps:genSteps('eq',userText1),quote:'你对最亲近的人发的火，其实是对"安全"的消耗。终有一天会用完。'};
-    else if(p.hasWork)px={book:'《社交天性》— 马修·利伯曼',insight:'职场情商的核心不是"忍住不发"，是"在安全的场合释放"。压抑的情绪不会消失，只会改道。',steps:genSteps('eq',userText1),quote:'情绪不会因为你忍了就消失，它会换一种方式出来。'};
-    else if(p.hasRegret)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'发完火就后悔，说明你的理性比情绪慢了6秒。解药不是"忍住不发"，是"缩短这个时间差"。',steps:genSteps('eq',userText1),quote:'你不能阻止波浪，但你可以学会冲浪。'};
-    else px={book:'《情商》— 丹尼尔·戈尔曼',insight:'情商的核心不是压抑情绪，而是识别情绪、理解情绪、然后选择回应方式。',steps:genSteps('eq',userText1),quote:'你不能阻止波浪，但你可以学会冲浪。情绪也是一样。'};
-    return{response:r,patterns:p};
-  },
-  respond3(text,p,userText1){
-    let r='';
-    r+=`明白了。你的情绪失控模式，其实是这样的：\n① 某个事触发了你的开关\n② 情绪脑先冲出来（杏仁核劫持）\n③ 理性脑慢了几秒才跟上\n解药不是「忍住不发」，是缩短那几秒的时差`;
-    r+='\n\n现在，我给你开一剂良方 👇';
+    r+='\n\n《情商》里有一句话："你不能阻止波浪，但你可以学会冲浪。情绪也是一样。"\n\n现在，我给你开一剂良方 👇';
     let px;
     if(p.hasFamily)px={book:'《情商》— 丹尼尔·戈尔曼',insight:'对家人发火不是"脾气差"，是"安全感"带来的放纵。你不会对陌生人这样，因为你知道家人不会离开。',steps:genSteps('eq',userText1),quote:'你对最亲近的人发的火，其实是对"安全"的消耗。终有一天会用完。'};
     else if(p.hasWork)px={book:'《社交天性》— 马修·利伯曼',insight:'职场情商的核心不是"忍住不发"，是"在安全的场合释放"。压抑的情绪不会消失，只会改道。',steps:genSteps('eq',userText1),quote:'情绪不会因为你忍了就消失，它会换一种方式出来。'};
@@ -985,16 +923,7 @@ eq:{
 };
 
 let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='';
-let chatHistory=[];
-const DOMAIN_KEY_MAP={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情绪':'eq'};
-const WORKER_URL='/api/ask';
-async function askAI(domainKey,step,text){
-  try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({domain:domainKey,step,text,history:chatHistory})});
-    if(!res.ok){const e=await res.json();throw new Error(e.error||'AI不可用');}
-    return await res.json();
-  }catch(e){console.error('askAI error:',e);return{response:'问诊台AI暂时不可用，请稍后再试。('+e.message+')',prescription:null};}
-}
+let _aiHistory=[];  // AI对话历史，用于多轮深聊
 let _currentConfidence='high';  // high | medium | low
 let _correctionCount=0;
 let _lastPrescription=null;
@@ -1244,6 +1173,7 @@ function startChat(domain,keepHistory){
     if(hInfo){ hInfo.appendChild(confInd); }
     else { chatHead.appendChild(confInd); }
   }
+  _aiHistory=[];
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
     chatStep=1;savedPatterns={};savedUserText1='';savedPrefillTag='';
@@ -1255,7 +1185,7 @@ function startChat(domain,keepHistory){
     d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域，请重新描述你的情况：';
     document.getElementById('chatBody').appendChild(d);scrollChat();
   }else{
-    chatStep=0;chatHistory=[];savedPatterns={};savedUserText1='';savedPrefillTag='';
+    chatStep=0;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatBody').innerHTML='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
@@ -2211,55 +2141,140 @@ function handleUserInput(text){ trackMessage("user", text);
   // Step 0.4: Diagnostic deviation check (runs before confidence branching)
   let deviationWarning = null;
   if(chatStep===1){
-    showTyping();
-    const domainKey=DOMAIN_KEY_MAP[curDomain.name];
-    askAI(domainKey,1,text).then(result=>{
-      hideTyping();
-      chatHistory.push({user:text,bot:result.response});
-      savedUserText1=text;
-      addBot(result.response);
-      chatStep=2;waitingForUser=true;document.getElementById('chatInput').focus();
-    });
+    const deviation = detectDiagnosticDeviation(text, domainKey);
+    if(deviation && deviation.level === 'warning'){
+      deviationWarning = '<div style="background:rgba(184,159,107,.08);border:1px solid rgba(184,159,107,.3);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-family:var(--cal);color:var(--gold-dark);font-size:13px;margin-bottom:6px">⚠ 诊断提醒</div><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">' + deviation.message + '</div><div style="font-size:12px;color:var(--gold);margin-top:8px;font-style:italic">' + deviation.suggestion + '</div></div>';
+    } else if(deviation && deviation.level === 'info'){
+      deviationWarning = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">💡 ' + deviation.message + '</div><div style="font-size:12px;color:#6B8E6F;margin-top:6px">' + deviation.suggestion + '</div></div>';
+    }
+  }
+  
+  if(conf.level === 'low' && chatStep === 1){
+    // 低置信度：直白告知知识库暂无相关内容
+    addBot(respondByConfidence(domainKey, text, 'low'));
+    waitingForUser = true;
+    document.getElementById('chatInput').focus();
     return;
-  }else if(chatStep===2){
-    showTyping();
-    const domainKey=DOMAIN_KEY_MAP[curDomain.name];
-    askAI(domainKey,2,text).then(result=>{
-      hideTyping();
-      chatHistory.push({user:text,bot:result.response});
-      addBot(result.response);
-      chatStep=3;waitingForUser=true;document.getElementById('chatInput').focus();
-    });
-    return;
-  }else if(chatStep===3){
-    showTyping();
-    const domainKey=DOMAIN_KEY_MAP[curDomain.name];
-    askAI(domainKey,3,text).then(result=>{
-      hideTyping();
-      chatHistory.push({user:text,bot:result.response});
-      addBot(result.response);
-      setTimeout(()=>{
-        if(result.prescription)addPrescription(result.prescription);
+  }
+  
+  // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
+  // 仅在 respond1 输出后附上书籍来源提示（如果有）
+  
+  // 高置信度 → 走正常流程 (chatStep >= 1 时)
+  if(deviationWarning){ addBot(deviationWarning); }
+  
+  // Step 0.5: Check for domain mismatch
+  if(chatStep===1){
+    const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+    const dk=domainMap[curDomain.name]||'anxiety';
+    if(detectDomainMismatch(text,dk)){
+      // 智能推荐问题域
+      const recommendation=recommendDomain(text);
+      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
+      if(recommendation && recommendation.key!==dk){
+        msg+='根据你描述的情况，我更推荐试试「'+recommendation.name+'」：';
+      }else{
+        msg+='如果你觉得选的问题域不太对，可以重新选择：';
+      }
+      addBot(msg);
+      const qd=document.createElement('div');qd.className='chat-quick';
+      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+      domainList.forEach(d=>{
+        const b=document.createElement('button');
+        b.className='quick-btn'+(recommendation&&recommendation.key===d.key?' recommended':'');
+        let label=d.name;
+        if(recommendation&&recommendation.key===d.key)label=''+d.name+' ⭐';
+        b.textContent=label;
+        b.onclick=()=>startChat(d.key,true);
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+      addBot('你也可以继续说下去，我会根据你说的来判断。');
+      return;
+    }
+  }
+  
+  // ===== AI 问诊：调用 Pages Functions /api/ask =====
+  showTyping();
+  const API_URL = '/api/ask';
+  // 为 Step 2 跳过 Step 1 做容错（用户快速连发）
+  const effectiveStep = chatStep;
+  const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+  const dk = domainMap[curDomain.name] || 'anxiety';
+
+  fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      domainKey: dk,
+      step: effectiveStep,
+      messages: _aiHistory.slice(),
+      userText: text,
+    }),
+  })
+  .then(res => res.json())
+  .then(data => {
+    hideTyping();
+    if(!data.ok || !data.content){
+      throw new Error(data.error || 'AI返回为空');
+    }
+    // 记录到对话历史
+    _aiHistory.push({ role: 'user', content: text });
+    _aiHistory.push({ role: 'assistant', content: data.content });
+    // 限制历史长度（避免 context 爆炸）
+    if(_aiHistory.length > 12){ _aiHistory = _aiHistory.slice(-12); }
+
+    addBot(data.content);
+
+    if(effectiveStep === 1){
+      // 第一步完成 → 进入第二步（原因分析）
+      chatStep = 2;
+      waitingForUser = true;
+      document.getElementById('chatInput').focus();
+    }else{
+      // 第二步（良方输出）→ 问诊完成
+      chatStep = 3;
+      saveSession();
+      const div = document.createElement('div');
+      div.style.cssText = 'text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
+      div.innerHTML = '良方已开 · 可关闭面板，或再选一个问题域继续深聊';
+      document.getElementById('chatBody').appendChild(div);
+      scrollChat();
+      const qd = document.createElement('div'); qd.className = 'chat-quick';
+      ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
+        const k = ['delay','anxiety','internal','express','eq'][i];
+        const b = document.createElement('button'); b.className='quick-btn'; b.textContent=n;
+        b.onclick = ()=>startChat(k,true); qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd); scrollChat();
+      waitingForUser = false;
+    }
+  })
+  .catch(err => {
+    // AI 不可用时，回退到本地模板逻辑
+    hideTyping();
+    console.warn('[BookPill AI] 回退到本地模板:', err.message);
+    addBot('网络暂时有点慢，我先用熟悉的方式帮你看看。');
+    setTimeout(()=>{
+      if(effectiveStep === 1){
+        savedUserText1 = text;
+        const result = curDomain.respond1(text);
+        addBot(result.response);
+        chatStep = 2; waitingForUser = true;
+        document.getElementById('chatInput').focus();
+      }else{
+        const result = curDomain.respond2(text, {}, savedUserText1);
+        addBot(result.response);
         setTimeout(()=>{
-          showTyping();
+          addPrescription(result.prescription);
           setTimeout(()=>{
-            hideTyping();
-            addBot(curDomain.wrapUp());
-            chatStep=4;            saveSession();const div=document.createElement('div');div.style.cssText='text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
-            div.innerHTML='良方已开 · 可关闭面板，或再选一个问题域继续问诊';
-            document.getElementById('chatBody').appendChild(div);scrollChat();
-            const qd=document.createElement('div');qd.className='chat-quick';
-            ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
-              const dk=['delay','anxiety','internal','express','eq'][i];
-              const b=document.createElement('button');b.className='quick-btn';b.textContent=n;
-              b.onclick=()=>startChat(dk,true);qd.appendChild(b);
-            });
-            document.getElementById('chatBody').appendChild(qd);scrollChat();
-          },400);
-        },600);
-      },500);
-    },1000);
-  }}
+            addBot(curDomain.wrapUp()); chatStep = 3; saveSession();
+          }, 400);
+        }, 500);
+      }
+    }, 600);
+  });
+}
 
 function addUser(text){const d=document.createElement('div');d.className='msg user';d.textContent=text;document.getElementById('chatBody').appendChild(d);scrollChat();}
 function addBot(text){trackMessage("bot",text);const d=document.createElement('div');d.className='msg bot';d.innerHTML='<span class="b-name">良方</span>'+text.replace(/\n/g,'<br>');document.getElementById('chatBody').appendChild(d);scrollChat();}
@@ -2339,7 +2354,7 @@ function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.
 function closeChat(){document.getElementById('chatPanel').classList.remove('open');document.getElementById('chatOverlay').classList.remove('show');}
 
 function openSkillGuide(){
-  window.open('https://bookpill-1463703373.cos-website.ap-guangzhou.myqcloud.com/bookpill-skill.zip', '_blank');
+  window.open('https://github.com/Josie-design-dhb/BookPill/tree/main', '_blank');
 }
 
 // 初始化：当问诊面板打开时显示提示
