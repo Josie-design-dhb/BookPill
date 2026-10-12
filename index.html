@@ -2155,6 +2155,7 @@ function handleUserInput(text){ trackMessage("user", text);
     }
   }
   
+<<<<<<< HEAD
   // 快捷标签点击 → 跳过置信度检查（标签本身就是为当前域设计的）
   if(!quickTag && conf.level === 'low' && chatStep === 1){
     // 低置信度：直白告知知识库暂无相关内容
@@ -2162,6 +2163,35 @@ function handleUserInput(text){ trackMessage("user", text);
     waitingForUser = true;
     document.getElementById('chatInput').focus();
     return;
+=======
+  // 低置信度不再拦截！照常走 AI，只给温和域提示
+  if(!quickTag && conf.level === 'low' && chatStep === 1){
+    const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+    const dk=domainMap[curDomain.name]||'anxiety';
+    if(detectDomainMismatch(text,dk)){
+      const recommendation=recommendDomain(text);
+      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
+      if(recommendation && recommendation.key!==dk){
+        msg+='我更推荐试试「'+recommendation.name+'」⭐；不过你也可以继续说下去，我来帮你看看。';
+      }else{
+        msg+='你可以换个问题域，也可以继续说下去我来帮你判断。';
+      }
+      addBot(msg);
+      const qd=document.createElement('div');qd.className='chat-quick';
+      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+      domainList.forEach(d=>{
+        const b=document.createElement('button');
+        b.className='quick-btn'+(recommendation&&recommendation.key===d.key?' recommended':'');
+        let label=d.name;
+        if(recommendation&&recommendation.key===d.key)label=d.name+' ⭐';
+        b.textContent=label;
+        b.onclick=()=>startChat(d.key,true);
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+    }
+    // ⬇️ 关键：不 return！继续走 AI 问诊
+>>>>>>> v2
   }
   
   // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
@@ -2170,7 +2200,11 @@ function handleUserInput(text){ trackMessage("user", text);
   // 高置信度 → 走正常流程 (chatStep >= 1 时)
   if(deviationWarning){ addBot(deviationWarning); }
   
+<<<<<<< HEAD
   // Step 0.5: Check for domain mismatch (快捷标签点击时跳过，标签本身就是为当前域设计的)
+=======
+  // Step 0.5: Check for domain mismatch (Step 1+2 都检查，因为 Step 2 用户说得更具体时可能暴露真实域)
+>>>>>>> v2
   if(!quickTag && (chatStep===1 || chatStep===2)){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
