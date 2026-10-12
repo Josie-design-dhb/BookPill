@@ -48,13 +48,18 @@ function cleanTrailingQuestion(text) {
   return text.replace(/([？?])\s*$/g, '。');
 }
 
-// 后处理：清理模型可能原样输出的结构标记（Step3 处方笺）
+// 后处理：清理模型可能原样输出的结构标记（Step2/3/4 都清理）
 function cleanStructuralMarkers(text) {
   if (!text) return text;
   return text
-    .replace(/^[一二三四五六七八九十]+[段步]?\s*[·.．]\s*[^\n]+$/gm, '')  // "第一段 · 问题拆解" 等
-    .replace(/^(问题拆解|处方笺格式|收尾要点|第一段|第二段|第三段)\s*[·.．:]?\s*[^\n]*$/gm, '')
-    .replace(/\n{3,}/g, '\n\n')  // 清理多余空行
+    // "第一段 · 问题拆解" / "第一段.问题拆解" / "第一段问题拆解"
+    .replace(/^\s*[一二三四五六七八九十\d]+[段步部分]?\s*[·.．:：]?\s*[^\n]{1,20}$/gm, '')
+    // 纯标题词："问题拆解" / "处方笺格式" / "收尾要点" / "第二段" 等（单独一行时才删）
+    .replace(/^\s*(问题拆解|处方笺格式|收尾要点|第一段|第二段|第三段|第四段|分析|诊断|拆解|原因分析|建议|方案|行动鼓励|下一步)\s*[·.．:：]?\s*$/gm, '')
+    // 【xxx】【xxx】 风格标记（整行）
+    .replace(/^\s*[【\[]+[^】\]]+[】\]]+\s*$/gm, '')
+    // 多余空行
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
@@ -311,14 +316,12 @@ export async function onRequest(context) {
     // 清理可能的模型前缀
     content = content.replace(/^(好的|我明白了|我理解|嗯|好|让我想想)[，。,\.]?\s*/, '').trim();
 
-    // 后处理：繁简转换兜底 + Step2/3 禁问号 + Step3 清结构标记
+    // 后处理：繁简转换兜底 + Step2/3 禁问号 + 清结构标记(全步骤)
     content = toSimplified(content);
     if (step === 2 || step === 3) {
       content = cleanTrailingQuestion(content);
     }
-    if (step === 3) {
-      content = cleanStructuralMarkers(content);
-    }
+    content = cleanStructuralMarkers(content);
 
     return Response.json({
       ok: true,

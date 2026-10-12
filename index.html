@@ -2218,7 +2218,6 @@ function handleUserInput(text){ trackMessage("user", text);
         qd.appendChild(b);
       });
       document.getElementById('chatBody').appendChild(qd);scrollChat();
-      if(chatStep===1) addBot('你也可以继续说下去，我会根据你说的来判断。');
       return;  // ⬅️ 关键：deviation 已经处理完了，跳过 Step 0.5
     } else if(deviation && deviation.level === 'info'){
       // info 级别：只给温和提示，不阻断，继续正常流程
@@ -2263,7 +2262,6 @@ function handleUserInput(text){ trackMessage("user", text);
         qd.appendChild(b);
       });
       document.getElementById('chatBody').appendChild(qd);scrollChat();
-      if(chatStep===1) addBot('你也可以继续说下去，我会根据你说的来判断。');
       return;
     }
   }
