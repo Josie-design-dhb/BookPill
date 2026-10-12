@@ -922,7 +922,7 @@ eq:{
 }
 };
 
-let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='';
+let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='',_quickTagClicked=false;
 let _aiHistory=[];  // AI对话历史，用于多轮深聊
 let _currentConfidence='high';  // high | medium | low
 let _correctionCount=0;
@@ -1181,7 +1181,7 @@ function startChat(domain,keepHistory){
     chatStep=4;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
-    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
     // 添加切换问题域的提示
     const d=document.createElement('div');d.className='msg bot domain-switch';
     d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域。我们接着聊，你想先说说什么？';
@@ -1192,7 +1192,7 @@ function startChat(domain,keepHistory){
     document.getElementById('chatBody').innerHTML='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
-    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
   }
   document.getElementById('chatPanel').classList.add('open');
   showSkillPromo();
@@ -2101,6 +2101,7 @@ function respondByConfidence(domainKey, text, confLevel){
 let _lastUserText = '';
 function handleUserInput(text){ trackMessage("user", text); 
   _lastUserText = text;
+  const quickTag = _quickTagClicked; _quickTagClicked = false;
   // Step 0: Check for boundary violations first (crisis, medical, legal, finance, violence)
   const boundaryCheck=detectBoundaryViolation(text);
   if(boundaryCheck){
@@ -2152,12 +2153,33 @@ function handleUserInput(text){ trackMessage("user", text);
     }
   }
   
-  if(conf.level === 'low' && chatStep === 1){
-    // 低置信度：直白告知知识库暂无相关内容
-    addBot(respondByConfidence(domainKey, text, 'low'));
-    waitingForUser = true;
-    document.getElementById('chatInput').focus();
-    return;
+  // 低置信度不再拦截！照常走 AI，只给温和域提示
+  if(!quickTag && conf.level === 'low' && chatStep === 1){
+    const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+    const dk=domainMap[curDomain.name]||'anxiety';
+    if(detectDomainMismatch(text,dk)){
+      const recommendation=recommendDomain(text);
+      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
+      if(recommendation && recommendation.key!==dk){
+        msg+='我更推荐试试「'+recommendation.name+'」⭐；不过你也可以继续说下去，我来帮你看看。';
+      }else{
+        msg+='你可以换个问题域，也可以继续说下去我来帮你判断。';
+      }
+      addBot(msg);
+      const qd=document.createElement('div');qd.className='chat-quick';
+      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+      domainList.forEach(d=>{
+        const b=document.createElement('button');
+        b.className='quick-btn'+(recommendation&&recommendation.key===d.key?' recommended':'');
+        let label=d.name;
+        if(recommendation&&recommendation.key===d.key)label=d.name+' ⭐';
+        b.textContent=label;
+        b.onclick=()=>startChat(d.key,true);
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+    }
+    // ⬇️ 关键：不 return！继续走 AI 问诊
   }
   
   // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
@@ -2167,7 +2189,7 @@ function handleUserInput(text){ trackMessage("user", text);
   if(deviationWarning){ addBot(deviationWarning); }
   
   // Step 0.5: Check for domain mismatch (Step 1+2 都检查，因为 Step 2 用户说得更具体时可能暴露真实域)
-  if(chatStep===1 || chatStep===2){
+  if(!quickTag && (chatStep===1 || chatStep===2)){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
     if(detectDomainMismatch(text,dk)){
