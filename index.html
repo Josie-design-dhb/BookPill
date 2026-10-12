@@ -922,7 +922,7 @@ eq:{
 }
 };
 
-let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='';
+let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserText1='',savedPrefillTag='',_quickTagClicked=false;
 let _aiHistory=[];  // AI对话历史，用于多轮深聊
 let _currentConfidence='high';  // high | medium | low
 let _correctionCount=0;
@@ -1181,7 +1181,7 @@ function startChat(domain,keepHistory){
     chatStep=4;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
-    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
     // 添加切换问题域的提示
     const d=document.createElement('div');d.className='msg bot domain-switch';
     d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域。我们接着聊，你想先说说什么？';
@@ -1192,7 +1192,7 @@ function startChat(domain,keepHistory){
     document.getElementById('chatBody').innerHTML='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
-    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
   }
   document.getElementById('chatPanel').classList.add('open');
   showSkillPromo();
@@ -2101,6 +2101,9 @@ function respondByConfidence(domainKey, text, confLevel){
 let _lastUserText = '';
 function handleUserInput(text){ trackMessage("user", text); 
   _lastUserText = text;
+  // 捕获快捷标签点击标记后立即重置（只影响本次调用）
+  const quickTag = _quickTagClicked;
+  _quickTagClicked = false;
   // Step 0: Check for boundary violations first (crisis, medical, legal, finance, violence)
   const boundaryCheck=detectBoundaryViolation(text);
   if(boundaryCheck){
@@ -2152,7 +2155,8 @@ function handleUserInput(text){ trackMessage("user", text);
     }
   }
   
-  if(conf.level === 'low' && chatStep === 1){
+  // 快捷标签点击 → 跳过置信度检查（标签本身就是为当前域设计的）
+  if(!quickTag && conf.level === 'low' && chatStep === 1){
     // 低置信度：直白告知知识库暂无相关内容
     addBot(respondByConfidence(domainKey, text, 'low'));
     waitingForUser = true;
@@ -2166,8 +2170,8 @@ function handleUserInput(text){ trackMessage("user", text);
   // 高置信度 → 走正常流程 (chatStep >= 1 时)
   if(deviationWarning){ addBot(deviationWarning); }
   
-  // Step 0.5: Check for domain mismatch (Step 1+2 都检查，因为 Step 2 用户说得更具体时可能暴露真实域)
-  if(chatStep===1 || chatStep===2){
+  // Step 0.5: Check for domain mismatch (快捷标签点击时跳过，标签本身就是为当前域设计的)
+  if(!quickTag && (chatStep===1 || chatStep===2)){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
     if(detectDomainMismatch(text,dk)){
