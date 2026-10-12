@@ -2182,28 +2182,58 @@ function handleUserInput(text){ trackMessage("user", text);
     confBadge.style.color = conf.level === 'high' ? '#4a6b54' : (conf.level === 'medium' ? '#8a7743' : '#9A3434');
   }
   
-  // Step 0.4: Diagnostic deviation check (runs before confidence branching)
+  // Step 0.4: 统一域不匹配检测 — deviation 驱动 + 跳过 Step 0.5
+  // deviation 检测更智能（有评分差异分析），直接用它的结果，避免和 domainMismatch 重复
+  let deviation = null;
   let deviationWarning = null;
-  if(chatStep===1){
-    const deviation = detectDiagnosticDeviation(text, domainKey);
+  if(chatStep===1 || chatStep===2){
+    deviation = detectDiagnosticDeviation(text, domainKey);
     if(deviation && deviation.level === 'warning'){
-      deviationWarning = '<div style="background:rgba(184,159,107,.08);border:1px solid rgba(184,159,107,.3);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-family:var(--cal);color:var(--gold-dark);font-size:13px;margin-bottom:6px">⚠ 诊断提醒</div><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">' + deviation.message + '</div><div style="font-size:12px;color:var(--gold);margin-top:8px;font-style:italic">' + deviation.suggestion + '</div></div>';
+      const deviationDomainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
+      const sdk=deviation.suggestedDomain||'';
+      const curName=curDomain.name;
+      const recName=deviationDomainMap[sdk]||'';
+      // 统一完整提示：带域切换按钮 + 推荐 ⭐
+      let msg;
+      if(chatStep===1){
+        msg='我注意到你说的情况，可能不完全属于当前选择的「'+curName+'」范围。';
+      }else{
+        msg='聊到这里我发现，你说的这些情况可能更偏向别的方向，不完全是「'+curName+'」的问题。';
+      }
+      if(recName){
+        msg+='我更推荐试试「'+recName+'」：';
+      }else{
+        msg+='你可以重新选择问题域，或者继续说下去我来帮你判断：';
+      }
+      addBot(msg);
+      const qd=document.createElement('div');qd.className='chat-quick';
+      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+      domainList.forEach(d=>{
+        const b=document.createElement('button');
+        b.className='quick-btn'+(sdk===d.key?' recommended':'');
+        let label=d.name;
+        if(sdk===d.key)label=d.name+' ⭐';
+        b.textContent=label;
+        b.onclick=()=>startChat(d.key,true);
+        qd.appendChild(b);
+      });
+      document.getElementById('chatBody').appendChild(qd);scrollChat();
+      if(chatStep===1) addBot('你也可以继续说下去，我会根据你说的来判断。');
+      return;  // ⬅️ 关键：deviation 已经处理完了，跳过 Step 0.5
     } else if(deviation && deviation.level === 'info'){
+      // info 级别：只给温和提示，不阻断，继续正常流程
       deviationWarning = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">💡 ' + deviation.message + '</div><div style="font-size:12px;color:#6B8E6F;margin-top:6px">' + deviation.suggestion + '</div></div>';
     }
   }
   
-  // 低置信度不再拦截！照常走 AI，域匹配提示统一在 Step 0.5 里处理
+  // 低置信度不再拦截！照常走 AI，域匹配提示统一在 Step 0.4 里处理
   // 这里什么都不用做，conf.level 只影响置信度徽章，不阻断流程
   
-  // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
-  // 仅在 respond1 输出后附上书籍来源提示（如果有）
-  
-  // 高置信度 → 走正常流程 (chatStep >= 1 时)
   if(deviationWarning){ addBot(deviationWarning); }
   
-  // Step 0.5: Check for domain mismatch (Step 1+2 都检查，快捷标签点击时跳过)
-  if(!quickTag && (chatStep===1 || chatStep===2)){
+  // Step 0.5: domain mismatch 兜底 — 仅在 deviation 没命中 warning 时才跑
+  // （快捷标签点击时也跳过）
+  if(!quickTag && (chatStep===1 || chatStep===2) && !(deviation && deviation.level==='warning')){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
     if(detectDomainMismatch(text,dk)){
