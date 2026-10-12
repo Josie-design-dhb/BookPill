@@ -2166,18 +2166,23 @@ function handleUserInput(text){ trackMessage("user", text);
   // 高置信度 → 走正常流程 (chatStep >= 1 时)
   if(deviationWarning){ addBot(deviationWarning); }
   
-  // Step 0.5: Check for domain mismatch
-  if(chatStep===1){
+  // Step 0.5: Check for domain mismatch (Step 1+2 都检查，因为 Step 2 用户说得更具体时可能暴露真实域)
+  if(chatStep===1 || chatStep===2){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
     if(detectDomainMismatch(text,dk)){
       // 智能推荐问题域
       const recommendation=recommendDomain(text);
-      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
-      if(recommendation && recommendation.key!==dk){
-        msg+='根据你描述的情况，我更推荐试试「'+recommendation.name+'」：';
+      let msg;
+      if(chatStep===1){
+        msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
       }else{
-        msg+='如果你觉得选的问题域不太对，可以重新选择：';
+        msg='聊到这里我发现，你说的这些情况可能更偏向别的方向，不完全是「'+curDomain.name+'」的问题。';
+      }
+      if(recommendation && recommendation.key!==dk){
+        msg+='我更推荐试试「'+recommendation.name+'」：';
+      }else{
+        msg+='你可以重新选择问题域，或者继续说下去我来帮你判断：';
       }
       addBot(msg);
       const qd=document.createElement('div');qd.className='chat-quick';
@@ -2192,7 +2197,7 @@ function handleUserInput(text){ trackMessage("user", text);
         qd.appendChild(b);
       });
       document.getElementById('chatBody').appendChild(qd);scrollChat();
-      addBot('你也可以继续说下去，我会根据你说的来判断。');
+      if(chatStep===1) addBot('你也可以继续说下去，我会根据你说的来判断。');
       return;
     }
   }
@@ -2238,11 +2243,8 @@ function handleUserInput(text){ trackMessage("user", text);
       // 第二步（良方输出）→ 进入自由深聊模式（用户可以继续聊任何内容）
       chatStep = 4;
       saveSession();
-      const div = document.createElement('div');
-      div.style.cssText = 'text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
-      div.innerHTML = '良方已开 · 觉得不够深入？想聊聊执行难点？想换个角度？<br>继续说就行，或者选另一个问题域继续深聊：';
-      document.getElementById('chatBody').appendChild(div);
-      scrollChat();
+      // 不再硬加"良方已开"——AI 输出里已经有完整的收尾鼓励了
+      // 只保留快捷域切换按钮，干净地出现在回复下方
       const qd = document.createElement('div'); qd.className = 'chat-quick';
       ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
         const k = ['delay','anxiety','internal','express','eq'][i];
