@@ -1173,18 +1173,21 @@ function startChat(domain,keepHistory){
     if(hInfo){ hInfo.appendChild(confInd); }
     else { chatHead.appendChild(confInd); }
   }
-  _aiHistory=[];
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
-    chatStep=1;savedPatterns={};savedUserText1='';savedPrefillTag='';
+    // 不清空 _aiHistory — 让 AI 记得之前聊了什么
+    // 添加域切换过渡消息，让 AI 知道上下文变化
+    _aiHistory.push({role:'user',content:'[用户当前从其他问题域切换到了「'+curDomain.name+'」问题域。之前的对话上下文仍然有效，请结合之前的理解继续深聊。]'});
+    chatStep=4;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
     qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
     // 添加切换问题域的提示
     const d=document.createElement('div');d.className='msg bot domain-switch';
-    d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域，请重新描述你的情况：';
+    d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域。我们接着聊，你想先说说什么？';
     document.getElementById('chatBody').appendChild(d);scrollChat();
   }else{
+    _aiHistory=[];
     chatStep=0;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatBody').innerHTML='';
     document.getElementById('chatQuick').innerHTML='';
@@ -2232,12 +2235,12 @@ function handleUserInput(text){ trackMessage("user", text);
       waitingForUser = true;
       document.getElementById('chatInput').focus();
     }else{
-      // 第二步（良方输出）→ 问诊完成
-      chatStep = 3;
+      // 第二步（良方输出）→ 进入自由深聊模式（用户可以继续聊任何内容）
+      chatStep = 4;
       saveSession();
       const div = document.createElement('div');
       div.style.cssText = 'text-align:center;padding:12px;background:rgba(184,159,107,.08);border-radius:8px;font-size:13px;color:var(--ink-soft);margin-top:4px';
-      div.innerHTML = '良方已开 · 可关闭面板，或再选一个问题域继续深聊';
+      div.innerHTML = '良方已开 · 觉得不够深入？想聊聊执行难点？想换个角度？<br>继续说就行，或者选另一个问题域继续深聊：';
       document.getElementById('chatBody').appendChild(div);
       scrollChat();
       const qd = document.createElement('div'); qd.className = 'chat-quick';
@@ -2247,7 +2250,9 @@ function handleUserInput(text){ trackMessage("user", text);
         b.onclick = ()=>startChat(k,true); qd.appendChild(b);
       });
       document.getElementById('chatBody').appendChild(qd); scrollChat();
-      waitingForUser = false;
+      // ⬇️ 关键修复：保持输入框开放！
+      waitingForUser = true;
+      document.getElementById('chatInput').focus();
     }
   })
   .catch(err => {
@@ -2268,7 +2273,10 @@ function handleUserInput(text){ trackMessage("user", text);
         setTimeout(()=>{
           addPrescription(result.prescription);
           setTimeout(()=>{
-            addBot(curDomain.wrapUp()); chatStep = 3; saveSession();
+            addBot(curDomain.wrapUp()); chatStep = 4; saveSession();
+            // 回退路径也保持输入开放
+            waitingForUser = true;
+            document.getElementById('chatInput').focus();
           }, 400);
         }, 500);
       }
