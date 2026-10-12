@@ -2155,34 +2155,8 @@ function handleUserInput(text){ trackMessage("user", text);
     }
   }
   
-  // 低置信度不再拦截！照常走 AI，只给温和域提示（快捷标签点击时跳过）
-  if(!quickTag && conf.level === 'low' && chatStep === 1){
-    const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
-    const dk=domainMap[curDomain.name]||'anxiety';
-    if(detectDomainMismatch(text,dk)){
-      const recommendation=recommendDomain(text);
-      let msg='我注意到你说的情况，可能不完全属于当前选择的「'+curDomain.name+'」范围。';
-      if(recommendation && recommendation.key!==dk){
-        msg+='我更推荐试试「'+recommendation.name+'」⭐；不过你也可以继续说下去，我来帮你看看。';
-      }else{
-        msg+='你可以换个问题域，也可以继续说下去我来帮你判断。';
-      }
-      addBot(msg);
-      const qd=document.createElement('div');qd.className='chat-quick';
-      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
-      domainList.forEach(d=>{
-        const b=document.createElement('button');
-        b.className='quick-btn'+(recommendation&&recommendation.key===d.key?' recommended':'');
-        let label=d.name;
-        if(recommendation&&recommendation.key===d.key)label=d.name+' ⭐';
-        b.textContent=label;
-        b.onclick=()=>startChat(d.key,true);
-        qd.appendChild(b);
-      });
-      document.getElementById('chatBody').appendChild(qd);scrollChat();
-    }
-    // ⬇️ 关键：不 return！继续走 AI 问诊
-  }
+  // 低置信度不再拦截！照常走 AI，域匹配提示统一在 Step 0.5 里处理
+  // 这里什么都不用做，conf.level 只影响置信度徽章，不阻断流程
   
   // 中置信度和高置信度一样走 respond1/respond2（respond1 内部已能处理模糊输入）
   // 仅在 respond1 输出后附上书籍来源提示（如果有）
