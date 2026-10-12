@@ -1175,17 +1175,54 @@ function startChat(domain,keepHistory){
   }
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
-    // 不清空 _aiHistory — 让 AI 记得之前聊了什么
-    // 添加域切换过渡消息，让 AI 知道上下文变化
-    _aiHistory.push({role:'user',content:'[用户当前从其他问题域切换到了「'+curDomain.name+'」问题域。之前的对话上下文仍然有效，请结合之前的理解继续深聊。]'});
+    // 提取用户最后说的话，让 AI 基于新域重新分析
+    const lastUserMsg = (() => {
+      for(let i=_aiHistory.length-1;i>=0;i--){
+        if(_aiHistory[i].role==='user' && !_aiHistory[i].content.startsWith('[')) return _aiHistory[i].content;
+      }
+      return '';
+    })();
+    
+    // 添加域切换过渡消息到 AI 历史
+    _aiHistory.push({role:'user',content:'[用户从其他问题域切换到了「'+curDomain.name+'」。之前的对话上下文仍然有效。现在请从「'+curDomain.name+'」的视角，基于用户之前说的内容，直接进行原因分析（Step 2）。不要重新共情开场，直接从书籍洞察开始分析。]'});
+    
     chatStep=4;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
     qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
-    // 添加切换问题域的提示
+    
+    // 先输出域切换过渡，然后自动触发 step=2 原因分析
     const d=document.createElement('div');d.className='msg bot domain-switch';
-    d.innerHTML='<span class="b-name">良方</span>已切换到「'+curDomain.name+'」问题域。我们接着聊，你想先说说什么？';
+    d.innerHTML='<span class="b-name">良方</span>好，我们换到「'+curDomain.name+'」脉重新看看...';
     document.getElementById('chatBody').appendChild(d);scrollChat();
+    
+    // 自动触发 AI 分析（step=2 原因分析）
+    if(lastUserMsg){
+      waitingForUser=false;
+      showTyping();
+      fetch('/api/ask',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({domainKey:domain,step:2,messages:_aiHistory,userText:lastUserMsg})
+      }).then(r=>r.json()).then(data=>{
+        hideTyping();
+        if(data.ok && data.content){
+          addBot(data.content);
+          _aiHistory.push({role:'assistant',content:data.content});
+        }else{
+          addBot('抱歉，我正在重新整理思路。你可以再说一遍你的情况，我来帮你看看。');
+        }
+        saveSession();
+        waitingForUser=true;
+        document.getElementById('chatInput').focus();
+      }).catch(()=>{
+        hideTyping();
+        addBot('抱歉网络卡了一下。你可以接着说，我来帮你看看。');
+        waitingForUser=true;
+        document.getElementById('chatInput').focus();
+      });
+    }else{
+      waitingForUser=true;document.getElementById('chatInput').focus();
+    }
   }else{
     _aiHistory=[];
     chatStep=0;savedPatterns={};savedUserText1='';savedPrefillTag='';
