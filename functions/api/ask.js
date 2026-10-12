@@ -41,11 +41,21 @@ function toSimplified(text) {
   return result;
 }
 
-// 后处理：清理末尾多余问号（Step2/3 不允许末尾有问号）
+// 后处理：清理末尾多余问号（Step2/3 禁止追问）
 function cleanTrailingQuestion(text) {
   if (!text) return text;
   // 去掉最后一个段落末尾的问号，改成句号
   return text.replace(/([？?])\s*$/g, '。');
+}
+
+// 后处理：清理模型可能原样输出的结构标记（Step3 处方笺）
+function cleanStructuralMarkers(text) {
+  if (!text) return text;
+  return text
+    .replace(/^[一二三四五六七八九十]+[段步]?\s*[·.．]\s*[^\n]+$/gm, '')  // "第一段 · 问题拆解" 等
+    .replace(/^(问题拆解|处方笺格式|收尾要点|第一段|第二段|第三段)\s*[·.．:]?\s*[^\n]*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')  // 清理多余空行
+    .trim();
 }
 
 // ===== 问题域知识库 =====
@@ -164,12 +174,19 @@ ${bookBlock}`,
 
 【当前阶段】第三步：问题拆解 + 多书处方 + 行动鼓励 ⚠️ 输出必须完整，三段一个都不能少
 
-第一段 · 问题拆解（2-4个，简洁要点形式，标注阶段）：
+⛔ 禁止把这些结构标记原样输出到最终回复："第一段 · 问题拆解"、"第二段 · 处方笺"、"第三段 · 收尾"。这些只是写给你看的结构提示，最终回复里要自然过渡，不要出现任何分段标题或标签。
+
+结构（你心里有数就行，不要输出这些标题）：
+- 问题拆解：2-4个要点，每行一个，标注阶段
+- 处方笺：2本书的完整格式
+- 收尾：温暖自然的结尾
+
+问题拆解要点格式：
 · 【可立即行动】→ 一句话方案
 · 【短期调整】→ 一句话方案
 · 【长期建设】→ 一句话方案
 
-第二段 · 处方笺（2本书）：
+处方笺格式（2本书，每本都要完整）：
 
 📖 处方笺
 
@@ -184,7 +201,7 @@ ${bookBlock}`,
 
 （第二本书同上格式）
 
-第三段 · 收尾（简短温暖）：
+收尾要点（简短温暖，自然融入，不要标"收尾"）：
 1. 肯定勇气（"你今天能停下来聊聊这件事，已经比继续熬着强太多了"）
 2. 从良方里挑一条最简单的，说"今晚就试这个"
 3. 开放式收尾（"随时回来聊聊进展" —— 绝对不要加问号！）
@@ -294,10 +311,13 @@ export async function onRequest(context) {
     // 清理可能的模型前缀
     content = content.replace(/^(好的|我明白了|我理解|嗯|好|让我想想)[，。,\.]?\s*/, '').trim();
 
-    // 后处理：繁简转换兜底（强制简体）+ 清理末尾问号（Step2/3 禁止追问）
+    // 后处理：繁简转换兜底 + Step2/3 禁问号 + Step3 清结构标记
     content = toSimplified(content);
     if (step === 2 || step === 3) {
       content = cleanTrailingQuestion(content);
+    }
+    if (step === 3) {
+      content = cleanStructuralMarkers(content);
     }
 
     return Response.json({
