@@ -2169,8 +2169,9 @@ function handleUserInput(text){ trackMessage("user", text);
   
   // Step 0.3: Confidence level calculation and branching
   const domainKey = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
-  const confText = savedPrefillTag ? text + ' ' + savedPrefillTag : text;
-  const conf=calcConfidence(confText,domainKey);
+  
+  // 快捷标签直接 HIGH — 标签本身就是为当前域设计的，用户明确表达了意图
+  const conf = quickTag ? {level:'high',label:'高置信度 · 快捷标签',score:99} : calcConfidence(text,domainKey);
   _currentConfidence = conf.level;
   
   // Update confidence badge in header
