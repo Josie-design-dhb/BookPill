@@ -2173,11 +2173,17 @@ function handleUserInput(text){ trackMessage("user", text);
   // 快捷标签直接 HIGH — 标签本身就是为当前域设计的，用户明确表达了意图
   const conf = quickTag ? {level:'high',label:'高置信度 · 快捷标签',score:99} : calcConfidence(text,domainKey);
   _currentConfidence = conf.level;
-  
-  // Update confidence badge in header
+
+  // Update confidence badge in header — 加流程跳过说明
   const confBadge = document.getElementById('chatConfBadge');
   if(confBadge){
-    confBadge.textContent = '● ' + conf.label;
+    let flowTag = '';
+    if(chatStep === 1){
+      if(conf.level === 'high') flowTag = ' · 直接开方';
+      else if(conf.level === 'medium') flowTag = ' · 还在聊';
+      else flowTag = ' · 先陪聊';
+    }
+    confBadge.textContent = '● ' + conf.label + flowTag;
     confBadge.style.background = conf.level === 'high' ? 'rgba(107,142,111,.14)' : (conf.level === 'medium' ? 'rgba(184,159,107,.16)' : 'rgba(184,64,64,.12)');
     confBadge.style.color = conf.level === 'high' ? '#4a6b54' : (conf.level === 'medium' ? '#8a7743' : '#9A3434');
   }
@@ -2269,10 +2275,32 @@ function handleUserInput(text){ trackMessage("user", text);
   // ===== AI 问诊：调用 Pages Functions /api/ask =====
   showTyping();
   const API_URL = '/api/ask';
-  // 为 Step 2 跳过 Step 1 做容错（用户快速连发）
-  const effectiveStep = chatStep;
   const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
   const dk = domainMap[curDomain.name] || 'anxiety';
+
+  // ===== 置信度驱动的流程跳过策略 =====
+  // 高置信度(≥5): 信息充分 → 直接开方,跳过聊天挖需求
+  // 中置信度(1.5~5): 有方向但不够深 → 推测点破+挖一轮
+  // 低置信度(<1.5): 模糊/情绪宣泄 → 完整聊
+  let effectiveStep;
+  const conf = quickTag ? {level:'high',score:99} : calcConfidence(text, dk);
+
+  if(chatStep === 1){
+    // 首轮输入: 按置信度决定调哪个 step
+    if(conf.level === 'high'){
+      effectiveStep = 3;  // 高置信度 → 直接开双书处方!
+    } else if(conf.level === 'medium'){
+      effectiveStep = 2;  // 中置信度 → 推测点破+继续挖
+    } else {
+      effectiveStep = 1;  // 低置信度 → 完整聊天
+    }
+  } else if(chatStep === 2){
+    effectiveStep = 2;  // 第二轮: 继续挖
+  } else if(chatStep === 3){
+    effectiveStep = 3;  // 第三轮: 开方
+  } else {
+    effectiveStep = 4;  // 第四轮+: 跟进闭环
+  }
 
   fetch(API_URL, {
     method: 'POST',
@@ -2298,17 +2326,26 @@ function handleUserInput(text){ trackMessage("user", text);
 
     addBot(data.content);
 
+    // ===== 正确的 chatStep 推进（按 effectiveStep） =====
     if(effectiveStep === 1){
-      // 第一步完成 → 进入第二步（原因分析）
+      // Step1 聊完 → 下一轮挖 Step2
       chatStep = 2;
-      waitingForUser = true;
-      document.getElementById('chatInput').focus();
-    }else{
-      // 第二步（良方输出）→ 进入自由深聊模式（用户可以继续聊任何内容）
+    }else if(effectiveStep === 2){
+      // Step2 挖完 → 下一轮开方 Step3
+      chatStep = 3;
+    }else if(effectiveStep === 3){
+      // Step3 开完方 → 进跟进闭环 Step4
       chatStep = 4;
+    }else{
+      // Step4 跟进闭环 → 循环
+      chatStep = 4;
+    }
+    waitingForUser = true;
+    document.getElementById('chatInput').focus();
+
+    // 只有开方完(effectiveStep≥3)才保存会话+显示域切换
+    if(effectiveStep >= 3){
       saveSession();
-      // 不再硬加"良方已开"——AI 输出里已经有完整的收尾鼓励了
-      // 只保留快捷域切换按钮，干净地出现在回复下方
       const qd = document.createElement('div'); qd.className = 'chat-quick';
       ['拖延','焦虑','内耗','表达','情商'].forEach((n,i)=>{
         const k = ['delay','anxiety','internal','express','eq'][i];
@@ -2316,9 +2353,6 @@ function handleUserInput(text){ trackMessage("user", text);
         b.onclick = ()=>startChat(k,true); qd.appendChild(b);
       });
       document.getElementById('chatBody').appendChild(qd); scrollChat();
-      // ⬇️ 关键修复：保持输入框开放！
-      waitingForUser = true;
-      document.getElementById('chatInput').focus();
     }
   })
   .catch(err => {
@@ -2334,13 +2368,13 @@ function handleUserInput(text){ trackMessage("user", text);
         chatStep = 2; waitingForUser = true;
         document.getElementById('chatInput').focus();
       }else{
+        // step≥2: 本地模板只有 respond1(聊)→respond2(开方+收尾)两档, 统一走 respond2
         const result = curDomain.respond2(text, {}, savedUserText1);
         addBot(result.response);
         setTimeout(()=>{
           addPrescription(result.prescription);
           setTimeout(()=>{
             addBot(curDomain.wrapUp()); chatStep = 4; saveSession();
-            // 回退路径也保持输入开放
             waitingForUser = true;
             document.getElementById('chatInput').focus();
           }, 400);
