@@ -1975,10 +1975,10 @@ function calcConfidenceV2(text, domainKey, quickTag=false, historyCount=0){
   // 快捷标签 → L4 直接开方
   if(quickTag){
     return {
-      score: 15, level: 'L4', label: '高置信度 · 快捷标签',
+      score: 15, level: 'L4', label: '高置信度',
       strategy: 'direct_prescription',
       dimensionScores: {anchor:3, emotion:3, behavior:3, context:3, domainMatch:3},
-      deviation: null, isEmotionalOnly: false
+      deviation: null, isEmotionalOnly: false, isQuickTag: true
     };
   }
   const sA = v2ScoreAnchor(text);
@@ -2052,7 +2052,8 @@ function calcConfidenceV2(text, domainKey, quickTag=false, historyCount=0){
     strategy,
     dimensionScores: { anchor: sA, emotion: sE, behavior: sB, context: sC, domainMatch: sD },
     deviation,
-    isEmotionalOnly: emotionalOnly
+    isEmotionalOnly: emotionalOnly,
+    isQuickTag: false
   };
 }
 
@@ -2403,7 +2404,9 @@ function handleUserInput(text){ trackMessage("user", text);
       'L1': { bg:'rgba(184,64,64,.12)',   fg:'#9A3434', dot:'🔴' }
     };
     const s = levelStyle[conf.level] || levelStyle['L2'];
-    confBadge.textContent = `${s.dot} ${conf.label} (${conf.score}/15)`;
+    // 快捷标签只显示等级, 不带分数后缀 (因为固定 15/15 无信息量)
+    const scoreSuffix = conf.isQuickTag ? '' : ` (${conf.score}/15)`;
+    confBadge.textContent = `${s.dot} ${conf.label}${scoreSuffix}`;
     confBadge.style.background = s.bg;
     confBadge.style.color = s.fg;
     // hover 显示五维度详情
