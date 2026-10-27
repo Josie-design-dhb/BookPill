@@ -1850,7 +1850,8 @@ const V2_ANCHOR_MARKERS = [
   '吵架','男朋友','女朋友','老公','老婆','父母','领导','同事','PUA',
   '改到凌晨','改到三点','熬夜','加班'
 ];
-const V2_ANCHOR_FREQ = /(已经|连续|连着|每次|总是|经常)(.{0,6})(周|月|年|天|次)/;
+const V2_ANCHOR_FREQ = /(已经|连续|连着|每次|总是|经常|持续|长达)(.{0,6})(周|月|年|天|次|小时|分钟)/;
+const V2_TIME_BARE = /\d{1,3}(个月|周|年|天|小时|分钟)/;  // 裸时间词 "8个月" 也能触发
 
 const V2_EMOTION_WORDS = [
   '焦虑','紧张','害怕','恐惧','担心','怕',
@@ -1879,12 +1880,15 @@ function v2CountMatches(text, markers){
 
 // ① 事件锚点: 0-3
 function v2ScoreAnchor(text){
-  const hasAnchor = v2CountMatches(text, V2_ANCHOR_MARKERS) >= 1;
-  const hasFreq = V2_ANCHOR_FREQ.test(text);
   const anchorCount = v2CountMatches(text, V2_ANCHOR_MARKERS);
-  if(!hasAnchor) return 0;
-  if(hasFreq || anchorCount >= 2) return 3;
-  if(anchorCount >= 1 && text.length >= 10) return 2;
+  const hasFreq = V2_ANCHOR_FREQ.test(text);
+  const hasBareTime = V2_TIME_BARE.test(text);
+  if(anchorCount === 0) return 0;
+  // anchor=3 条件(收紧): 必须有频次修饰/裸时间/高频场景词, 不是光靠 count≥2
+  const SCENE_WORDS = ['改稿','改设计','改到','面试','离职','辞职','跳槽','简历','找工作','失业','加班','改到凌晨','改到三点','开会','演讲','吵架','男朋友','女朋友','老公','老婆','父母','领导','同事','PUA','deadline','DDL','截止','报告','汇报','发言'];
+  const hasSceneWord = SCENE_WORDS.some(w => text.includes(w));
+  if(hasFreq || hasBareTime || (hasSceneWord && anchorCount >= 2)) return 3;
+  if(hasSceneWord || anchorCount >= 1 && text.length >= 6) return 2;
   return 1;
 }
 
@@ -1911,19 +1915,26 @@ function v2ScoreBehavior(text){
   return 0;
 }
 
-// ④ 时间/因果线索: 0-3 (historyCount 是对话历史消息数, 每条 history 自动 +0.5)
+// ④ 时间/因果线索: 0-3 (historyCount 是对话历史消息数)
 function v2ScoreContext(text, historyCount){
   let score = 0;
   const timeCount = v2CountMatches(text, V2_CONTEXT_TIME);
   const causeCount = v2CountMatches(text, V2_CONTEXT_CAUSE);
   const compareCount = v2CountMatches(text, V2_CONTEXT_COMPARE);
-  if(timeCount >= 1 || causeCount >= 1) score = Math.max(score, 1);
-  if(timeCount >= 1 && causeCount >= 1) score = Math.max(score, 2);
-  if(compareCount >= 1 || (timeCount >= 1 && causeCount >= 1 && text.length >= 20)) score = Math.max(score, 3);
+  const hasBareTime = V2_TIME_BARE.test(text);  // 裸时间词 "8个月" 也算
+  const hasAnchorFreq = V2_ANCHOR_FREQ.test(text); // "已经连续三周" 这类频次+时间修饰
+  // 频次行为: X次/每次/反复 → 暗示不是第一次发生, 有时间跨度背景
+  const hasFreqVerb = /(每次|总是|经常|一直|反复|连着|连续|从来|\d+次|[一二三四五六七八九十]次|几次|多次|好几次|好几回)/.test(text);
+  const timeSignal = timeCount >= 1 || hasBareTime || hasAnchorFreq || hasFreqVerb;
+  if(timeSignal || causeCount >= 1) score = Math.max(score, 1);
+  if(timeSignal && causeCount >= 1) score = Math.max(score, 2);
+  // 有频次修饰(已经连续X周)或裸时间词(8个月) → context 至少 2, 因为有明确时间跨度
+  if(hasAnchorFreq || hasBareTime) score = Math.max(score, 2);
+  if(compareCount >= 1 || (timeSignal && causeCount >= 1 && text.length >= 20)) score = Math.max(score, 3);
   // 多轮历史补分: 每轮加 1 (historyCount 是 messages 数组长度, 每 2 条 = 1 轮)
   const rounds = Math.floor(historyCount / 2);
   if(rounds >= 1) score = Math.min(3, score + Math.min(rounds, 2));
-  return score;
+  return Math.min(3, score);
 }
 
 // ⑤ 域匹配质量: 0-3
@@ -1976,21 +1987,26 @@ function calcConfidenceV2(text, domainKey, quickTag=false, historyCount=0){
   const sC = v2ScoreContext(text, historyCount);
   const sD = v2ScoreDomainMatch(text, domainKey);
 
-  // ---- 加权: anchor 是核心锚点, 高分 anchor 自动补偿 emotion/context ----
-  // 一个具体事件(sA≥2) 本身就是高置信信号, 即使没情绪词也加分
+  // ---- 加权补偿: anchor/behavior/emotion 是硬信号, 补偿软维度 ----
   let total = sA + sE + sB + sC + sD;
-  if(sA >= 3){
-    // 事件+频次都明确 → 额外 +1 奖励
-    total += 1;
-  }
-  // anchor + behavior 双高 → 再 +1 (有具体事+具体行为=最可诊断的组合)
-  if(sA >= 2 && sB >= 2){
-    total += 1;
-  }
-  // domainMatch 纯关键词命中(=1)也算有效匹配, 只在完全没命中时才扣分
-  if(sD === 0 && text.length >= 8){
-    // 没命中任何关键词但说了不少话 → 可能是域选错了, 保持 total 不变, deviation 检测会处理
-  }
+
+  // 1. 高频事件 +1
+  if(sA >= 3) total += 1;
+
+  // 2. 隐含情绪补偿: 说具体行为的人大概率有情绪但没说 → emotion+1
+  if(sB >= 2 && sE <= 1) total += 1;
+
+  // 3. 双高组合 (最可诊断): anchor≥2 + behavior≥2 → 信息充分即使域不匹配也加分
+  if(sA >= 2 && sB >= 2) total += 1;
+
+  // 4. 跨域补偿 A: anchor+behavior≥4 但 domainMatch=0 → 域选错了但信息够充分
+  if(sD === 0 && sA + sB >= 4) total += 2;
+
+  // 5. 跨域补偿 B: anchor≥2 + emotion≥2 但 domainMatch=0 → 有事件有情绪只是域关键词没命中 (面试/开会/吵架 等场景常出现)
+  if(sD === 0 && sA >= 2 && sE >= 2) total += 2;
+
+  // 6. 锚点饱和 + 域匹配好但缺少显式行为词 → 有具体场景关键词 + 域匹配 = 信息足够, behavior 没覆盖只是关键词不全
+  if(sA >= 3 && sD >= 2 && sB <= 1) total += 1;
 
   const emotionalOnly = v2IsEmotionalOnly(text, sA);
 
