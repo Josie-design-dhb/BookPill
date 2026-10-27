@@ -1975,9 +1975,23 @@ function calcConfidenceV2(text, domainKey, quickTag=false, historyCount=0){
   const sB = v2ScoreBehavior(text);
   const sC = v2ScoreContext(text, historyCount);
   const sD = v2ScoreDomainMatch(text, domainKey);
-  const total = sA + sE + sB + sC + sD;
 
-  // 纯情绪宣泄 → 强制 L1
+  // ---- 加权: anchor 是核心锚点, 高分 anchor 自动补偿 emotion/context ----
+  // 一个具体事件(sA≥2) 本身就是高置信信号, 即使没情绪词也加分
+  let total = sA + sE + sB + sC + sD;
+  if(sA >= 3){
+    // 事件+频次都明确 → 额外 +1 奖励
+    total += 1;
+  }
+  // anchor + behavior 双高 → 再 +1 (有具体事+具体行为=最可诊断的组合)
+  if(sA >= 2 && sB >= 2){
+    total += 1;
+  }
+  // domainMatch 纯关键词命中(=1)也算有效匹配, 只在完全没命中时才扣分
+  if(sD === 0 && text.length >= 8){
+    // 没命中任何关键词但说了不少话 → 可能是域选错了, 保持 total 不变, deviation 检测会处理
+  }
+
   const emotionalOnly = v2IsEmotionalOnly(text, sA);
 
   // 域不匹配检测: 当前域分数 vs 其他域最高分数
