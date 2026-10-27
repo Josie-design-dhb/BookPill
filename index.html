@@ -1163,15 +1163,9 @@ function startChat(domain,keepHistory){
   const chatHead = document.querySelector('.chat-head');
   if(chatHead){
     const hInfo = chatHead.querySelector('.h-info');
-    // Remove existing badge if present to avoid duplicates
+    // 清掉上次的徽章, 等用户发消息后由置信度计算再渲染
     const existingBadge = document.getElementById('chatConfBadge');
     if(existingBadge){ existingBadge.remove(); }
-    const confInd = document.createElement('span');
-    confInd.id = 'chatConfBadge';
-    confInd.style.cssText = 'margin-left:8px;padding:2px 8px;border-radius:100px;font-size:10px;background:rgba(107,142,111,.14);color:#4a6b54;font-family:var(--display);letter-spacing:.08em';
-    confInd.textContent = '● 高置信度';
-    if(hInfo){ hInfo.appendChild(confInd); }
-    else { chatHead.appendChild(confInd); }
   }
   if(keepHistory){
     // 保留对话历史，只更新问题域信息
@@ -2395,7 +2389,19 @@ function handleUserInput(text){ trackMessage("user", text);
   _currentConfidence = conf.level;
 
   // Update confidence badge in header — V2 等级 + 策略说明
-  const confBadge = document.getElementById('chatConfBadge');
+  let confBadge = document.getElementById('chatConfBadge');
+  // 刚进入问诊面板时徽章不存在, 由首次 sendMessage 创建
+  if(!confBadge){
+    const chatHead = document.querySelector('.chat-head');
+    if(chatHead){
+      confBadge = document.createElement('span');
+      confBadge.id = 'chatConfBadge';
+      confBadge.style.cssText = 'margin-left:8px;padding:2px 8px;border-radius:100px;font-size:10px;font-family:var(--display);letter-spacing:.08em';
+      const hInfo = chatHead.querySelector('.h-info');
+      if(hInfo){ hInfo.appendChild(confBadge); }
+      else { chatHead.appendChild(confBadge); }
+    }
+  }
   if(confBadge){
     const levelStyle = {
       'L4': { bg:'rgba(107,142,111,.14)', fg:'#4a6b54', dot:'🟢' },
