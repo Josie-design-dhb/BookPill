@@ -2424,11 +2424,11 @@ function handleUserInput(text){ trackMessage("user", text);
   }
 
   // V2 deviation 替代旧 detectDiagnosticDeviation
-  if(deviation && chatStep === 1){
+  if(conf.deviation && chatStep === 1){
     // 统一完整提示：带域切换按钮 + 推荐 ⭐
     const curName = curDomain.name;
-    const recKey = deviation.otherDomain;
-    const recName = deviation.otherDomainName;
+    const recKey = conf.deviation.otherDomain;
+    const recName = conf.deviation.otherDomainName;
     let msg = '我注意到你说的情况，可能不完全属于当前选择的「' + curName + '」范围。';
     if(recName) msg += ' 从关键词匹配来看，我更推荐试试「' + recName + '」，那里的书籍和方法会更对口：';
     addBot(msg);
@@ -2453,7 +2453,7 @@ function handleUserInput(text){ trackMessage("user", text);
   
   // Step 0.5: domain mismatch 兜底 — 仅在 deviation 没命中 warning 时才跑
   // （快捷标签点击时也跳过）
-  if(!quickTag && (chatStep===1 || chatStep===2) && !(deviation && deviation.level==='warning')){
+  if(!quickTag && (chatStep===1 || chatStep===2) && !(conf.deviation && conf.deviation.level==='warning')){
     const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
     const dk=domainMap[curDomain.name]||'anxiety';
     if(detectDomainMismatch(text,dk)){
