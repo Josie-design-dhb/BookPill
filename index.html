@@ -1225,12 +1225,14 @@ function startChat(domain,keepHistory){
     document.getElementById('chatQuick').innerHTML='';
     const qa=Array.isArray(curDomain.quick)?curDomain.quick:curDomain.quick.split('|');
     qa.forEach(q=>{const b=document.createElement('button');b.className='quick-btn';b.textContent=q;b.onclick=()=>{_quickTagClicked=true;document.getElementById('chatInput').value=q;sendMessage();};document.getElementById('chatQuick').appendChild(b);});
+    // 快捷标签按钮一出现就要允许用户点击发送, 不等 opening timer (1000ms) 跑完
+    waitingForUser=true;
   }
   document.getElementById('chatPanel').classList.add('open');
   showSkillPromo();
   document.getElementById('chatOverlay').classList.add('show');
   if(!keepHistory){
-    _openingTimer = setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;waitingForUser=true;document.getElementById('chatInput').focus();},600);},400);
+    _openingTimer = setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;document.getElementById('chatInput').focus();},600);},400);
   }else{
     waitingForUser=true;document.getElementById('chatInput').focus();
   }
