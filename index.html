@@ -1837,6 +1837,195 @@ function calcConfidence(text, domainKey){
   };
 }
 
+// ================================================================
+// 置信度评分体系 V2 — 五维度独立打分 (design/confidence-v2.md)
+// 维度: anchor(事件) + emotion(情绪) + behavior(行为) + context(背景) + domainMatch(域匹配)
+// 每个维度 0-3, 总分 0-15 → L1/L2/L3/L4 四个等级 → 驱动工作流跳过策略
+// ================================================================
+const V2_ANCHOR_MARKERS = [
+  '改稿','改设计','改到','拖','拖延','deadline','DDL','截止',
+  '简历','找工作','面试','离职','辞职','跳槽','失业',
+  '失眠','睡不着','压力','考试','报告','汇报','发言',
+  '开会','不敢说','说不出','卡壳','演讲',
+  '吵架','男朋友','女朋友','老公','老婆','父母','领导','同事','PUA',
+  '改到凌晨','改到三点','熬夜','加班'
+];
+const V2_ANCHOR_FREQ = /(已经|连续|连着|每次|总是|经常)(.{0,6})(周|月|年|天|次)/;
+
+const V2_EMOTION_WORDS = [
+  '焦虑','紧张','害怕','恐惧','担心','怕',
+  '沮丧','难过','伤心','痛苦',
+  '烦躁','烦','生气','愤怒','后悔',
+  '麻木','空虚','空','没感觉','没力气',
+  '纠结','犹豫','矛盾','不知所措',
+  '压力','累','疲惫','崩溃','绝望'
+];
+const V2_EMOTION_BODY = ['失眠','睡不着','头疼','心痛','心慌','出汗','发抖','脑子空白','脑子一片','喘不上'];
+const V2_EMOTION_AMBIV = ['明明','想','应该','不敢','既','又','一方面','另一方面'];
+
+const V2_BEHAVIOR_FREQ = ['每次','总是','经常','一直','反复','连着','连续','从来'];
+const V2_BEHAVIOR_DEG = ['停不下来','放不开','动不了','不敢','不想','做不到','忍不住','控制不住','卡壳','说不出来','开不了口'];
+const V2_BEHAVIOR_SELF_OBSERVE = ['明知道','明知','心里在想','其实','内心'];
+
+const V2_CONTEXT_TIME = ['已经','自从','从小','以前','上次','上一次','之后','开始','一直'];
+const V2_CONTEXT_CAUSE = ['因为','所以','原因是','可能是','大概是','估计是','归根结底','本质是','核心是'];
+const V2_CONTEXT_COMPARE = ['以前不会','以前不会这样','现在反而','反而更','跟之前不一样','反差','对比','不再'];
+
+function v2CountMatches(text, markers){
+  let c=0; const seen=new Set();
+  for(const m of markers){ if(text.includes(m) && !seen.has(m)){ c++; seen.add(m); } }
+  return c;
+}
+
+// ① 事件锚点: 0-3
+function v2ScoreAnchor(text){
+  const hasAnchor = v2CountMatches(text, V2_ANCHOR_MARKERS) >= 1;
+  const hasFreq = V2_ANCHOR_FREQ.test(text);
+  const anchorCount = v2CountMatches(text, V2_ANCHOR_MARKERS);
+  if(!hasAnchor) return 0;
+  if(hasFreq || anchorCount >= 2) return 3;
+  if(anchorCount >= 1 && text.length >= 10) return 2;
+  return 1;
+}
+
+// ② 情绪明确度: 0-3
+function v2ScoreEmotion(text){
+  const emoCount = v2CountMatches(text, V2_EMOTION_WORDS);
+  const hasBody = v2CountMatches(text, V2_EMOTION_BODY) >= 1;
+  const hasAmbiv = v2CountMatches(text, V2_EMOTION_AMBIV) >= 1;
+  if(emoCount === 0 && !hasBody) return 0;
+  if(emoCount >= 2 || (emoCount >= 1 && hasBody)) return 2;
+  if((emoCount >= 1 && hasAmbiv) || (hasBody && hasAmbiv)) return 3;
+  return 1;
+}
+
+// ③ 行为可观察: 0-3
+function v2ScoreBehavior(text){
+  const hasFreq = v2CountMatches(text, V2_BEHAVIOR_FREQ) >= 1;
+  const hasDeg = v2CountMatches(text, V2_BEHAVIOR_DEG) >= 1;
+  const hasSelf = v2CountMatches(text, V2_BEHAVIOR_SELF_OBSERVE) >= 1;
+  if(!hasFreq && !hasDeg) return 0;
+  if(hasSelf) return 3;
+  if(hasFreq && hasDeg) return 2;
+  if(hasFreq || hasDeg) return 1;
+  return 0;
+}
+
+// ④ 时间/因果线索: 0-3 (historyCount 是对话历史消息数, 每条 history 自动 +0.5)
+function v2ScoreContext(text, historyCount){
+  let score = 0;
+  const timeCount = v2CountMatches(text, V2_CONTEXT_TIME);
+  const causeCount = v2CountMatches(text, V2_CONTEXT_CAUSE);
+  const compareCount = v2CountMatches(text, V2_CONTEXT_COMPARE);
+  if(timeCount >= 1 || causeCount >= 1) score = Math.max(score, 1);
+  if(timeCount >= 1 && causeCount >= 1) score = Math.max(score, 2);
+  if(compareCount >= 1 || (timeCount >= 1 && causeCount >= 1 && text.length >= 20)) score = Math.max(score, 3);
+  // 多轮历史补分: 每轮加 1 (historyCount 是 messages 数组长度, 每 2 条 = 1 轮)
+  const rounds = Math.floor(historyCount / 2);
+  if(rounds >= 1) score = Math.min(3, score + Math.min(rounds, 2));
+  return score;
+}
+
+// ⑤ 域匹配质量: 0-3
+function v2ScoreDomainMatch(text, domainKey){
+  const ds = calcDomainScore(text, domainKey);
+  const matchedCount = ds.matched.length;
+  const hasRegex = ds.matched.some(m => m.type === 'pattern');
+  const bookConcepts = detectBookConcepts(text, domainKey);
+  const hasBook = bookConcepts.length > 0;
+  if(hasBook) return 3;
+  if(hasRegex) return 2;
+  if(matchedCount >= 2) return 1;
+  if(matchedCount >= 1) return 0;
+  return 0;
+}
+
+// 纯情绪宣泄检测: anchor=0 + emotion≥1 + 情绪词反复出现
+function v2IsEmotionalOnly(text, anchorScore){
+  if(anchorScore >= 1) return false;
+  const emoCount = v2CountMatches(text, V2_EMOTION_WORDS);
+  const repeatedEmo = V2_EMOTION_WORDS.some(w => {
+    const regex = new RegExp(w, 'g');
+    const matches = text.match(regex);
+    return matches && matches.length >= 2;
+  });
+  return emoCount >= 1 || repeatedEmo;
+}
+
+/**
+ * calcConfidenceV2 — 五维度独立打分
+ * @param {string} text - 用户输入
+ * @param {string} domainKey - 当前域 key
+ * @param {boolean} quickTag - 是否点击了快捷标签
+ * @param {number} historyCount - 已聊过的历史消息数 (messages.length)
+ * @returns {{score:number, level:string, label:string, strategy:string, dimensionScores:{anchor:number,emotion:number,behavior:number,context:number,domainMatch:number}, deviation:null|{signal:string, otherDomain:string, otherScore:number}, isEmotionalOnly:boolean}}
+ */
+function calcConfidenceV2(text, domainKey, quickTag=false, historyCount=0){
+  // 快捷标签 → L4 直接开方
+  if(quickTag){
+    return {
+      score: 15, level: 'L4', label: '高置信度 · 快捷标签',
+      strategy: 'direct_prescription',
+      dimensionScores: {anchor:3, emotion:3, behavior:3, context:3, domainMatch:3},
+      deviation: null, isEmotionalOnly: false
+    };
+  }
+  const sA = v2ScoreAnchor(text);
+  const sE = v2ScoreEmotion(text);
+  const sB = v2ScoreBehavior(text);
+  const sC = v2ScoreContext(text, historyCount);
+  const sD = v2ScoreDomainMatch(text, domainKey);
+  const total = sA + sE + sB + sC + sD;
+
+  // 纯情绪宣泄 → 强制 L1
+  const emotionalOnly = v2IsEmotionalOnly(text, sA);
+
+  // 域不匹配检测: 当前域分数 vs 其他域最高分数
+  let deviation = null;
+  const domainMap = {'delay':'拖延','anxiety':'焦虑','internal':'内耗','express':'表达','eq':'情商'};
+  const otherScores = {};
+  for(const [dk,name] of Object.entries(domainMap)){
+    if(dk === domainKey) continue;
+    otherScores[dk] = calcDomainScore(text, dk).score;
+  }
+  const currentDomainRawScore = calcDomainScore(text, domainKey).score;
+  const maxOther = Math.max(...Object.values(otherScores));
+  const maxOtherKey = Object.keys(otherScores).find(k => otherScores[k] === maxOther);
+  if(maxOther >= currentDomainRawScore * 2 && maxOther >= 2){
+    deviation = {
+      signal: 'mismatch',
+      otherDomain: maxOtherKey,
+      otherDomainName: domainMap[maxOtherKey],
+      otherScore: maxOther,
+      currentScore: currentDomainRawScore
+    };
+  }
+
+  // 总分 → 等级 + 策略
+  let level, label, strategy;
+  if(emotionalOnly){
+    level = 'L1'; label = '低置信度 · 情绪宣泄'; strategy = 'full_chat';
+  } else if(total >= 12){
+    level = 'L4'; label = '高置信度 · 信息充分'; strategy = 'direct_prescription';
+  } else if(total >= 8){
+    level = 'L3'; label = '中高置信度 · 方向明确'; strategy = 'deepen_then_prescribe';
+  } else if(total >= 4){
+    level = 'L2'; label = '中低置信度 · 继续聊聊'; strategy = 'chat_then_deepen';
+  } else {
+    level = 'L1'; label = '低置信度 · 先陪聊'; strategy = 'full_chat';
+  }
+
+  return {
+    score: total,
+    level,
+    label,
+    strategy,
+    dimensionScores: { anchor: sA, emotion: sE, behavior: sB, context: sC, domainMatch: sD },
+    deviation,
+    isEmotionalOnly: emotionalOnly
+  };
+}
+
 // ============ 纠错反馈系统 ============
 function attachFeedback(px, prescId){
   const fb = document.createElement('div');
@@ -2167,69 +2356,53 @@ function handleUserInput(text){ trackMessage("user", text);
     return;
   }
   
-  // Step 0.3: Confidence level calculation and branching
+  // Step 0.3: V2 置信度计算 — 五维度独立打分
   const domainKey = ({'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'})[curDomain.name] || 'anxiety';
-  
-  // 快捷标签直接 HIGH — 标签本身就是为当前域设计的，用户明确表达了意图
-  const conf = quickTag ? {level:'high',label:'高置信度 · 快捷标签',score:99} : calcConfidence(text,domainKey);
+
+  // V2: 历史消息数传递给 context 维度补分
+  const conf = calcConfidenceV2(text, domainKey, quickTag, _aiHistory.length);
   _currentConfidence = conf.level;
 
-  // Update confidence badge in header — 加流程跳过说明
+  // Update confidence badge in header — V2 等级 + 策略说明
   const confBadge = document.getElementById('chatConfBadge');
   if(confBadge){
-    let flowTag = '';
-    if(chatStep === 1){
-      if(conf.level === 'high') flowTag = ' · 直接开方';
-      else if(conf.level === 'medium') flowTag = ' · 还在聊';
-      else flowTag = ' · 先陪聊';
-    }
-    confBadge.textContent = '● ' + conf.label + flowTag;
-    confBadge.style.background = conf.level === 'high' ? 'rgba(107,142,111,.14)' : (conf.level === 'medium' ? 'rgba(184,159,107,.16)' : 'rgba(184,64,64,.12)');
-    confBadge.style.color = conf.level === 'high' ? '#4a6b54' : (conf.level === 'medium' ? '#8a7743' : '#9A3434');
+    const levelStyle = {
+      'L4': { bg:'rgba(107,142,111,.14)', fg:'#4a6b54', dot:'🟢' },
+      'L3': { bg:'rgba(184,159,107,.16)', fg:'#8a7743', dot:'🟡' },
+      'L2': { bg:'rgba(184,159,107,.10)', fg:'#9a8a5a', dot:'⚪' },
+      'L1': { bg:'rgba(184,64,64,.12)',   fg:'#9A3434', dot:'🔴' }
+    };
+    const s = levelStyle[conf.level] || levelStyle['L2'];
+    confBadge.textContent = `${s.dot} ${conf.label} (${conf.score}/15)`;
+    confBadge.style.background = s.bg;
+    confBadge.style.color = s.fg;
+    // hover 显示五维度详情
+    const ds = conf.dimensionScores;
+    confBadge.title = `维度: 事件${ds.anchor}/3 情绪${ds.emotion}/3 行为${ds.behavior}/3 背景${ds.context}/3 域匹配${ds.domainMatch}/3 → ${conf.strategy}`;
   }
-  
-  // Step 0.4: 统一域不匹配检测 — deviation 驱动 + 跳过 Step 0.5
-  // deviation 检测更智能（有评分差异分析），直接用它的结果，避免和 domainMismatch 重复
-  let deviation = null;
+
+  // V2 deviation 替代旧 detectDiagnosticDeviation
+  if(deviation && chatStep === 1){
+    // 统一完整提示：带域切换按钮 + 推荐 ⭐
+    const curName = curDomain.name;
+    const recKey = deviation.otherDomain;
+    const recName = deviation.otherDomainName;
+    let msg = '我注意到你说的情况，可能不完全属于当前选择的「' + curName + '」范围。';
+    if(recName) msg += ' 从关键词匹配来看，我更推荐试试「' + recName + '」，那里的书籍和方法会更对口：';
+    addBot(msg);
+    const qd = document.createElement('div'); qd.className = 'chat-quick';
+    const domainList = [{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
+    domainList.forEach(d => {
+      const b = document.createElement('button');
+      b.className = 'quick-btn' + (recKey === d.key ? ' recommended' : '');
+      b.textContent = recKey === d.key ? d.name + ' ⭐' : d.name;
+      b.onclick = () => startChat(d.key, true);
+      qd.appendChild(b);
+    });
+    document.getElementById('chatBody').appendChild(qd); scrollChat();
+    return;
+  }
   let deviationWarning = null;
-  if(chatStep===1 || chatStep===2){
-    deviation = detectDiagnosticDeviation(text, domainKey);
-    if(deviation && deviation.level === 'warning'){
-      const deviationDomainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
-      const sdk=deviation.suggestedDomain||'';
-      const curName=curDomain.name;
-      const recName=deviationDomainMap[sdk]||'';
-      // 统一完整提示：带域切换按钮 + 推荐 ⭐
-      let msg;
-      if(chatStep===1){
-        msg='我注意到你说的情况，可能不完全属于当前选择的「'+curName+'」范围。';
-      }else{
-        msg='聊到这里我发现，你说的这些情况可能更偏向别的方向，不完全是「'+curName+'」的问题。';
-      }
-      if(recName){
-        msg+='我更推荐试试「'+recName+'」：';
-      }else{
-        msg+='你可以重新选择问题域，或者继续说下去我来帮你判断：';
-      }
-      addBot(msg);
-      const qd=document.createElement('div');qd.className='chat-quick';
-      const domainList=[{key:'delay',name:'拖延'},{key:'anxiety',name:'焦虑'},{key:'internal',name:'内耗'},{key:'express',name:'表达'},{key:'eq',name:'情商'}];
-      domainList.forEach(d=>{
-        const b=document.createElement('button');
-        b.className='quick-btn'+(sdk===d.key?' recommended':'');
-        let label=d.name;
-        if(sdk===d.key)label=d.name+' ⭐';
-        b.textContent=label;
-        b.onclick=()=>startChat(d.key,true);
-        qd.appendChild(b);
-      });
-      document.getElementById('chatBody').appendChild(qd);scrollChat();
-      return;  // ⬅️ 关键：deviation 已经处理完了，跳过 Step 0.5
-    } else if(deviation && deviation.level === 'info'){
-      // info 级别：只给温和提示，不阻断，继续正常流程
-      deviationWarning = '<div style="background:rgba(107,142,111,.06);border:1px solid rgba(107,142,111,.2);border-radius:10px;padding:12px 14px;margin:6px 0;"><div style="font-size:13px;color:var(--ink-soft);line-height:1.8">💡 ' + deviation.message + '</div><div style="font-size:12px;color:#6B8E6F;margin-top:6px">' + deviation.suggestion + '</div></div>';
-    }
-  }
   
   // 低置信度不再拦截！照常走 AI，域匹配提示统一在 Step 0.4 里处理
   // 这里什么都不用做，conf.level 只影响置信度徽章，不阻断流程
@@ -2278,28 +2451,20 @@ function handleUserInput(text){ trackMessage("user", text);
   const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
   const dk = domainMap[curDomain.name] || 'anxiety';
 
-  // ===== 置信度驱动的流程跳过策略 =====
-  // 高置信度(≥5): 信息充分 → 直接开方,跳过聊天挖需求
-  // 中置信度(1.5~5): 有方向但不够深 → 推测点破+挖一轮
-  // 低置信度(<1.5): 模糊/情绪宣泄 → 完整聊
+  // ===== V2 strategy 驱动 effectiveStep =====
+  // conf 变量已在上面 Step 0.3 里用 calcConfidenceV2 算好了
   let effectiveStep;
-  const conf = quickTag ? {level:'high',score:99} : calcConfidence(text, dk);
-
   if(chatStep === 1){
-    // 首轮输入: 按置信度决定调哪个 step
-    if(conf.level === 'high'){
-      effectiveStep = 3;  // 高置信度 → 直接开双书处方!
-    } else if(conf.level === 'medium'){
-      effectiveStep = 2;  // 中置信度 → 推测点破+继续挖
-    } else {
-      effectiveStep = 1;  // 低置信度 → 完整聊天
-    }
+    // 首轮: 按 V2 strategy 选 step
+    if(conf.strategy === 'direct_prescription') effectiveStep = 3;  // L4: 直接开双书处方
+    else if(conf.strategy === 'deepen_then_prescribe') effectiveStep = 2;  // L3: 推测点破+深挖
+    else effectiveStep = 1;  // L1/L2: 完整聊天
   } else if(chatStep === 2){
-    effectiveStep = 2;  // 第二轮: 继续挖
+    effectiveStep = 2;  // 第二轮继续挖
   } else if(chatStep === 3){
-    effectiveStep = 3;  // 第三轮: 开方
+    effectiveStep = 3;  // 第三轮开方
   } else {
-    effectiveStep = 4;  // 第四轮+: 跟进闭环
+    effectiveStep = 4;  // 第四轮+ 跟进闭环
   }
 
   fetch(API_URL, {
