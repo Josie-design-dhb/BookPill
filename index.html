@@ -926,6 +926,7 @@ let curDomain=null,chatStep=0,waitingForUser=false,savedPatterns={},savedUserTex
 let _aiHistory=[];  // AI对话历史，用于多轮深聊
 let _currentConfidence='high';  // high | medium | low
 let _correctionCount=0;
+let _openingTimer=null;  // startChat 的开场白 setTimeout, 首轮用户先发消息时需要清掉防止双重输出
 let _lastPrescription=null;
 let _lastPrescriptionId=null;
 
@@ -1229,7 +1230,7 @@ function startChat(domain,keepHistory){
   showSkillPromo();
   document.getElementById('chatOverlay').classList.add('show');
   if(!keepHistory){
-    setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;waitingForUser=true;document.getElementById('chatInput').focus();},600);},400);
+    _openingTimer = setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();addBot(curDomain.opening());chatStep=1;waitingForUser=true;document.getElementById('chatInput').focus();},600);},400);
   }else{
     waitingForUser=true;document.getElementById('chatInput').focus();
   }
@@ -1239,6 +1240,8 @@ function sendMessage(){
   const input=document.getElementById('chatInput');
   const text=input.value.trim();
   if(!text||!waitingForUser)return;
+  // 用户先发消息了(尤其点快捷标签), 清掉开场白定时器防止 opening 与 API 回复双重输出
+  if(_openingTimer){ clearTimeout(_openingTimer); _openingTimer=null; }
   addUser(text);input.value='';input.style.height='auto';
   waitingForUser=false;
   document.getElementById('chatQuick').innerHTML='';
@@ -2493,7 +2496,8 @@ function handleUserInput(text){ trackMessage("user", text);
   // ===== V2 strategy 驱动 effectiveStep =====
   // conf 变量已在上面 Step 0.3 里用 calcConfidenceV2 算好了
   let effectiveStep;
-  if(chatStep === 1){
+  // chatStep===0 也是首轮 (用户还没发过消息, AI 开场白可能还没跑完 setTimeout)
+  if(chatStep === 0 || chatStep === 1){
     // 首轮: 按 V2 strategy 选 step
     if(conf.strategy === 'direct_prescription') effectiveStep = 3;  // L4: 直接开双书处方
     else if(conf.strategy === 'deepen_then_prescribe') effectiveStep = 2;  // L3: 推测点破+深挖
