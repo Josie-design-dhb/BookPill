@@ -2415,8 +2415,8 @@ function handleUserInput(text){ trackMessage("user", text);
       'L1': { bg:'rgba(184,64,64,.12)',   fg:'#9A3434', dot:'🔴' }
     };
     const s = levelStyle[conf.level] || levelStyle['L2'];
-    // 分数只藏在 hover title 里, 徽章本身只显示等级 (去掉所有后缀)
-    confBadge.textContent = `${s.dot} ${conf.label}`;
+    // 分数只藏在 hover title 里, 徽章本身只显示等级 (去掉"· xxx"后缀)
+    confBadge.textContent = `${s.dot} ${conf.label.split(' · ')[0]}`;
     confBadge.style.background = s.bg;
     confBadge.style.color = s.fg;
     // hover 显示五维度详情
