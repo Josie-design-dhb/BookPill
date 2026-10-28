@@ -2525,6 +2525,10 @@ function handleUserInput(text){ trackMessage("user", text);
   .then(data => {
     hideTyping();
     if(!data.ok || !data.content){
+      // Cloudflare AI 4006: 免费额度用完, 前端识别给明确提示
+      if(data.error && (data.error.includes('4006') || data.error.includes('allocation') || data.error.includes('neuron'))){
+        throw { _isQuota: true, message: data.error };
+      }
       throw new Error(data.error || 'AI返回为空');
     }
     // 记录到对话历史
@@ -2565,10 +2569,17 @@ function handleUserInput(text){ trackMessage("user", text);
     }
   })
   .catch(err => {
-    // AI 不可用时，回退到本地模板逻辑
+    // Cloudflare AI 4006: 免费额度用完 — 专属提示 + 本地模板降级
+    const msg = err && err.message ? err.message : String(err);
+    const isQuota = err && err._isQuota || msg.includes('4006') || msg.includes('allocation') || msg.includes('neuron');
     hideTyping();
-    console.warn('[BookPill AI] 回退到本地模板:', err.message);
-    addBot('网络暂时有点慢，我先用熟悉的方式帮你看看。');
+    if(isQuota){
+      console.warn('[BookPill AI] 免费额度用完:', msg);
+      addBot('AI 今日免费额度已用完（北京时间每天 8:00 重置）。先用本地书籍模板为你解答，稍后可回来继续问诊。');
+    }else{
+      console.warn('[BookPill AI] 网络异常，回退本地模板:', msg);
+      addBot('网络暂时有点慢，我先用熟悉的方式帮你看看。');
+    }
     setTimeout(()=>{
       if(effectiveStep === 1){
         savedUserText1 = text;
