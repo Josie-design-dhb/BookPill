@@ -2511,6 +2511,12 @@ function handleUserInput(text){ trackMessage("user", text);
     effectiveStep = 4;  // 第四轮+ 跟进闭环
   }
 
+  // ===== 快捷标签修正: 首轮(chatStep≤2)应该先深挖, 多轮才直接开方 =====
+  // 快捷标签本质是"用户懒得打字给方向", 不是"信息充分可开方"
+  if(conf.isQuickTag && chatStep <= 2){
+    effectiveStep = 2;
+  }
+
   fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
