@@ -1169,17 +1169,19 @@ function startChat(domain,keepHistory){
     if(existingBadge){ existingBadge.remove(); }
   }
   if(keepHistory){
-    // 保留对话历史，只更新问题域信息
-    // 提取用户最后说的话，让 AI 基于新域重新分析
+    // 域切换: 清空旧域历史, 只保留用户最后一句真实输入作为新域起点
     const lastUserMsg = (() => {
       for(let i=_aiHistory.length-1;i>=0;i--){
         if(_aiHistory[i].role==='user' && !_aiHistory[i].content.startsWith('[')) return _aiHistory[i].content;
       }
       return '';
     })();
-    
-    // 添加域切换过渡消息到 AI 历史
-    _aiHistory.push({role:'user',content:'[用户从其他问题域切换到了「'+curDomain.name+'」。之前的对话上下文仍然有效。现在请从「'+curDomain.name+'」的视角，基于用户之前说的内容，直接进行原因分析（Step 2）。不要重新共情开场，直接从书籍洞察开始分析。]'});
+    // ⛔ 关键修复: 域切换时清空旧域的完整对话历史, 避免拖延域历史污染内耗域分析
+    _aiHistory = [];
+    if(lastUserMsg){
+      _aiHistory.push({role:'user', content:'[用户从其他问题域切换到了「'+curDomain.name+'」脉。以下是用户之前说的最后一句话，请从「'+curDomain.name+'」的视角重新分析：]'});
+      _aiHistory.push({role:'user', content:lastUserMsg});
+    }
     
     chatStep=4;savedPatterns={};savedUserText1='';savedPrefillTag='';
     document.getElementById('chatQuick').innerHTML='';
