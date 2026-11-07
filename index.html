@@ -683,7 +683,7 @@ function genSteps(domain,userText){
 const engines={
 delay:{
   name:'拖延',sub:'拖延脉 · 启动困难',
-  quick:['就是不想开始','完美主义','总是拖到deadline'],
+  quick:['就是不想开始','完美主义','总是拖到deadline','改了又改停不下来'],
   opening(){return'听得出来你有事压在心里。说说看，最近什么事让你觉得"该做但就是动不了"？'},
   respond1(text){
     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
@@ -733,7 +733,7 @@ delay:{
 },
 anxiety:{
   name:'焦虑',sub:'焦虑脉 · 压力紧绷',
-  quick:['最近压力很大','睡不着','什么都想做好'],
+  quick:['最近压力很大','睡不着','什么都想做好','心跳快手抖'],
   opening(){return'听起来你现在绷得比较紧。跟我说说，最近什么事让你觉得焦虑？'},
   respond1(text){
     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
@@ -783,7 +783,7 @@ anxiety:{
 },
 internal:{
   name:'内耗',sub:'内耗脉 · 反复纠结',
-  quick:['想太多','自我怀疑','做了决定又后悔'],
+  quick:['想太多','自我怀疑','做了决定又后悔','别人一句话想三天'],
   opening(){return'你一定很累吧。反复纠结同一件事，做了决定又后悔，没做又焦虑——这种内耗比真正做事还累人。\n\n你现在最纠结的是什么事？'},
   respond1(text){
     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
@@ -830,7 +830,7 @@ internal:{
 },
 express:{
   name:'表达',sub:'表达脉 · 词不达意',
-  quick:['不敢开口','说了对方没get到','社交紧张'],
+  quick:['不敢开口','说了对方没get到','社交紧张','不会拒绝'],
   opening(){return'表达这件事，真的是"知道该说什么"和"实际能说出来"之间隔着一道坎。你并不是不会想，而是卡在了"说出来"这一步。\n\n你最近在什么场景下觉得表达最困难？'},
   respond1(text){
     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
@@ -878,7 +878,7 @@ express:{
 },
 eq:{
   name:'情商',sub:'情商脉 · 情绪管理',
-  quick:['容易发火','人际关系紧张','控制不住'],
+  quick:['容易发火','人际关系紧张','控制不住','发完火后悔'],
   opening(){return'能意识到"控制不住情绪"这一点，说明你的觉察力其实不差——很多人发完火还觉得是别人的问题。\n\n你说"控制不住"，能具体说说最近哪次让你印象最深吗？是什么事、什么人触发的？'},
   respond1(text){
     const _ctx = savedPrefillTag ? text + " " + savedPrefillTag : text;
