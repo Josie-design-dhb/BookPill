@@ -165,12 +165,15 @@ section{padding:96px 0;position:relative}
 .msg.bot{align-self:flex-start;background:var(--paper);border:1px solid rgba(184,159,107,.12);border-bottom-left-radius:4px;box-shadow:var(--shadow)}
 .msg.user{align-self:flex-end;background:var(--vermillion);color:#fff;border-bottom-right-radius:4px}
 .msg.bot .b-name{font-family:var(--cal);color:var(--vermillion);font-size:13px;margin-bottom:4px;display:block}
-.chat-typing{align-self:flex-start;padding:12px 18px;background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:12px;border-bottom-left-radius:4px}
-.typing-dots{display:flex;gap:4px}
-.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:td 1.4s infinite}
+.chat-typing{align-self:flex-start;padding:10px 16px;background:var(--paper);border:1px solid rgba(184,159,107,.12);border-radius:14px;border-bottom-left-radius:4px;display:flex;align-items:center;gap:8px}
+.typing-label{font-size:12px;color:var(--ink-faint);font-family:var(--cal);animation:tl 2s ease-in-out infinite}
+@keyframes tl{0%,100%{opacity:.5}50%{opacity:1}}
+.typing-dots{display:flex;gap:3px}
+.typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--ink-faint);animation:td 1.2s infinite}
 .typing-dots span:nth-child(2){animation-delay:.2s}
 .typing-dots span:nth-child(3){animation-delay:.4s}
-@keyframes td{0%,60%,100%{opacity:.3}30%{opacity:1}}
+@keyframes td{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+.msg.bot.skeleton{align-self:flex-start;color:var(--ink-faint);font-size:13px;font-family:var(--cal);padding:4px 12px;margin-bottom:-8px}
 
 .prescription{background:var(--paper);border:1.5px solid var(--gold);border-radius:12px;padding:20px;margin:4px 0;box-shadow:var(--shadow);max-width:88%;align-self:flex-start;animation:msgIn .3s ease both}
 .prescription .p-title{font-family:var(--cal);font-size:16px;color:var(--vermillion);margin-bottom:8px;display:flex;align-items:center;gap:6px}
@@ -1196,12 +1199,12 @@ function startChat(domain,keepHistory){
     // 自动触发 AI 分析（step=2 原因分析）
     if(lastUserMsg){
       waitingForUser=false;
-      showTyping();
+      showTyping(); showTransition();
       fetch('/api/ask',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({domainKey:domain,step:2,messages:_aiHistory,userText:lastUserMsg})
       }).then(r=>r.json()).then(data=>{
-        hideTyping();
+        hideTyping(); hideTransition();
         if(data.ok && data.content){
           addBot(data.content);
           _aiHistory.push({role:'assistant',content:data.content});
@@ -1212,7 +1215,7 @@ function startChat(domain,keepHistory){
         waitingForUser=true;
         document.getElementById('chatInput').focus();
       }).catch(()=>{
-        hideTyping();
+        hideTyping(); hideTransition();
         addBot('抱歉网络卡了一下。你可以接着说，我来帮你看看。');
         waitingForUser=true;
         document.getElementById('chatInput').focus();
@@ -2491,7 +2494,7 @@ function handleUserInput(text){ trackMessage("user", text);
   }
   
   // ===== AI 问诊：调用 Pages Functions /api/ask =====
-  showTyping();
+  showTyping(); showTransition();
   const API_URL = '/api/ask';
   const domainMap={'拖延':'delay','焦虑':'anxiety','内耗':'internal','表达':'express','情商':'eq'};
   const dk = domainMap[curDomain.name] || 'anxiety';
@@ -2531,7 +2534,7 @@ function handleUserInput(text){ trackMessage("user", text);
   })
   .then(res => res.json())
   .then(data => {
-    hideTyping();
+    hideTyping(); hideTransition();
     if(!data.ok || !data.content){
       // Cloudflare AI 4006: 免费额度用完, 前端识别给明确提示
       if(data.error && (data.error.includes('4006') || data.error.includes('allocation') || data.error.includes('neuron'))){
@@ -2580,7 +2583,7 @@ function handleUserInput(text){ trackMessage("user", text);
     // Cloudflare AI 4006: 免费额度用完 — 专属提示 + 本地模板降级
     const msg = err && err.message ? err.message : String(err);
     const isQuota = err && err._isQuota || msg.includes('4006') || msg.includes('allocation') || msg.includes('neuron');
-    hideTyping();
+    hideTyping(); hideTransition();
     if(isQuota){
       console.warn('[BookPill AI] 免费额度用完:', msg);
       addBot('AI 今日免费额度已用完（北京时间每天 8:00 重置）。先用本地书籍模板为你解答，稍后可回来继续问诊。');
@@ -2684,8 +2687,15 @@ function addPrescription(px){ trackMessage("prescription", "", {prescription: px
   _lastPrescriptionId = prescId;
   scrollChat();
 }
-function showTyping(){const d=document.createElement('div');d.className='chat-typing';d.id='typing';d.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';document.getElementById('chatBody').appendChild(d);scrollChat();}
+function showTyping(){const d=document.createElement('div');d.className='chat-typing';d.id='typing';d.innerHTML='<span class="typing-label">良方正在看</span><div class="typing-dots"><span></span><span></span><span></span></div>';document.getElementById('chatBody').appendChild(d);scrollChat();}
 function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+// 插入/移除 AI 思考中的过渡消息(灰色小字), 让用户 0ms 就看到响应
+function showTransition(){
+  const d=document.createElement('div');d.className='msg bot skeleton';d.id='transitionMsg';
+  d.textContent='正在想怎么帮你...';
+  document.getElementById('chatBody').appendChild(d);scrollChat();
+}
+function hideTransition(){const t=document.getElementById('transitionMsg');if(t)t.remove();}
 function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
 function closeChat(){document.getElementById('chatPanel').classList.remove('open');document.getElementById('chatOverlay').classList.remove('show');}
 
